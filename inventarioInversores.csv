@@ -1,0 +1,43 @@
+Referencia;Tipo;Fabricante ;Precio ;Proveedor ;Nominal AC active power (W) ;Max PV input power (Wp);Max Input Voltage ;Max current per MPPT ;Max SC current per MPPT;Start Voltage ;rated voltage;# of MPPT;Max AC apparant power;Output voltage 1;Output voltage 2;Grid connection: 3f-1f;Max Eff;Eur Eff;$/rated output P
+Cero;0;0;0;;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
+SUN2000-20KTL-M3 Smart String Inverter 20kW;String ;Huaweii; $ 11.875.000,00 ; Solaire ;20.000;30.000;750;26;40;200;360;4;22.000;208;220;3;97,6%;97,2%; $ 594 
+SUN2000-2KTL-L1 Smart Energy Center 2kW;String ;Huaweii; $ 2.875.000,00 ; Solaire ;2.000;3.000;600;12,5;18;100;360;2;2.200;220;240;1;98,2%;96,7%; $ 1.438 
+SUN2000-3KTL-L1 Smart Energy Center 3kW;String ;Huaweii; $ 3.250.000,00 ; Solaire ;3.000;4.500;600;12,5;18;100;360;2;3.300;220;240;1;98,3%;97,3%; $ 1.083 
+SUN2000-4KTL-L1 Smart Energy Center 4kW;String ;Huaweii; $ 4.000.000,00 ; Solaire ;4.000;6.000;600;12,5;18;100;360;2;4.400;220;240;1;98,4%;97,5%; $ 1.000 
+SUN2000-5KTL-L1 Smart Energy Center 5kW;String ;Huaweii; $ 4.125.000,00 ; Solaire ;5.000;7.500;600;12,5;18;100;360;2;5.500;220;240;1;98,4%;97,8%; $ 825 
+SUN2000-6KTL-L1 Smart Energy Center 6kW;String ;Huaweii; $ 4.625.000,00 ; Solaire ;6.000;9.000;600;12,5;18;100;360;2;6.000;220;240;1;98,4%;97,8%; $ 771 
+SUN2000-100KTL-M1 Smart String Inverter 100kW;String ;Huaweii; $ 24.375.000,00 ; Solaire ;100.000;;1100;26;40;200;720;10;110.000;480;400;3;98,6%;98,4%; $ 244 
+SUN2000-36KTL-M3 Smart String Inverter 36kW;String ;Huaweii; $ 12.750.000,00 ; Solaire ;36.000;;1100;22;30;250;620;4;40.000;400;;3;98,6%;98,4%; $ 354 
+SUN2000-60KTL-M0 Smart String Inverter 60kW;String ;Huaweii; $ 17.125.000,00 ; Solaire ;60.000;;1100;22;30;200;600;6;66.000;380;480;3;98,7%;98,5%; $ 285 
+Fronius Symo 10.0-3 208-240V advanced;String ;Fronius; $ 11.000.000,00 ; Solaire ;9.995;15.000;600;20,75;31,1;200;350;2;9.995;208;240;3;97,0%;96,5%; $ 1.101 
+Fronius Primo 3,8-1 208 /240;String ;Fronius; $ 5.287.500,00 ; Solaire ;3.800;6.000;600;18;22,5;80;410;2;3.800;208;240;1;96,7%;95,0%; $ 1.391 
+Fronius Primo 3,8-1 208 /240 lite ;String ;Fronius; $ 4.912.500,00 ; Solaire ;3.800;6.000;600;18;22,5;80;420;2;3.800;208;240;1;96,7%;95,0%; $ 1.293 
+Fronius Primo 5.0-1 208 /240;String ;Fronius; $ 5.425.000,00 ; Solaire ;5.000;7.800;600;18;22,5;80;420;2;5.000;208;240;1;96,9%;95,5%; $ 1.085 
+Fronius Primo 5.0-1 208 /240 lite;String ;Fronius; $ 5.050.000,00 ; Solaire ;5.000;7.800;600;18;22,5;80;420;2;5.000;208;240;1;96,9%;95,5%; $ 1.010 
+Fronius Primo 6.0-1 208 /240;String ;Fronius; $ 6.000.000,00 ; Solaire ;6.000;9.300;600;18;22,5;80;420;2;6.000;208;240;1;96,9%;96,0%; $ 1.000 
+Fronius Primo 6.0-1 208 /240 lite;String ;Fronius; $ 5.625.000,00 ; Solaire ;6.000;9.300;600;18;22,5;80;420;2;6.000;208;240;1;96,9%;96,0%; $ 938 
+Fronius Primo 7.6-1 208 /240;String ;Fronius; $ 7.312.500,00 ; Solaire ;7.600;11.700;600;18;22,5;80;420;2;7.600;208;240;1;96,9%;96,0%; $ 962 
+Fronius Primo 7.6-1 208 /240 lite;String ;Fronius; $ 6.937.500,00 ; Solaire ;7.600;11.700;600;18;22,5;80;420;2;7.600;208;240;1;96,9%;96,0%; $ 913 
+Fronius Primo 8.2-1 208 /240;String ;Fronius; $ 7.750.000,00 ; Solaire ;8.200;23.200;600;18;22,5;80;420;2;8.200;208;240;1;97,0%;96,5%; $ 945 
+Fronius Primo 8.2-1 208 /240 lite;String ;Fronius; $ 7.375.000,00 ; Solaire ;8.200;23.200;600;18;22,5;80;420;2;8.200;208;240;1;97,0%;96,5%; $ 899 
+Fronius Primo 10.0-1 208 /240;String ;Fronius; $ 9.675.000,00 ; Solaire ;10.000;15.500;1000;25,5;;80;655;2;10.000;208;240;1;97,9%;96,0%; $ 968 
+Fronius Primo 10.0-1 208 /240 lite;String ;Fronius; $ 9.300.000,00 ; Solaire ;10.000;15.500;1000;25,5;;80;655;2;10.000;208;240;1;97,9%;96,0%; $ 930 
+Fronius Primo 15.0-1 208 /240;String ;Fronius; $ 12.925.000,00 ; Solaire ;15.000;23.200;1000;25,5;;80;680;2;15.000;208;240;1;97,9%;96,5%; $ 862 
+Fronius Primo 15.0-1 208 /240 lite;String ;Fronius; $ 12.550.000,00 ; Solaire ;15.000;23.200;1000;25,5;;80;680;2;15.000;208;240;1;97,9%;96,5%; $ 837 
+Fronius Symo 10.0-3 208-240V advanced lite ;String ;Fronius; $ 10.625.000,00 ; Solaire ;9.995;15.000;600;20,75;31,1;200;350;2;9.995;208;240;3;97,0%;96,5%; $ 1.063 
+Fronius Symo 12.0-3  208-240V advanced ;String ;Fronius; $ 12.312.500,00 ; Solaire ;12.000;;;;;;;;;;;;;; $ 1.026 
+Fronius Symo 12.0-3  208-240V advanced lite;String ;Fronius; $ 11.937.500,00 ; Solaire ;12.000;;;;;;;;;;;;;; $ 995 
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;
