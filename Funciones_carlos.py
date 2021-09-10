@@ -12,9 +12,9 @@ import math
 import numpy as np
 
 
-#DatosInversores = {'referencia':['Huawei 20','Huawei 60','Fronius 15','Fronius 10','CPS 30', 'CPS 10'],
- #               'nominal_power':[20,60,15,10,30,10],'precio':[11875000,17125000,12950000,9675000,12750000,3000000],
-  #              'fabricante':['Huawei','Huawei','Fronius','Fronius','CPS','CPS']}
+DatosInversores = {'referencia':['Huawei 20','Huawei 60','Fronius 15','Fronius 10','CPS 30', 'CPS 10'],
+                'nominal_power':[20,60,15,10,30,10],'precio':[11875000,17125000,12950000,9675000,12750000,3000000],
+                'fabricante':['Huawei','Huawei','Fronius','Fronius','CPS','CPS']}
 
 #inversores_1= pd.DataFrame(data=DatosInversores)
 #inversores_2= inversores_1.sort_values('nominal_power')
@@ -29,18 +29,24 @@ def calculoPotenciaNuevaNecesaria( potenciaNecesaria, potenciaNominalInversor, c
     costoLote = cantidadInversores * costoInversor
     return [potenciaNuevaNecesaria, cantidadInversores, costoLote]
 
-def filtraFabricante(dataframe, fabricante):
+def filterAndSort(dataframe, fabricante):
 
-    for
+    newDataFrame = dataframe
+    duplicados = dataframe.duplicated(fabricante)
+    for i in duplicados:
+        if(duplicados[i]==0):
+            dataframeNuevo= dataframeNuevo.drop([i],axis=0)
 
+    newDataFrame.sort("nominal_power")
+    newDataFrame = newDataFrame.reset_index(drop = True)
     return newDataFrame
 
-def organizaPotenciaInferior(dataframe):
 
-    newDataFrame = 20
-    return newDataFrame
+[pNew, invAm, cost] = calculoPotenciaNuevaNecesaria(20000, 6000, 3.5e6)
 
-[pNew, invAm, cost]=calculoPotenciaNuevaNecesaria(20000, 6000, 3.5e6)
+DF_FilterAndSorted = filterAndSort(DatosInversores, "Huawei")
+
+print(DF_FilterAndSorted)
 
 print(pNew)
 print("\n")
