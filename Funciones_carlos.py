@@ -20,27 +20,36 @@ DatosInversores = {'referencia':['Huawei 20','Huawei 60','Fronius 15','Fronius 1
 #inversores_2= inversores_1.sort_values('nominal_power')
 
 
+# Calcula la potencia necesaria nueva, la configuracion y la potenciaNominal
 def calculoPotenciaNuevaNecesaria( potenciaNecesaria, potenciaNominalInversor, costoInversor):
-    # recibe
+    
+    # Calculo cantidad de inversores
     cantidadInversores = math.floor(potenciaNecesaria / potenciaNominalInversor)
+    # Verificacion exceso de Potencia
     if(cantidadInversores < 1):
+        # Calculo Inversores para exceso de potencia
         cantidadInversores = math.ceil(potenciaNecesaria / potenciaNominalInversor)
+    # Calculo nueva potencia nueva necesaria
     potenciaNuevaNecesaria = potenciaNecesaria - cantidadInversores * potenciaNominalInversor
+    # Calculo costo de configuracion
     costoLote = cantidadInversores * costoInversor
     return [potenciaNuevaNecesaria, cantidadInversores, costoLote]
 
-def filterAndSort(dataframe, fabricante):
+def filterAndSort(dataframe, fabricante, potenciaNominal):
 
+    # copia en buffer temporal 
     newDataFrame = dataframe
+    # Busqueda de inversores del mismo fabricante
     duplicados = dataframe.duplicated(fabricante)
+    # Recorre array de duplicados
     for i in duplicados:
-        if(duplicados[i]==0):
-            dataframeNuevo= dataframeNuevo.drop([i],axis=0)
+        # Busca donde estan ubicados los 
+        if(duplicados[i] == 0 or newDataFrame["nominal_power"][i] > potenciaNominal):
+            newDataFrame= newDataFrame.drop([i],axis=0)
 
     newDataFrame.sort("nominal_power")
     newDataFrame = newDataFrame.reset_index(drop = True)
     return newDataFrame
-
 
 [pNew, invAm, cost] = calculoPotenciaNuevaNecesaria(20000, 6000, 3.5e6)
 
