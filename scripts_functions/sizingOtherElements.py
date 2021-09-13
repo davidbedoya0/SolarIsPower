@@ -25,7 +25,7 @@ Accesorios sistemas de medicion
 Sistema de adquisicion
 Accesorios sistema de adquisicion
     Tiempo Horas hombre
-Tiempo horas hombre ingenieria
+    Tiempo horas hombre ingenieria
     elementos Estructura
     tuberia
 
