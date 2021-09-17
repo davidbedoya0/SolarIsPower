@@ -1,7 +1,7 @@
 import pandas as pd 
 
 proteccionesAC = [
-    "referencia"["worldsunlight B110A 4P XM1 - 125PV", "referencia2"]
+    {"referencia":["worldsunlight B110A 4P XM1 - 125PV", "referencia2"]}
 ]
 
 proteccionesDC = {"referencia":["Siemens16ADC72V1P", "Weg20ADC120V1P",
@@ -18,7 +18,8 @@ proteccionesDC = {"referencia":["Siemens16ADC72V1P", "Weg20ADC120V1P",
     32, 50, 63, 50, 
     40, 63, 16, 32, 
     63, 16, 32, 63, 
-    16, 32, 63, 16, 
+    16, 32, 63, 16,
+    32, 63, 16, 32,
     63, 16, 32, 40, 
     63, 16, 32, 63],
 
@@ -27,6 +28,7 @@ proteccionesDC = {"referencia":["Siemens16ADC72V1P", "Weg20ADC120V1P",
     72, 72, 250, 250, 
     250, 500, 500, 500, 
     750, 750, 750, 1000, 
+    1000, 1000, 1000, 1000, 
     1000, 250, 250, 250, 
     250, 500, 500, 500],
 
@@ -35,10 +37,11 @@ proteccionesDC = {"referencia":["Siemens16ADC72V1P", "Weg20ADC120V1P",
     1, 1, 1, 1, 
     1, 2, 2, 2, 
     3, 3, 3, 4, 
+    4, 4, 4, 4, 
     4, 1, 1, 1, 
     1, 2, 2, 2],
 
-    "Polos":["Siemens", "Weg",
+    "Marca":["Siemens", "Weg",
     "Weg","Weg","Weg","Siemens",
     "Siemens","Siemens","Worldsunlight","Worldsunlight",
     "Worldsunlight","Worldsunlight","Worldsunlight","Worldsunlight",
@@ -47,5 +50,4 @@ proteccionesDC = {"referencia":["Siemens16ADC72V1P", "Weg20ADC120V1P",
     "FEEO","FEEO","FEEO","FEEO",
     "FEEO","FEEO","FEEO","FEEO"
     ]
-
     }

@@ -1,3 +1,6 @@
+
+import numpy as np
+
 """
 
 # Descripcion. Calcula la configuracion de las protecciones, el tablero, cableado, 
@@ -51,6 +54,7 @@ para el lado DC o AC.
 Dataframe Protecciones mercado
 Corriente salida arreglo paneles
 Corriente salida inversores
+configuracion
 
 
 
@@ -63,10 +67,47 @@ Dataframe protecciones necesarias
 
 def calculoProtecciones(corrienteSalidaPaneles, corrienteSalidaInversor, proteccionesDF):
 
-
+    # Breaker Paneles
+    breakerDC = buscarProteccionCercana(proteccionesDF, corrienteSalidaPaneles)
 
 
     return [proteccionnecesariaDF]
+
+
+def buscarProteccionCercana(df, i_fail, config):
+
+    # convierte la columna de corriente en un array numpy
+    ibreakers = df["corriente"]
+
+    # crea un array con el valor de la corriente del panel
+    iPanelArr = [i_fail] * len(ibreakers)
+
+    # calcula la diferencia entre los dos paneles
+    diffI = [e1 - e2 for e1, e2 in zip(ibreakers, iPanelArr)]
+
+    #Inicializa las variables de diferencia e indicador
+    breakerCercano = 1e6
+    iCurr = 1e6
+    lowV = 1e6
+
+    # Se recorre el vector diffI buscando el valor mas cercano a cero positivo
+    for i, val in enumerate(diffI):
+        # Se actualiza la diferencia mas pequena y mayor a 0 y el indice
+        if breakerCercano > val and val > 0:
+            print(str(config["fases"]) + " AND " + str(df["Polos"][i]) + "\n")
+            print(str(config["Tension"]) + " AND " + str(df["Tension"][i]) + "\n")
+            if config["fases"] == df["Polos"][i] and config["Tension"] < df["Tension"][i]:
+                if df["Tension"][i] < lowV:
+                    breakerCercano = diffI[i]
+                    lowV = df["Tension"][i]
+                    iCurr = i
+    
+    # Se retorna la referencia de la proteccion mas cercana
+    if iCurr == 1e6:
+        return "No se encontro Breaker Adecuado"
+    else:
+        return df["referencia"][iCurr]
+
 
 
 """
