@@ -247,12 +247,35 @@ referenciaMedidor
 """
 
 def seleccionMedidor(
-    tensionAC, 
-    corrienteAC,
-    configuracionAC):
+    dimensionamiento,
+    dbMeters, 
+    dbCT):
+    current = dimensionamiento["solarInverter"]["totIoutput"]
+    polos = dimensionamiento["siteFeatures"]["ACConfig"]["polos"]
+    for val, ind in dbMeters[polos]:
+        if polos == val:
+            if current < 120 and dbMeters["tipo"][ind] == 1:
+                ref = dbMeters["referencia"][ind]
+                directa = True
+            if current > 120 and dbMeters["tipo"][ind] == 0:
+                ref = dbMeters["referencia"][ind]
+                directa = False
 
+    if directa:
 
-    return [refMedidor]
+        currentdif = 1e9
+        for val, ind in dbCT["corriente"]:
+            diff = val - current
+            if diff > 0 & diff < currentdif:
+                if val > current * 1.5:
+                    currentdif = diff
+                    index = ind
+        CT = dbCT["referencia"][index]
+
+    else:
+        CT = "MEDIDA DIRECTA"
+
+    return [ref, CT]
 
 
 
@@ -277,7 +300,7 @@ def tiempoinstalacionTotal(
     longitudCableado,
     cantidadModulosPV, 
     cantidadInversores):
-
+    
 
     return [tiempoInstalacion]
 

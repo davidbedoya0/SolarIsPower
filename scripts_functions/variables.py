@@ -31,6 +31,7 @@ solarInverter = {
     "iInput":[], 
     "vInput":[], 
     "iOutput":[], 
+    "totIoutput":[],
     "vOutput":[], 
     "pOutput":[], 
     "pInput":[]
