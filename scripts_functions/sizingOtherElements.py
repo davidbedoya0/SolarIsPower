@@ -177,24 +177,59 @@ Dataframe cableado necesarias
 """
 
 def calculoCableado(
-    corrienteSalidaPaneles, 
-    corrienteSalidaInversor, 
-    cableDF, 
-    distanciaTab2Array, 
-    areaPV):
+    dimensionamiento, 
+    cableDF):
 
-    #Calculo cableado paneles
+    
     factOverSizing = 1.25
+    # Se extrae la corriente necesaria
     curr = dimensionamiento["pvModules"]["iArray"] * factOverSizing
+    befDiffCurr = 1e9
+    # Seleccion de la referencia del conductor para el lado DC
     for i, idx, in cableDF["capCurr"]:
         diffCurr = i - curr
         if diffCurr < befDiffCurr and diffCurr > 0:
             befDiffCurr = diffCurr
             ind = idx
-    
 
+    referencePVWire = cableDF["capCurr"][ind]
 
+    curr = dimensionamiento["solarInverter"]["iOutput"] * factOverSizing
+    befDiffCurr = 1e9
+    # Seleccion de la referencia del conductor para el lado AC
+    for i, idx, in cableDF["capCurr"]:
+        diffCurr = i - curr
+        if diffCurr < befDiffCurr and diffCurr > 0:
+            befDiffCurr = diffCurr
+            ind = idx
 
+    referenceACWire = cableDF["capCurr"][ind]
+
+    # Calculo cantidad de conductor lado DC
+
+    # Para calcularlo seguimos la siguiente formula
+    # PVWireTOTDC = (A + B) * C
+    # A -> distancia del tablero a los strings X N Strings X 2
+    # B -> Cantidad de Modulos per String X Cantidad strings X anchoMod X 2
+    # C -> Factor sobredimensionamiento Normalmente 1.1
+
+    nArray = dimensionamiento["pvModules"]["nArray"]
+
+    A = dimensionamiento["siteFeatures"]["distPv_Tab"] * nArray * 2
+    B = dimensionamiento["pvModules"]["pvModperArray"] * nArray * dimensionamiento["pvModules"]["areaPVMod"][1] *2
+    C = 1.1
+
+    PVWireTOTDC = (A + B) * C
+
+    # Calculo cantidad de conductor lado AC
+
+    # Para calcularlo seguimos la siguiente formula
+    # PVWireTOT = cantidad total de inversores * configuracionAC * distanciaInversores_Medidor * C
+
+    nInv = dimensionamiento["solarInverter"]["totInvAmount"]
+    PVWireTOTAC = nInv * dimensionamiento["siteFeatures"]["ACConfig"][1] * 1.1
+
+    return[PVWireTOTAC, referenceACWire, PVWireTOTDC, referencePVWire]
 
 """
 

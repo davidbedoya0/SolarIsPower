@@ -24,8 +24,9 @@ solarInverter = {
     "powerNeed":[],
 
     #output
-    "ref":[],       #referencias de inversores seleccionados
-    "invAmount":[], #cantidad por referencia
+    "ref":[],           #referencias de inversores seleccionados
+    "invAmount":[],     #cantidad por referencia
+    "totInvAmount":[],  # cantidad total de inversores
     "cost":[], 
     "iInput":[], 
     "vInput":[], 
@@ -35,7 +36,7 @@ solarInverter = {
     "pInput":[]
 }
 
-otehrElements = {
+otherElements = {
     "pvWires":[],
     "facilityWires":[],
     "pvProtections":[],
@@ -48,8 +49,19 @@ otehrElements = {
     "InstalationData":[]
 }
 
+siteFeatures ={
+    "distPv_Tab":[],
+    "availableArea":[],
+    "HSP":[],
+    "coords":[], 
+    # ACConfig es un vector que contiene:
+    # "TAG 3F+N, Cantidad de Fases"
+    "ACConfig":[] 
+}
+
 dimensionamiento = {
     pvModules,
-    solarInverter
+    solarInverter,
+    siteFeatures
 
 }
