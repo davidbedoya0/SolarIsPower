@@ -177,24 +177,59 @@ Dataframe cableado necesarias
 """
 
 def calculoCableado(
-    corrienteSalidaPaneles, 
-    corrienteSalidaInversor, 
-    cableDF, 
-    distanciaTab2Array, 
-    areaPV):
+    dimensionamiento, 
+    cableDF):
 
-    #Calculo cableado paneles
+    
     factOverSizing = 1.25
+    # Se extrae la corriente necesaria
     curr = dimensionamiento["pvModules"]["iArray"] * factOverSizing
+    befDiffCurr = 1e9
+    # Seleccion de la referencia del conductor para el lado DC
     for i, idx, in cableDF["capCurr"]:
         diffCurr = i - curr
         if diffCurr < befDiffCurr and diffCurr > 0:
             befDiffCurr = diffCurr
             ind = idx
-    
 
+    referencePVWire = cableDF["capCurr"][ind]
 
+    curr = dimensionamiento["solarInverter"]["iOutput"] * factOverSizing
+    befDiffCurr = 1e9
+    # Seleccion de la referencia del conductor para el lado AC
+    for i, idx, in cableDF["capCurr"]:
+        diffCurr = i - curr
+        if diffCurr < befDiffCurr and diffCurr > 0:
+            befDiffCurr = diffCurr
+            ind = idx
 
+    referenceACWire = cableDF["capCurr"][ind]
+
+    # Calculo cantidad de conductor lado DC
+
+    # Para calcularlo seguimos la siguiente formula
+    # PVWireTOTDC = (A + B) * C
+    # A -> distancia del tablero a los strings X N Strings X 2
+    # B -> Cantidad de Modulos per String X Cantidad strings X anchoMod X 2
+    # C -> Factor sobredimensionamiento Normalmente 1.1
+
+    nArray = dimensionamiento["pvModules"]["nArray"]
+
+    A = dimensionamiento["siteFeatures"]["distPv_Tab"] * nArray * 2
+    B = dimensionamiento["pvModules"]["pvModperArray"] * nArray * dimensionamiento["pvModules"]["areaPVMod"][1] *2
+    C = 1.1
+
+    PVWireTOTDC = (A + B) * C
+
+    # Calculo cantidad de conductor lado AC
+
+    # Para calcularlo seguimos la siguiente formula
+    # PVWireTOT = cantidad total de inversores * configuracionAC * distanciaInversores_Medidor * C
+
+    nInv = dimensionamiento["solarInverter"]["totInvAmount"]
+    PVWireTOTAC = nInv * dimensionamiento["siteFeatures"]["ACConfig"][1] * 1.1
+
+    return[PVWireTOTAC, referenceACWire, PVWireTOTDC, referencePVWire]
 
 """
 
@@ -212,12 +247,35 @@ referenciaMedidor
 """
 
 def seleccionMedidor(
-    tensionAC, 
-    corrienteAC,
-    configuracionAC):
+    dimensionamiento,
+    dbMeters, 
+    dbCT):
+    current = dimensionamiento["solarInverter"]["totIoutput"]
+    polos = dimensionamiento["siteFeatures"]["ACConfig"]["polos"]
+    for val, ind in dbMeters[polos]:
+        if polos == val:
+            if current < 120 and dbMeters["tipo"][ind] == 1:
+                ref = dbMeters["referencia"][ind]
+                directa = True
+            if current > 120 and dbMeters["tipo"][ind] == 0:
+                ref = dbMeters["referencia"][ind]
+                directa = False
 
+    if directa:
 
-    return [refMedidor]
+        currentdif = 1e9
+        for val, ind in dbCT["corriente"]:
+            diff = val - current
+            if diff > 0 & diff < currentdif:
+                if val > current * 1.5:
+                    currentdif = diff
+                    index = ind
+        CT = dbCT["referencia"][index]
+
+    else:
+        CT = "MEDIDA DIRECTA"
+
+    return [ref, CT]
 
 
 
@@ -242,7 +300,7 @@ def tiempoinstalacionTotal(
     longitudCableado,
     cantidadModulosPV, 
     cantidadInversores):
-
+    
 
     return [tiempoInstalacion]
 

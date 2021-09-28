@@ -1,5 +1,6 @@
 #import pandas as pd 
 
+## Base de datos protecciones AC
 proteccionesAC = {
     "referencia":["ABN52C15A", "ABN52C20A","ABN52C30A","ABN52C40A","ABN52C50A",
     "ABN62C60A", "ABN102C75A", "ABN102C100A",
@@ -75,7 +76,7 @@ proteccionesAC = {
     ]
 }
 
-
+## Base de datos DPS AC
 DPS_AC = {"referencia":["SPL220S2P_LS", "BKS_E_3PLS", "BKS_C_L4PS", 
             "CSH50120", "CSH50277","PSC1-12_120","PSC1-12_277",
             "PSC2-12_120TNS","PSC2-12_277TNS",
@@ -108,7 +109,7 @@ DPS_AC = {"referencia":["SPL220S2P_LS", "BKS_E_3PLS", "BKS_C_L4PS",
     ]
 }
 
-
+## Base de datos DPS DC
 DPS_DC = {"referencia":["WorldSunlightn2P500VDC20_40kA","WorldSunlightn3P1000VDC20_40kA",
     "FEEO2P600V20_40kA", "FEEO3P1000V20_40kA", "Clamper3P300VDC40kA","Clamper1P275VDC20kA"], 
 
@@ -122,7 +123,7 @@ DPS_DC = {"referencia":["WorldSunlightn2P500VDC20_40kA","WorldSunlightn3P1000VDC
 
 }
 
-
+## Base de datos Protecciones DC
 proteccionesDC = {"referencia":["Siemens16ADC72V1P", "Weg20ADC120V1P",
     "Weg32ADC120V1P","Weg50ADC120V1P","Weg63ADC120V1P","Siemens50ADC120V1P",
     "Siemens40ADC72V1P","Siemens63ADC72V1P","Worldsunlight16ADC250V1P","Worldsunlight32ADC250V1P",
@@ -181,6 +182,7 @@ proteccionesDC = {"referencia":["Siemens16ADC72V1P", "Weg20ADC120V1P",
     ]
 }
 
+## Base de datos Cables desnudos THHN para AC
 WiresISO = {
     "REF":["ALTHHN_N18","ALTHHN_N16","ALTHHN_N14","ALTHHN_N12","ALTHHN_N10","ALTHHN_N8","ALTHHNEXTDZL_N3x12",
     "ALTHHNEXTDZL_N14","ALTHHNEXTDZL_N12","ALTHHNEXTDZL_N10","ALTHHNEXTDZL_N8","ALTHHNEXTDZL_N6",
@@ -233,8 +235,77 @@ WiresISO = {
 
 }
 
-
-"WirNakedCu"={
+# Base de datos conductor desnudo
+WirNakedCu={
     "referencia":[]
 
 }
+
+# Base de datos medidores bidireccionales
+bidMeters={
+    "referencia":["ISKRAMT174-D25120_1F","ISKRAMT174-D25120_2F","ISKRAMT174-D25120_3F",
+    "ISKRAMT174-T116_1F","ISKRAMT174-T116_2F","ISKRAMT174-T116_3F"],
+    "polos":[1, 2, 3, 1, 2, 3],
+    "tipo":[1, 1, 1, 0, 0, 0]
+}
+
+
+#Base de datos CT
+CT = {
+    "referencia":[
+        "M70111","M70112","M70113","M70114","M70115",
+        "M70116","M70117","M70118","M7011A","M70121",
+        "M70122","M70123","M70124","M70125","M70126",
+        "M70127","M70128","M7012A","M7012B","M7012C",
+        "M7012D","M70131","M70132","M70133","M70134",
+        "M70135","M70136","M70137","M70138","M70141",
+        "M70142","M70143","M70144","M70145","M70146",
+        "M70147","M70148","M70149","M7014A","M70151",
+        "M70152","M70153","M70154","M70155","M70156",
+        "M70157","M70158","M7015A","M7015B","M7015C",
+        "M7015E","M7015F","M7015H"
+        ],
+
+    "Corriente":[
+            100, 150, 200, 250, 300, 
+            400, 75, 125, 50, 250, 
+            300, 400, 500, 600, 750, 
+            800, 1000, 150, 200, 700, 
+            100, 250, 300, 400, 500, 
+            600, 750, 800, 1000, 500, 
+            600, 750, 800, 1000, 1200, 
+            1250, 1500, 1600, 2500, 1000, 
+            1500, 2000, 2500, 3000, 4000, 
+            5000, 750, 1250, 1600, 3200, 
+            6000, 500, 600],
+
+    "pletina":[
+            [20, 30], [20, 30], [20, 30], [20, 30], [20, 30], 
+            [20, 30], [20, 30], [20, 30], [50, 80], [50, 80], 
+            [50, 80], [50, 80], [50, 80], [50, 80], [50, 80], 
+            [50, 80], [50, 80], [50, 80], [50, 80], [50, 80], 
+            [50, 80], [80, 80], [80, 80], [80, 80], [80, 80], 
+            [80, 80], [80, 80], [80, 80], [80, 80], [80, 120], 
+            [80, 120], [80, 120], [80, 120], [80, 120], [80, 120], 
+            [80, 120], [80, 120], [80, 120], [80, 120], [80, 160], 
+            [80, 160], [80, 160], [80, 160], [80, 160], [80, 160], 
+            [80, 160], [80, 160], [80, 160], [80, 160], [80, 160], 
+            [80, 160], [80, 160], [80, 160]
+            ],
+
+    "precio":[
+        318854, 308760, 308760, 308760, 308760,
+        308760, 308760, 308760, 308760, 349088,
+        349088, 349088, 349088, 349088, 349088,
+        360500, 349088, 349088, 349088, 349088,
+        360500, 384345, 384345, 384345, 384345, 
+        384345, 384345, 384345, 384345, 560055,
+        560055, 560055, 560055, 560055, 560055,
+        560055, 560055, 560055, 644102, 1208292, 
+        1232464, 1138024, 1203752, 1307149, 1410260, 
+        1497665, 1204447, 1232464, 1252056, 1317620, 
+        1497665, 1190541, 1381997
+        ]
+
+}
+
