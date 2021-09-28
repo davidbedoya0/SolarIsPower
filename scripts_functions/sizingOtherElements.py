@@ -43,33 +43,32 @@ def otherElementsSising():
 
 
 """
-
 # Descripcion: Calcula la proteccion especifica que se necesita en el sistema 
 para el lado DC o AC. 
 
 # Inputs: 
-Dataframe Protecciones mercado
-Corriente salida arreglo paneles
-Corriente salida inversores
-configuracion
-
-
+Dataframe de configuracion
+Base de datos breakers AC
+Base de datos breakers DC
+Base de datos DPS AC
+Base de datos DPS DC
 
 # Outputs: 
-Dataframe protecciones necesarias
-    tipo
-    configuracion
-
+Dataframe de configuracion actualizado
+    Se actualiza el array proteccion AC
+    Se actualiza el array proteccion DC
+    Se actualiza el string DPS AC
+    Se actualiza el string DPS DC
 """
 
-def calculoProtecciones(corrienteSalidaPaneles, corrienteSalidaInversor, config):
+def calculoProtecciones(config, DB_BKR_AC, DB_BKR_DC, DB_DPS_AC, DB_DPS_DC):
 
     # Crea un nuevo dataframe que contendra todas las protecciones necesarias en el sistema
     proteccionnecesariaDF = pd.DataFrame()
     breakerAC = []
     # Calculo de protecciones de salida
     # Recorre la columna de inversores
-    for i, iFalla in config["inversores"]["iFalla"]:
+    for iFalla in config["inversores"]["iFalla"]:
         # Breaker Paneles
         breakerAC.append(buscarProteccionCercana(proteccionesAC, iFalla, config, 0))
     
@@ -108,7 +107,7 @@ def buscarProteccionCercana(df, i_fail, config, typeBreaker):
                         lowV = df["tension"][i]
                         iCurr = i
         # Se retorna la referencia de la proteccion mas cercana
-        if iCurr!=1e6:
+        if iCurr != 1e6:
             return (str(config["stack"]) + " X " + str(df["referencia"][iCurr]))
     # CASO AC 
     else:
@@ -153,24 +152,13 @@ def seleccionDPS(config, DPS_DB, DCoAC):
                     Vdiffant = Vdiff
                     # Se almacena la referencia
                     currREF = DPS_DB["referencia"][i]
-    # Se retorna la referencia
+    # Se retorna la referencias
     return currREF
 
 
 
 
-
-
-
-
-
-
-
-
-
-
 """
-
 # Descripcion: Calcula la cantidad total de cable que es necesaria para el proyecto en 
 su lado AC y DC.
 
@@ -186,7 +174,6 @@ Dataframe cableado necesarias
     tipo
     configuracion
     distancia
-
 """
 
 def calculoCableado(
@@ -196,9 +183,7 @@ def calculoCableado(
     distanciaTab2Array, 
     areaPV):
 
-
-
-
+    
     return [cablenecesariaDF]
 
 
