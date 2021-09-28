@@ -35,7 +35,18 @@ solarInverter = {
     "pInput":[]
 }
 
-
+otehrElements = {
+    "pvWires":[],
+    "facilityWires":[],
+    "pvProtections":[],
+    "facilityProtections":[],
+    "pvDPS":[],
+    "facilityDPS":[],
+    "meter":[],
+    "structData":[],
+    "pipeData":[],
+    "InstalationData":[]
+}
 
 dimensionamiento = {
     pvModules,

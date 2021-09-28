@@ -183,8 +183,15 @@ def calculoCableado(
     distanciaTab2Array, 
     areaPV):
 
+    #Calculo cableado paneles
+    factOverSizing = 1.25
+    curr = dimensionamiento["pvModules"]["iArray"] * factOverSizing
+    for i, idx, in cableDF["capCurr"]:
+        diffCurr = i - curr
+        if diffCurr < befDiffCurr and diffCurr > 0:
+            befDiffCurr = diffCurr
+            ind = idx
     
-    return [cablenecesariaDF]
 
 
 
@@ -259,7 +266,7 @@ dataframe estructura para paneles proyecto
 
 """
 
-def tiempoinstalacionTotal(
+def structureComputation(
     cantidadTableros, 
     longitudCableado,
     cantidadModulosPV, 
@@ -283,7 +290,7 @@ dataframe tuberia
 
 """
 
-def tiempoinstalacionTotal(
+def pipeliComputation(
     distanciaTab2Panels, 
     cableadoutilizadoDF):
 
