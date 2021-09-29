@@ -47,7 +47,8 @@ otherElements = {
     "meter":[],
     "structData":[],
     "pipeData":[],
-    "InstalationData":[]
+    "InstalationData":[],
+    "wires":[]
 }
 
 siteFeatures ={
@@ -57,7 +58,10 @@ siteFeatures ={
     "coords":[], 
     # ACConfig es un vector que contiene:
     # "TAG 3F+N, Cantidad de Fases"
-    "ACConfig":[] 
+    "ACConfig":[], 
+    "TipodeCubierta":[],
+    "cubiertaApta":[],
+    "buitron":[]
 }
 
 dimensionamiento = {
