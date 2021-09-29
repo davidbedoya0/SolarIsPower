@@ -261,7 +261,7 @@ def seleccionMedidor(
                 ref = dbMeters["referencia"][ind]
                 directa = False
 
-    if directa:
+    if directa == False:
 
         currentdif = 1e9
         for val, ind in dbCT["corriente"]:
@@ -339,13 +339,53 @@ dataframe estructura para paneles proyecto
 """
 
 def structureComputation(
-    cantidadTableros, 
-    longitudCableado,
-    cantidadModulosPV, 
-    cantidadInversores):
+    dimensionamiento, 
+    metalStruct, 
+    claytyleStruct,
+    soilStruct
+    ):
+
+    cubType = dimensionamiento["siteFeatures"]["TipodeCubierta"]
+    amMods = dimensionamiento["pvModules"]["amountPVMod"]
+    
+    if cubType > 0 and cubType < 4:
+        # Cubierta del tipo metalica
+        if cubType == 1:
+            return quantityStructComputation(metalStruct, amMods)
+        # Cubierta del tipo teja de barro
+        elif cubType == 2:
+            return quantityStructComputation(claytyleStruct, amMods)
+        # Cubierta del tipo suelo
+        elif cubType == 3:
+            return quantityStructComputation(soilStruct, amMods)
+    else:
+        return "ERROR"
 
 
-    return [estructuraPanelesDF]
+def quantityStructComputation(db, amMods):
+    amMods_ = amMods
+    unidadesAnt = 1e9
+    i = 0
+    k = 0
+    references = []
+    unidades = []
+
+    while amMods_ > 0:
+
+        val = db["cantidadModulos"][i]
+        unidades = val / amMods_
+        resto = val % amMods_
+
+        if unidades < unidadesAnt:
+
+            unidadesAnt = unidades
+            amMods_ = resto
+            references[k] = db["reference"][i]
+            unidades[k] = unidades
+            k =+ 1
+        i += 1
+
+    return [references]
 
 
 """
@@ -364,7 +404,9 @@ dataframe tuberia
 def pipeliComputation(
     dimensionamiento, 
     wiresDBAC, 
-    wiresDBDC):
+    wiresDBDC,
+    pipeDB
+    ):
 
     # Calculo del metraje y tipo de tuberia (expuesta, enterrada)
     # Verificamos si existe buitron para uso de IMT
@@ -403,7 +445,7 @@ def pipeliComputation(
     ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"])
     # Se extrae el calibre
     seccionAWGDC = wiresDBAC["seccion"][ind]
-    seccionAWGAC = wiresDBAC["seccion"][ind]
+    seccionAWGAC = wiresDBDC["seccion"][ind]
     # Calculo seccion optima del tubo
     
     if amountWiresDC == 2:
@@ -416,11 +458,26 @@ def pipeliComputation(
     else:
         seccionOptimaAC = seccionAWGAC / 40
 
+    seccionOpt = 1e9
     # Buscar seccion 
-    for val, ind in 
+    for val, ind in pipeDB["seccion"]:
+        diff = val - seccionOptimaAC
+        if diff > 0 and diff < seccionOpt:
+            seccionOpt = pipeDB["seccion"][ind]
+            indopt = ind
 
+    refSeccOptAC = pipeDB["referencia"][ind]
+            
+    for val, ind in pipeDB["seccion"]:
+        diff = val - seccionOptimaDC
+        if diff > 0 and diff < seccionOpt:
+            seccionOpt = pipeDB["seccion"][ind]
+            indopt = ind
 
-    return [estructuraPanelesDF]
+    refSeccOptDC = pipeDB["referencia"][ind]
+
+    return [refSeccOptAC, dimensionamiento["siteFeatures"]["distTab2Cont"],
+        refSeccOptDC, tubEnterrada, tubExpuesta]
 
 
 
