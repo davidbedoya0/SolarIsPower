@@ -296,10 +296,24 @@ Timepo horas Hombre
 """
 
 def tiempoinstalacionTotal(
-    cantidadTableros, 
+    dimensionamiento, 
     longitudCableado,
     cantidadModulosPV, 
     cantidadInversores):
+
+    # Sigue la siguiente ecuacion para el calculo 
+    # instalationTime = A + B + C + D + E + F
+    # A = AreaCubiertaReemplazo * 2.5 hrs
+    # B = Cantidadtableros * 4 hrs
+    # C = longitudTuberiaExpuesta *  1 hr + longitudTuberiaEnterrada *  4 hr 
+    # D = CantidadInversores * 3 hrs
+    # E = CantidadModulos * 4 hrs
+    # F = CantidadContadores * 3hrs
+    
+    if dimensionamiento["siteFeatures"]["cubiertaApta"]==1:
+        areaCubiertaReemplazo = 0;
+    if dimensionamiento["siteFeatures"]["buitron"]==0:
+        longitudTuberiaEnterrada = dimensionamiento["siteFeatures"]["distPv_Tab"]
     
 
     return [tiempoInstalacion]
@@ -334,7 +348,6 @@ def structureComputation(
     return [estructuraPanelesDF]
 
 
-    
 """
 
 # Descripcion: Calcula la tuberia necesaria desde el punto 
@@ -349,8 +362,65 @@ dataframe tuberia
 """
 
 def pipeliComputation(
-    distanciaTab2Panels, 
-    cableadoutilizadoDF):
+    dimensionamiento, 
+    wiresDBAC, 
+    wiresDBDC):
+
+    # Calculo del metraje y tipo de tuberia (expuesta, enterrada)
+    # Verificamos si existe buitron para uso de IMT
+    overSize = 1.2
+    if dimensionamiento["siteFeatures"]["buitron"]==0:
+        tubEnterrada = dimensionamiento["siteFeatures"]["distPv_Tab"]
+        tubExpuesta = dimensionamiento["pvModules"]["pvModperArray"]*dimensionamiento["pvModules"]["sizePVMod"][1]
+    else:
+        tubEnterrada = 0
+        tubExp1 = dimensionamiento["siteFeatures"]["distPv_Tab"]
+        tubExp2 = dimensionamiento["pvModules"]["pvModperArray"]*dimensionamiento["pvModules"]["sizePVMod"][1]
+        tubExpuesta = tubExp1 + tubExp2
+
+    # Calculo cantidad de conductores por la tuberia
+    # Lado DC
+    amountWiresDC = dimensionamiento["pvModules"]["nArray"]*2
+    
+    # Lado AC
+    # Para el lado AC se tiene en cuenta una cantidad de conductores igual a 
+    # la configuracion del sistema
+
+    config = dimensionamiento["siteFeatures"]["ACConfig"]
+
+    if config == "3P+N":
+        amountWiresAC = 4
+    elif config == "3P": 
+        amountWiresAC = 3
+    elif config == "2P": 
+        amountWiresAC = 2
+    elif config == "1P": 
+        amountWiresAC = 2
+
+    # Calculo de la tuberia
+    # conversion de AWG a mm2
+
+    ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"])
+    # Se extrae el calibre
+    seccionAWGDC = wiresDBAC["seccion"][ind]
+    seccionAWGAC = wiresDBAC["seccion"][ind]
+    # Calculo seccion optima del tubo
+    
+    if amountWiresDC == 2:
+        seccionOptimaDC = seccionAWGDC / 31
+    else:
+        seccionOptimaDC = seccionAWGDC / 40
+
+    if amountWiresAC == 2:
+        seccionOptimaAC = seccionAWGAC / 31
+    else:
+        seccionOptimaAC = seccionAWGAC / 40
+
+    # Buscar seccion 
+    for val, ind in 
 
 
     return [estructuraPanelesDF]
+
+
+
