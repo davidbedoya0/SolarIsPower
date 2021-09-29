@@ -309,3 +309,137 @@ CT = {
 
 }
 
+PVC = {
+    "referencia":[
+        "PVCCndt1_2_3M", "PVCCndt3_4_3M", "PVCCndt1_3M", "PVCCndt11_2_3M"
+        ,"PVCCndt1_1_4M","PVCCndt2_3M","PVCCndt3_3M","PVCCndt4_3M"
+    ],
+    "seccion":[
+        17.93, 23.42, 29.54, 44.20, 
+        38.35, 55.80, 88.90, 114.30
+    ],
+    "calibre":[
+        0.5, 0.75, 1, 1.5, 
+        1.25, 2, 3, 4
+    ],
+    "precio":[
+        1679, 2198, 3046, 6003, 
+        4710, 9269, 23800, 30716
+    ]
+}
+
+EMT = {
+    "referencia":[
+        "EMTCndt1_2_3M", "EMTCndt3_4_3M", "EMTCndt1_3M", "EMTCndt11_2_3M"
+        ,"EMTCndt1_1_4M","EMTCndt2_3M","EMTCndt21_2_3M","EMTCndt3_3M"
+        ,"EMTCndt4_3M"
+        ],
+
+    "diametro":[
+        17.93, 23.42, 29.54, 44.20, 
+        38.35, 55.80, 73.03, 88.90, 
+        114.30
+        ],
+
+    "calibre":[
+        0.5, 0.75, 1, 1.5, 
+        1.25, 2, 2.5, 3, 
+        4
+        ],
+    "precio":[
+        5566, 8316, 12516, 21183, 
+        19033, 26883, 53880, 61683, 
+        88583]
+}
+
+IMC = {
+    "referencia":[
+        "IMCCndt1_2_3M", "IMCCndt3_4_3M", "IMCCndt1_3M", "IMCCndt11_2_3M"
+        ,"IMCCndt1_1_4M","IMCCndt2_3M","IMCCndt3_3M", "IMCCndt4_3M"
+        ],
+
+    "diametro":[
+        17.93, 23.42, 29.54, 44.20, 
+        38.35, 55.80, 88.90, 114.30
+        ],
+
+    "calibre":[
+        0.5, 0.75, 1, 1.5, 
+        1.25, 2, 3, 4
+        ],
+    "precio":[
+        14316, 17516, 25183, 40233, 
+        33166, 51433, 115583, 153316]
+}
+
+
+SoilStruct = {
+
+    "info":[
+        "Estructuras de suelo 15 a 30 grados de inclinacion, incluye accesorios"
+        ],
+
+    "reference":[
+        "SoilSt_1530_1Mod", "SoilSt_1530_1Mod", "SoilSt_1530_1Mod",
+        "SoilSt_1530_1Mod", "SoilSt_1530_1Mod", "SoilSt_1530_1Mod"
+        ],
+
+    "cantidadModulos":[
+        1, 2, 3, 
+        4, 5, 6
+        ],
+
+    "precio":[
+        189210, 433160, 629748, 
+        681156, 819910, 958664
+        ]
+
+}
+
+
+clayTileStruct = {
+
+    "info":[
+        "Estructura de soporte de panel para teja de barro, incluye accesorios"
+        ],
+
+    "reference":[
+        "clayTlSt_adjDeg_1Mod", "clayTlSt_adjDeg_2Mod", "clayTlSt_adjDeg_3Mod"
+        "clayTlSt_adjDeg_4Mod", "clayTlSt_adjDeg_5Mod", "clayTlSt_adjDeg_6Mod"
+        ],
+
+    "cantidadModulos":[
+        1, 2, 3, 
+        4, 5, 6
+        ],
+
+    "precio":[
+        189210, 340578, 479332, 
+        681156, 819910, 996030
+        ]
+
+}
+
+metalicStruct = {
+
+    "info":[
+        "Estructura de soporte de panel para techo metalico, incluye accesorios"
+        ],
+
+    "reference":[
+        "metalSt_adjDeg_3Mod", "metalSt_adjDeg_6Mod", "metalSt_adjDeg_8Mod", 
+        "metalSt_adjDeg_10Mod"
+        ],
+
+    "cantidadModulos":[
+        3, 6, 8, 
+        10
+        ],
+
+    "precio":[
+        411264, 684250, 981750,
+        1190000
+        ]
+
+}
+

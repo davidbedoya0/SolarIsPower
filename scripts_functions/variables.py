@@ -47,26 +47,26 @@ otherElements = {
     "meter":[],
     "structData":[],
     "pipeData":[],
-    "InstalationData":[],
-    "wires":[]
+    "InstalationData":[],     
+    "wires":[]                  # Estructura del cableado
 }
 
 siteFeatures ={
-    "distPv_Tab":[],
-    "availableArea":[],
-    "HSP":[],
-    "coords":[], 
-    # ACConfig es un vector que contiene:
-    # "TAG 3F+N, Cantidad de Fases"
-    "ACConfig":[], 
-    "TipodeCubierta":[],
-    "cubiertaApta":[],
-    "buitron":[]
+    "distTab_Cont":[],          # Distancia del tablero de inversores al contador
+    "distPv_Tab":[],            # Distancia del tablero de inversores a los array
+    "availableArea":[],         # Area disponible 
+    "HSP":[],                   # Horas solares Pico 
+    "coords":[],                # Coordenadas del proyecto 
+    "ACConfig":[],              # "TAG 3F+N, Cantidad de Fases" 
+    "TipodeCubierta":[],        # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha)
+    "cubiertaApta":[],          # Cubierta Apta (la cubierta es apta)
+    "buitron":[]                # Existencia de buitron (bool)
 }
 
 dimensionamiento = {
-    pvModules,
-    solarInverter,
-    siteFeatures
+    "pvModules":[],             # Estructura de modulos solares
+    "solarInverter":[],         # Estructura de la seleccion del inversor
+    "siteFeatures":[]           # Estructura de las caracteristicas del sitio
 
 }
+
