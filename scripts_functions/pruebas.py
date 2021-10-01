@@ -1,26 +1,84 @@
 #import pandas as pd
 from sizingOtherElements import *
-from protectionsDB import proteccionesDC
+from ComponentsDB import *
 
-config = {
-    "fases":3, 
-    "tension":230, 
-    "stack": 4, 
-    "vString":200
-    }
+pvModules = {
 
-DCbreak = buscarProteccionCercana(proteccionesDC, 60, config, 1)
-print(DCbreak)
+    #input
+    "performanceRatio":[],
+    "ener_Need":[],
+    #output
+    "vArray":[],
+    "iArray":[],
+    "nArray":[2],
+    "pvModperArray":[],
+    "amountPVMod":[],
+    "refPVMod":[],
+    "iPVMod":[],
+    "vPVMod":[],
+    "sizePVMod":[],
+    "areaPVMod":[],
+    "araTotSyst":[]
+}
 
-ACbreak = buscarProteccionCercana(proteccionesAC, 90, config, 0)
-print(ACbreak)
+solarInverter = {
+    #input
+    "powerNeed":[],
 
-DPSAC = seleccionDPS(config, DPS_AC, 0)
-DPSDC = seleccionDPS(config, DPS_DC, 1)
-print(DPSDC)
-print(DPSAC)
+    #output
+    "ref":[],           #referencias de inversores seleccionados
+    "invAmount":[],     #cantidad por referencia
+    "totInvAmount":[],  # cantidad total de inversores
+    "cost":[], 
+    "iInput":[], 
+    "vInput":[], 
+    "iOutput":[54], 
+    "totIoutput":[],
+    "vOutput":[200], 
+    "pOutput":[], 
+    "pInput":[], 
+    "MPPTusados":[]
+    
+}
+
+otherElements = {
+    "pvWires":[],
+    "facilityWires":[],
+    "pvProtections":[],
+    "facilityProtections":[],
+    "pvDPS":[],
+    "facilityDPS":[],
+    "meter":[],
+    "structData":[],
+    "pipeData":[],
+    "InstalationData":[],     
+    "wires":[]                  # Estructura del cableado
+}
+
+siteFeatures ={
+    "distTab_Cont":[],          # Distancia del tablero de inversores al contador
+    "distPv_Tab":[],            # Distancia del tablero de inversores a los array
+    "availableArea":[],         # Area disponible 
+    "HSP":[],                   # Horas solares Pico 
+    "coords":[],                # Coordenadas del proyecto 
+    "ACConfig":"3P+N",          # "TAG 3F+N, Cantidad de Fases" 
+    "TipodeCubierta":[],        # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha)
+    "cubiertaApta":[],          # Cubierta Apta (la cubierta es apta)
+    "buitron":[]                # Existencia de buitron (bool)
+}
+
+dimensionamiento = {
+    "pvModules":pvModules,             # Estructura de modulos solares
+    "solarInverter":solarInverter,         # Estructura de la seleccion del inversor
+    "siteFeatures":siteFeatures,          # Estructura de las caracteristicas del sitio
+    "otherElements":otherElements          # Estructura que almacena la informacion de otros elementos
+}
 
 
 
-
+status = otherElementsSising( dimensionamiento, 
+    proteccionesAC, 
+    DPS_AC, 
+    proteccionesDC, 
+    DPS_DC)
 

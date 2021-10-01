@@ -1,6 +1,4 @@
 
-import numpy as np
-from protectionsDB import *
 """
 
 # Descripcion. Calcula la configuracion de las protecciones, el tablero, cableado, 
@@ -8,39 +6,30 @@ estructura,sistemas de medicion, adquisicion, tiempo horas hombre y horas
 de ingenieria.
 
 # Inputs 
-Limites Potencia
-Limites Tension
-Limites Corriente
-Cantidad de paneles
-Configuracion de paneles
-Cantidad inversores 
-Configuracion inversores
+dimensionamiento
+base de datos breakers AC
+base de datos breakers DC
+base de datos DPS AC
+base de datos DPS DC
 
 # Outputs
-    Cantidad de protecciones
-accesoreios protecciones 
-Cantidad de tableros
-Accesorios Tableros 
-    Seleccion de cable
-    Cantidad de cable
-    Referencia sistema de medicion 
-Accesorios sistemas de medicion
-Sistema de adquisicion
-Accesorios sistema de adquisicion
-    Tiempo Horas hombre
-Tiempo horas hombre ingenieria
-    elementos Estructura
-    tuberia
+    bandera: SUCCESS o ERROR
 
 
 """
 
-def otherElementsSising():
+def otherElementsSising(
+    dimensionamiento, 
+    dbBRKAC, 
+    dbBRKDC, 
+    dbDPSAC, 
+    dbPSCDC):
 
-
-
-    return otherElements
-
+    
+    flag = calculoProtecciones(dimensionamiento, dbBRKAC, dbBRKDC, dbDPSAC, dbPSCDC)
+    if flag == "ERROR":
+        return "ERROR"
+    
 
 """
 # Descripcion: Calcula la proteccion especifica que se necesita en el sistema 
@@ -61,31 +50,66 @@ Dataframe de configuracion actualizado
     Se actualiza el string DPS DC
 """
 
-def calculoProtecciones(config, DB_BKR_AC, DB_BKR_DC, DB_DPS_AC, DB_DPS_DC):
+def calculoProtecciones(dimensionamiento, DB_BKR_AC, DB_BKR_DC, DB_DPS_AC, DB_DPS_DC):
 
-    # Crea un nuevo dataframe que contendra todas las protecciones necesarias en el sistema
-    proteccionnecesariaDF = pd.DataFrame()
-    breakerAC = []
     # Calculo de protecciones de salida
-    # Recorre la columna de inversores
-    for iFalla in config["inversores"]["iFalla"]:
-        # Breaker Paneles
-        breakerAC.append(buscarProteccionCercana(proteccionesAC, iFalla, config, 0))
+    # Recorre columna de corrientes de inversores para breakers AC
+    for iFalla in range( len( dimensionamiento["solarInverter"]["iOutput"])):
+        dimensionamiento["otherElements"]["facilityProtections"] = buscarProteccionCercana( DB_BKR_AC, iFalla, dimensionamiento, 0)
+        if dimensionamiento["otherElements"]["facilityProtections"] == "ERROR":
+            return "ERROR"
+
+    # Busca la proteccion para el lado DC
+    dimensionamiento["otherElements"]["pvProtections"] = buscarProteccionCercana(DB_BKR_DC, dimensionamiento["solarInverter"]["iOutput"])
+    if dimensionamiento["otherElements"]["pvProtections"] == "ERROR":
+        return "ERROR"
+
+    # Dimensionamiento
+    dimensionamiento["pvDPS"] = seleccionDPS(dimensionamiento, DB_DPS_AC, 0)
+    if dimensionamiento["pvDPS"] == "ERROR":
+        return "ERROR"
     
-    proteccionesAC["proteccionDC"] = buscarProteccionCercana(proteccionesDC, corrienteSalidaPaneles)
-    proteccionesAC["proteccionAC"] = breakerAC
-    
+    # Dimensionamiento
+    dimensionamiento["facilityDPS"] = seleccionDPS(dimensionamiento, DB_DPS_DC, 1)
+    if dimensionamiento["facilityDPS"] == "ERROR":
+        return "ERROR"
 
-    return [proteccionnecesariaDF]
+    return "SUCCESS"
 
+"""
+# Descripcion: Calcula el breaker para el circuito. Funciona para AC y DC
 
-def buscarProteccionCercana(df, i_fail, config, typeBreaker):
+# Inputs: 
+Base de datos de breakers (AC o DC)
+Corriente de falla
+estructura que contiene la info del dimensionamiento
+Tipo de breaker a seleccionar (DC o AC)
+
+# Outputs: 
+Referencia o success
+"""
+
+def buscarProteccionCercana( df, i_fail, dimensionamiento, typeBreaker):
 
     # convierte la columna de corriente en una lista
     ibreakers = df["corriente"]
 
     # crea un array con el valor de la corriente del panel
     iPanelArr = [i_fail] * len(ibreakers)
+    typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
+    tension = dimensionamiento["solarInverter"]["vOutput"]
+    n_string = dimensionamiento["pvModules"]["nArray"]
+
+    if typeCon == "3P+N":
+        amountWiresAC = 3
+    elif typeCon == "3P": 
+        amountWiresAC = 3
+    elif typeCon == "2P": 
+        amountWiresAC = 2
+    elif typeCon == "1P": 
+        amountWiresAC = 1
+    else:
+        return "ERROR"
 
     # calcula la diferencia entre los dos paneles
     diffI = [e1 - e2 for e1, e2 in zip(ibreakers, iPanelArr)]
@@ -101,32 +125,42 @@ def buscarProteccionCercana(df, i_fail, config, typeBreaker):
         for i, val in enumerate(diffI):
             # Se actualiza la diferencia mas pequena y mayor a 0 y el indice
             if breakerCercano > val and val > 0:
-                if config["fases"] == df["polos"][i] and config["tension"] < df["tension"][i]:
+                if amountWiresAC == df["polos"][i] and tension < df["tension"][i]:
                     if df["tension"][i] < lowV:
                         breakerCercano = diffI[i]
                         lowV = df["tension"][i]
                         iCurr = i
         # Se retorna la referencia de la proteccion mas cercana
         if iCurr != 1e6:
-            return (str(config["stack"]) + " X " + str(df["referencia"][iCurr]))
+            return [df["referencia"][iCurr], n_string]
     # CASO AC 
     else:
         # Se recorre el vector diffI buscando el valor mas cercano a cero positivo
         for i, val in enumerate(diffI):
             # Se actualiza la diferencia mas pequena y mayor a 0 y el indice
             if breakerCercano > val and val > 0:
-                if config["fases"] == df["polos"][i]:
+                if amountWiresAC == df["polos"][i]:
                         breakerCercano = diffI[i]
                         iCurr = i
         # Se retorna la referencia de la proteccion mas cercana
         if iCurr!=1e6:
-            return (str(config["stack"]) + " X " + str(df["referencia"][iCurr]))
+            return df["referencia"][iCurr]
         
-    
     # Se retorna el mensaje donde se indica que no se encontro la proteccion adecuada
     if iCurr == 1e6:
-        return "No se encontro Breaker Adecuado"
+        return "ERROR"
 
+"""
+# Descripcion: selecciona el DPS, es valido para lado DC y AC
+
+# Inputs: 
+dimensionamiento: estructura que contiene todas las variables de dimensionamiento
+DPS_DB: Base de datos del DPS (valida para DB AC y DC)
+DCoAC: variable que indica si el calculo del DPS es AC o DC
+
+# Outputs: 
+currRef : retorna la referencia del DPS
+"""
 
 def seleccionDPS(config, DPS_DB, DCoAC):
     
@@ -153,10 +187,10 @@ def seleccionDPS(config, DPS_DB, DCoAC):
                     # Se almacena la referencia
                     currREF = DPS_DB["referencia"][i]
     # Se retorna la referencias
-    return currREF
-
-
-
+    if Vdiffant == 1e6:
+        return "ERROR"
+    else:
+        return currREF
 
 """
 # Descripcion: Calcula la cantidad total de cable que es necesaria para el proyecto en 
@@ -176,34 +210,31 @@ Dataframe cableado necesarias
     distancia
 """
 
-def calculoCableado(
-    dimensionamiento, 
-    cableDF):
+def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
 
-    
     factOverSizing = 1.25
     # Se extrae la corriente necesaria
     curr = dimensionamiento["pvModules"]["iArray"] * factOverSizing
     befDiffCurr = 1e9
     # Seleccion de la referencia del conductor para el lado DC
-    for i, idx, in cableDF["capCurr"]:
+    for i, idx, in cableDBDC["capCurr"]:
         diffCurr = i - curr
         if diffCurr < befDiffCurr and diffCurr > 0:
             befDiffCurr = diffCurr
             ind = idx
 
-    referencePVWire = cableDF["capCurr"][ind]
+    referencePVWire = cableDBDC["capCurr"][ind]
 
     curr = dimensionamiento["solarInverter"]["iOutput"] * factOverSizing
     befDiffCurr = 1e9
     # Seleccion de la referencia del conductor para el lado AC
-    for i, idx, in cableDF["capCurr"]:
+    for i, idx, in cableDBAC["capCurr"]:
         diffCurr = i - curr
         if diffCurr < befDiffCurr and diffCurr > 0:
             befDiffCurr = diffCurr
             ind = idx
 
-    referenceACWire = cableDF["capCurr"][ind]
+    referenceACWire = cableDBAC["capCurr"][ind]
 
     # Calculo cantidad de conductor lado DC
 
@@ -319,9 +350,6 @@ def tiempoinstalacionTotal(
     return [tiempoInstalacion]
 
 
-
-
-
 """
 
 # Descripcion: Calcula el tipo de estructura y la cantidad necesaria
@@ -362,6 +390,24 @@ def structureComputation(
         return "ERROR"
 
 
+"""
+# Descripcion: Calcula la cantidad total de cable que es necesaria para el proyecto en 
+su lado AC y DC.
+
+# Inputs: 
+Dataframe cables mercado
+Corriente salida arreglo paneles
+Corriente salida inversores
+Distancia ubicacion tablero - paneles
+Area arreglos paneles solares
+
+# Outputs: 
+Dataframe cableado necesarias
+    tipo
+    configuracion
+    distancia
+"""
+
 def quantityStructComputation(db, amMods):
     amMods_ = amMods
     unidadesAnt = 1e9
@@ -393,8 +439,10 @@ def quantityStructComputation(db, amMods):
 # Descripcion: Calcula la tuberia necesaria desde el punto 
 
 # Inputs: 
-distancia tablero paneles
-dataframe Cableado utilizado
+Estructura de dimensionamiento
+Base de datos cableado AC
+Base de datos cableado DC
+Base de datos tuberia
 
 # Outputs: 
 dataframe tuberia
