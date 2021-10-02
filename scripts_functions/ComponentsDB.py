@@ -236,10 +236,22 @@ WiresISO = {
 }
 
 # Base de datos conductor desnudo
-WirNakedCu={
-    "referencia":[]
+WiresDCIso={
+    "referencia":["AWG_1_0_Soldaflex_HF_Flex","AWG_2_0_SoldaFlex_HF_Flex", "AWG_6_SoldaFlex_HF_Flex",
+        "AWG_12_Nexans_XLPE", "AWG_10_Nexans_XLPE"
+    ],
 
+    "calibre":[100, 200, 6, 12, 10],
+
+    "capCurr":[170, 195, 75, 30, 40],
+
+    "Precio":[40698, 43554, 16184, 5224, 6378]
 }
+
+
+
+
+
 
 # Base de datos medidores bidireccionales
 bidMeters={

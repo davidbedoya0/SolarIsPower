@@ -8,16 +8,16 @@ pvModules = {
     "performanceRatio":[],
     "ener_Need":[],
     #output
-    "vArray":[],
-    "iArray":[],
-    "nArray":[2],
-    "pvModperArray":[],
+    "vArraymax":125,
+    "iArray":[12, 26, 38],
+    "nArray":2,           #
+    "pvModperArray":20,
     "amountPVMod":[],
     "refPVMod":[],
     "iPVMod":[],
     "vPVMod":[],
     "sizePVMod":[],
-    "areaPVMod":[],
+    "areaPVMod":[2, 1.05, 0.03],
     "araTotSyst":[]
 }
 
@@ -28,57 +28,60 @@ solarInverter = {
     #output
     "ref":[],           #referencias de inversores seleccionados
     "invAmount":[],     #cantidad por referencia
-    "totInvAmount":[],  # cantidad total de inversores
+    "totInvAmount": 2,  # cantidad total de inversores
     "cost":[], 
-    "iInput":[], 
+    "iInput":[12, 26, 38], 
+    "polesperInput":[1, 2, 1], 
     "vInput":[], 
-    "iOutput":[54], 
+    "iOutput":[54,30], 
     "totIoutput":[],
-    "vOutput":[200], 
+    "vOutput":[200, 75, 40], 
     "pOutput":[], 
     "pInput":[], 
     "MPPTusados":[]
-    
 }
 
 otherElements = {
-    "pvWires":[],
-    "facilityWires":[],
-    "pvProtections":[],
-    "facilityProtections":[],
-    "pvDPS":[],
-    "facilityDPS":[],
-    "meter":[],
-    "structData":[],
-    "pipeData":[],
-    "InstalationData":[],     
+    "pvWires":[],               # 
+    "facilityWires":[],         # 
+    "pvProtections":[],         # 
+    "facilityProtections":[],   # 
+    "pvDPS":[],                 # 
+    "facilityDPS":[],           # 
+    "meter":[],                 # 
+    "structData":[],            # 
+    "pipeData":[],              # 
+    "InstalationData":[],       # 
     "wires":[]                  # Estructura del cableado
 }
 
 siteFeatures ={
-    "distTab_Cont":[],          # Distancia del tablero de inversores al contador
-    "distPv_Tab":[],            # Distancia del tablero de inversores a los array
-    "availableArea":[],         # Area disponible 
-    "HSP":[],                   # Horas solares Pico 
-    "coords":[],                # Coordenadas del proyecto 
-    "ACConfig":"3P+N",          # "TAG 3F+N, Cantidad de Fases" 
-    "TipodeCubierta":[],        # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha)
-    "cubiertaApta":[],          # Cubierta Apta (la cubierta es apta)
+    "distTab_Cont":3,           # Distancia del tablero de inversores al contador (float)
+    "distPv_Tab":15,            # Distancia del tablero de inversores a los array (float)
+    "availableArea":[],         # Area disponible (float)
+    "HSP":[],                   # Horas solares Pico (float)
+    "coords":[],                # Coordenadas del proyecto (list)
+    "ACConfig":"3P+N",          # "TAG 3F+N, Cantidad de Fases" (string)
+    "TipodeCubierta":[],        # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha) (string)
+    "cubiertaApta":[],          # Cubierta Apta (la cubierta es apta)(book)
     "buitron":[]                # Existencia de buitron (bool)
 }
 
 dimensionamiento = {
     "pvModules":pvModules,             # Estructura de modulos solares
-    "solarInverter":solarInverter,         # Estructura de la seleccion del inversor
-    "siteFeatures":siteFeatures,          # Estructura de las caracteristicas del sitio
-    "otherElements":otherElements          # Estructura que almacena la informacion de otros elementos
+    "solarInverter":solarInverter,     # Estructura de la seleccion del inversor
+    "siteFeatures":siteFeatures,       # Estructura de las caracteristicas del sitio
+    "otherElements":otherElements      # Estructura que almacena la informacion de otros elementos
 }
 
 
 
 status = otherElementsSising( dimensionamiento, 
     proteccionesAC, 
-    DPS_AC, 
     proteccionesDC, 
-    DPS_DC)
+    DPS_AC, 
+    DPS_DC, 
+    WiresISO,
+    WiresDCIso 
+    )
 

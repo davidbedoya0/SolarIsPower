@@ -1,3 +1,6 @@
+from math import *
+import math
+
 
 """
 
@@ -23,10 +26,16 @@ def otherElementsSising(
     dbBRKAC, 
     dbBRKDC, 
     dbDPSAC, 
-    dbPSCDC):
+    dbPSCDC, 
+    cableDBAC, 
+    cableDBDC):
 
     
+    # Se llama la funcion de calculo de protecciones
     flag = calculoProtecciones(dimensionamiento, dbBRKAC, dbBRKDC, dbDPSAC, dbPSCDC)
+    if flag == "ERROR":
+        return "ERROR"
+    flag = calculoCableado(dimensionamiento, cableDBAC, cableDBDC)
     if flag == "ERROR":
         return "ERROR"
     
@@ -54,24 +63,38 @@ def calculoProtecciones(dimensionamiento, DB_BKR_AC, DB_BKR_DC, DB_DPS_AC, DB_DP
 
     # Calculo de protecciones de salida
     # Recorre columna de corrientes de inversores para breakers AC
-    for iFalla in range( len( dimensionamiento["solarInverter"]["iOutput"])):
-        dimensionamiento["otherElements"]["facilityProtections"] = buscarProteccionCercana( DB_BKR_AC, iFalla, dimensionamiento, 0)
-        if dimensionamiento["otherElements"]["facilityProtections"] == "ERROR":
+    if type(dimensionamiento["solarInverter"]["iOutput"]) == list:
+        rngAC = len( dimensionamiento["solarInverter"]["iOutput"])
+    elif type(dimensionamiento["solarInverter"]["iOutput"]) == int:
+        rngAC = 1
+    if type(dimensionamiento["solarInverter"]["iInput"]) == list:
+        rngDC = len( dimensionamiento["solarInverter"]["iInput"])
+    elif type(dimensionamiento["solarInverter"]["iInput"]) == int:
+        rngDC = 1
+
+    for i in range( rngAC):
+        ifail = dimensionamiento["solarInverter"]["iOutput"][i]
+        dimensionamiento["otherElements"]["facilityProtections"].append(buscarProteccionCercana( DB_BKR_AC, ifail, 0, 0,dimensionamiento, 0))
+        if dimensionamiento["otherElements"]["facilityProtections"][i] == "ERROR":
             return "ERROR"
 
     # Busca la proteccion para el lado DC
-    dimensionamiento["otherElements"]["pvProtections"] = buscarProteccionCercana(DB_BKR_DC, dimensionamiento["solarInverter"]["iOutput"])
-    if dimensionamiento["otherElements"]["pvProtections"] == "ERROR":
-        return "ERROR"
+    for i in range(rngDC):
+        Vdc = dimensionamiento["solarInverter"]["vOutput"][i]
+        Idc = dimensionamiento["solarInverter"]["iInput"][i]
+        poles = dimensionamiento["solarInverter"]["polesperInput"][i]
+        dimensionamiento["otherElements"]["pvProtections"].append(buscarProteccionCercana(DB_BKR_DC, Idc, Vdc, poles, dimensionamiento, 1))
+        if dimensionamiento["otherElements"]["pvProtections"][i] == "ERROR":
+            return "ERROR"
 
     # Dimensionamiento
-    dimensionamiento["pvDPS"] = seleccionDPS(dimensionamiento, DB_DPS_AC, 0)
-    if dimensionamiento["pvDPS"] == "ERROR":
+    dimensionamiento["otherElements"]["facilityDPS"] = seleccionDPS(dimensionamiento, DB_DPS_AC, 0)
+    if dimensionamiento["otherElements"]["facilityDPS"] == "ERROR":
         return "ERROR"
     
     # Dimensionamiento
-    dimensionamiento["facilityDPS"] = seleccionDPS(dimensionamiento, DB_DPS_DC, 1)
-    if dimensionamiento["facilityDPS"] == "ERROR":
+    dimensionamiento["otherElements"]["pvDPS"] = seleccionDPS(dimensionamiento, DB_DPS_DC, 1)
+    if dimensionamiento["otherElements"]["pvDPS"] == "ERROR":
         return "ERROR"
 
     return "SUCCESS"
@@ -89,7 +112,7 @@ Tipo de breaker a seleccionar (DC o AC)
 Referencia o success
 """
 
-def buscarProteccionCercana( df, i_fail, dimensionamiento, typeBreaker):
+def buscarProteccionCercana( df, i_fail, tension, polesperInput, dimensionamiento, typeBreaker):
 
     # convierte la columna de corriente en una lista
     ibreakers = df["corriente"]
@@ -97,7 +120,6 @@ def buscarProteccionCercana( df, i_fail, dimensionamiento, typeBreaker):
     # crea un array con el valor de la corriente del panel
     iPanelArr = [i_fail] * len(ibreakers)
     typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
-    tension = dimensionamiento["solarInverter"]["vOutput"]
     n_string = dimensionamiento["pvModules"]["nArray"]
 
     if typeCon == "3P+N":
@@ -111,7 +133,7 @@ def buscarProteccionCercana( df, i_fail, dimensionamiento, typeBreaker):
     else:
         return "ERROR"
 
-    # calcula la diferencia entre los dos paneles
+    # calcula la diferencia entre la corriente de falla y 
     diffI = [e1 - e2 for e1, e2 in zip(ibreakers, iPanelArr)]
 
     #Inicializa las variables de diferencia e indicador
@@ -125,7 +147,7 @@ def buscarProteccionCercana( df, i_fail, dimensionamiento, typeBreaker):
         for i, val in enumerate(diffI):
             # Se actualiza la diferencia mas pequena y mayor a 0 y el indice
             if breakerCercano > val and val > 0:
-                if amountWiresAC == df["polos"][i] and tension < df["tension"][i]:
+                if df["polos"][i]==polesperInput and tension < df["tension"][i]:
                     if df["tension"][i] < lowV:
                         breakerCercano = diffI[i]
                         lowV = df["tension"][i]
@@ -164,8 +186,9 @@ currRef : retorna la referencia del DPS
 
 def seleccionDPS(config, DPS_DB, DCoAC):
     
-    # extrae la tension de operacion de los string del lado DC
-    vString = config["vString"]
+    polos = max(config["solarInverter"]["polesperInput"])
+    # extrae la tension de operacion maxima de los string del lado DC
+    vString = config["pvModules"]["vArraymax"]
     # Inicializa la referencia actual y la diferencia de tension
     currREF = ""
     Vdiffant = 1e6
@@ -181,7 +204,7 @@ def seleccionDPS(config, DPS_DB, DCoAC):
                 # Se almacena la referencia
                 currREF = DPS_DB["referencia"][i]
             else:
-                if DPS_DB["polos"][i] == config["fases"]:
+                if DPS_DB["polos"][i] == polos:
                     # Se almacena la nueva mejor diferencia
                     Vdiffant = Vdiff
                     # Se almacena la referencia
@@ -212,29 +235,56 @@ Dataframe cableado necesarias
 
 def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
 
+    ## Seleccion de los conductores para el lado DC
+    
+    # Crea el array donde se almacenaran las referencias de los conductores
+    referencePVWire = []
+    referenceACWire = []
+    # Se define el factor de sobredimensionamiento
     factOverSizing = 1.25
-    # Se extrae la corriente necesaria
-    curr = dimensionamiento["pvModules"]["iArray"] * factOverSizing
-    befDiffCurr = 1e9
-    # Seleccion de la referencia del conductor para el lado DC
-    for i, idx, in cableDBDC["capCurr"]:
-        diffCurr = i - curr
-        if diffCurr < befDiffCurr and diffCurr > 0:
-            befDiffCurr = diffCurr
-            ind = idx
+    # Se extraen las corrientes de cada array de paneles y se sobredimensionan
+    curr = [ factOverSizing * element for element in dimensionamiento["pvModules"]["iArray"]]
+    
+    for j in range(len(curr)):
+        # Se inicializa la variable de medicion y la variable indice
+        befDiffCurr = 1e9
+        ind_ = 1e9
+        # Se recorre la DB de conductores DC
+        for i in range(len(cableDBDC["capCurr"])):
+            # Se calcula la diferencia de corriente el conductor seleccionado y la I de falla
+            diffCurr = cableDBDC["capCurr"][i] - curr[j]
+            # Se verifica si la diferencia calculada es inferior a la mejor diferencia calculada y si 
+            # la diferencia es mayor a 0
+            if diffCurr < befDiffCurr and diffCurr > 0:
+                # Se actualiza el valor de la mejor diferencia con la diferencia actual
+                befDiffCurr = diffCurr
+                # Se almacena el indice de la referencia que genero la mejor diferencia
+                ind_ = i
+        # Se agrega la referencia del conductor al vector de salida
+        referencePVWire.append(cableDBDC["referencia"][ind_])
+    if ind_ == 1e9:
+        return "ERROR SIZING DC WIRES"
 
-    referencePVWire = cableDBDC["capCurr"][ind]
+    ## Seleccion de los conductores para el lado AC
 
-    curr = dimensionamiento["solarInverter"]["iOutput"] * factOverSizing
-    befDiffCurr = 1e9
-    # Seleccion de la referencia del conductor para el lado AC
-    for i, idx, in cableDBAC["capCurr"]:
-        diffCurr = i - curr
-        if diffCurr < befDiffCurr and diffCurr > 0:
-            befDiffCurr = diffCurr
-            ind = idx
+    # Calcula la corriente de falla
+    curr = [ element * factOverSizing for element in dimensionamiento["solarInverter"]["iOutput"]]
+    
+    for j in range ( len(curr)):
+        # Inicializa la variable de medicion
+        befDiffCurr = 1e9
+        ind_ = 1e9
+        # Seleccion de la referencia del conductor para el lado AC
+        for i in range( len( cableDBAC["capCurr"])):
+            diffCurr = cableDBAC["capCurr"][i] - curr[j]
+            if diffCurr < befDiffCurr and diffCurr > 0:
+                befDiffCurr = diffCurr
+                ind_ = i
 
-    referenceACWire = cableDBAC["capCurr"][ind]
+        referenceACWire.append(cableDBAC["reference"][ind_])
+    
+    if ind_ == 1e9:
+        return "ERROR SIZING AC WIRES"
 
     # Calculo cantidad de conductor lado DC
 
@@ -256,9 +306,23 @@ def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
 
     # Para calcularlo seguimos la siguiente formula
     # PVWireTOT = cantidad total de inversores * configuracionAC * distanciaInversores_Medidor * C
+    
+    typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
+
+    if typeCon == "3P+N":
+        amountWiresAC = 4
+    elif typeCon == "3P": 
+        amountWiresAC = 3
+    elif typeCon == "2P": 
+        amountWiresAC = 2
+    elif typeCon == "1P": 
+        amountWiresAC = 2
+    else:
+        return "ERROR en AC Config"    
 
     nInv = dimensionamiento["solarInverter"]["totInvAmount"]
-    PVWireTOTAC = nInv * dimensionamiento["siteFeatures"]["ACConfig"][1] * 1.1
+    distInv2Tab = dimensionamiento["siteFeatures"]["distTab_Cont"]
+    PVWireTOTAC = nInv * amountWiresAC * distInv2Tab * 1.1
 
     return[PVWireTOTAC, referenceACWire, PVWireTOTDC, referencePVWire]
 
