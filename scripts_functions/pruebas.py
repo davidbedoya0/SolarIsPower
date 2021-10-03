@@ -12,7 +12,7 @@ pvModules = {
     "iArray":[12, 26, 38],
     "nArray":2,           #
     "pvModperArray":20,
-    "amountPVMod":[],
+    "amountPVMod":63,
     "refPVMod":[],
     "iPVMod":[],
     "vPVMod":[],
@@ -33,7 +33,7 @@ solarInverter = {
     "iInput":[12, 26, 38], 
     "polesperInput":[1, 2, 1], 
     "vInput":[], 
-    "iOutput":[54,90], 
+    "iOutput":[54, 90], 
     "totIoutput": None,
     "vOutput":[200, 75, 40], 
     "pOutput":[], 
@@ -62,7 +62,7 @@ siteFeatures ={
     "HSP":[],                   # Horas solares Pico (float)
     "coords":[],                # Coordenadas del proyecto (list)
     "ACConfig":"3P+N",          # "TAG 3F+N, Cantidad de Fases" (string)
-    "TipodeCubierta":[],        # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha) (string)
+    "TipodeCubierta":1,        # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha) (string)
     "cubiertaApta":[],          # Cubierta Apta (la cubierta es apta)(book)
     "buitron":[]                # Existencia de buitron (bool)
 }
@@ -84,6 +84,9 @@ status = otherElementsSising( dimensionamiento,
     WiresISO,
     WiresDCIso, 
     bdMeters, 
-    dbCT
+    dbCT, 
+    metalicStruct, 
+    clayTileStruct, 
+    metalicStruct
     )
 

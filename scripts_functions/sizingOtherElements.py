@@ -23,14 +23,10 @@ base de datos DPS DC
 
 def otherElementsSising(
     dimensionamiento, 
-    dbBRKAC, 
-    dbBRKDC, 
-    dbDPSAC, 
-    dbPSCDC, 
-    cableDBAC, 
-    cableDBDC, 
-    dbMeters, 
-    dbCT
+    dbBRKAC, dbBRKDC, dbDPSAC, dbPSCDC, 
+    cableDBAC, cableDBDC, 
+    dbMeters, dbCT, 
+    metalicStruct, clayTilStruct, soilStruct
     ):
     
     # Se llama la funcion de calculo de protecciones
@@ -48,6 +44,11 @@ def otherElementsSising(
     if flag == "ERROR":
         return "ERROR"
     
+    # Se llama la funcion de dimensionamiento de la estructura
+    flag = structureComputation( dimensionamiento, metalicStruct, clayTilStruct, soilStruct)
+    if flag == "ERROR":
+        return "ERROR"
+
 
 """
 # Descripcion: Calcula la proteccion especifica que se necesita en el sistema 
@@ -543,26 +544,31 @@ def quantityStructComputation(db, amMods):
     amMods_ = amMods
     unidadesAnt = 1e9
     i = 0
-    k = 0
     references = []
-    unidades = []
+    cant = []
 
     while amMods_ > 0:
 
-        val = db["cantidadModulos"][i]
-        unidades = val / amMods_
-        resto = val % amMods_
+        # Calcula la referencia con la que menos unidades se gastan
+        for i in range(len(db["reference"])):
+            # Cantidad de modulos que se extraen
+            val = db["cantidadModulos"][i]
+            # Unidades a extraer
+            unidades = math.ceil( amMods_ / val)
+            resto = amMods_ % val
+  
+            if unidades < unidadesAnt:
+                unidadesAnt = unidades
+                cant_ = unidades
+                resto_ = resto
+                ind = i
+                
+        references.append(db["reference"][ind])
+        cant.append(cant_)
+        amMods_ = resto_
 
-        if unidades < unidadesAnt:
 
-            unidadesAnt = unidades
-            amMods_ = resto
-            references[k] = db["reference"][i]
-            unidades[k] = unidades
-            k =+ 1
-        i += 1
-
-    return [references]
+    return [references, cant]
 
 
 """
