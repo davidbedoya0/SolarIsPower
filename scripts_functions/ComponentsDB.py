@@ -254,7 +254,7 @@ WiresDCIso={
 
 
 # Base de datos medidores bidireccionales
-bidMeters={
+bdMeters={
     "referencia":["ISKRAMT174-D25120_1F","ISKRAMT174-D25120_2F","ISKRAMT174-D25120_3F",
     "ISKRAMT174-T116_1F","ISKRAMT174-T116_2F","ISKRAMT174-T116_3F"],
     "polos":[1, 2, 3, 1, 2, 3],
@@ -263,7 +263,7 @@ bidMeters={
 
 
 #Base de datos CT
-CT = {
+dbCT = {
     "referencia":[
         "M70111","M70112","M70113","M70114","M70115",
         "M70116","M70117","M70118","M7011A","M70121",
@@ -278,7 +278,7 @@ CT = {
         "M7015E","M7015F","M7015H"
         ],
 
-    "Corriente":[
+    "corriente":[
             100, 150, 200, 250, 300, 
             400, 75, 125, 50, 250, 
             300, 400, 500, 600, 750, 

@@ -28,14 +28,23 @@ def otherElementsSising(
     dbDPSAC, 
     dbPSCDC, 
     cableDBAC, 
-    cableDBDC):
-
+    cableDBDC, 
+    dbMeters, 
+    dbCT
+    ):
     
     # Se llama la funcion de calculo de protecciones
     flag = calculoProtecciones(dimensionamiento, dbBRKAC, dbBRKDC, dbDPSAC, dbPSCDC)
     if flag == "ERROR":
         return "ERROR"
+
+    # Se llama la funcion de calculo de cableado
     flag = calculoCableado(dimensionamiento, cableDBAC, cableDBDC)
+    if flag == "ERROR":
+        return "ERROR"
+    
+    # Se llama la funcion de seleccion del medidor
+    flag = seleccionMedidor( dimensionamiento, dbMeters, dbCT)
     if flag == "ERROR":
         return "ERROR"
     
@@ -318,7 +327,7 @@ def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
     elif typeCon == "1P": 
         amountWiresAC = 2
     else:
-        return "ERROR en AC Config"    
+        return "ERROR en AC Config Wiring"    
 
     nInv = dimensionamiento["solarInverter"]["totInvAmount"]
     distInv2Tab = dimensionamiento["siteFeatures"]["distTab_Cont"]
@@ -345,31 +354,89 @@ def seleccionMedidor(
     dimensionamiento,
     dbMeters, 
     dbCT):
+
+    # Se verifica que existe la corriente total de salida de los inversores
+    if dimensionamiento["solarInverter"]["totIoutput"] == None:
+
+        # Se extrae el tamano del vector de corrientes de salida de inversores
+        tam = len(dimensionamiento["solarInverter"]["iOutput"])
+        # Se inicializa la variable acumuladora
+        acumul = 0
+        # Se verifica el tamano del vector de corrientes de salida de inversores
+        if tam > 0:
+            # Se recorre el vector
+            for i in range(tam):
+                # Se suman todas las corrientes en una variable auxiliar
+                acumul += dimensionamiento["solarInverter"]["iOutput"][i]
+            # Se almacena la corriente total 
+            dimensionamiento["solarInverter"]["totIoutput"] = acumul 
+
+
+    # Se toma la corriente maxima
     current = dimensionamiento["solarInverter"]["totIoutput"]
-    polos = dimensionamiento["siteFeatures"]["ACConfig"]["polos"]
-    for val, ind in dbMeters[polos]:
-        if polos == val:
+    # Se extrae la cantidad de polos del sistema
+
+    # Extrae el tipo de configuracion
+    typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
+    
+    # Calcula la cantidad de polos de acuerdo a la conexion
+    if typeCon == "3P+N":
+        polos = 3
+    elif typeCon == "3P": 
+        polos = 3
+    elif typeCon == "2P": 
+        polos = 2
+    elif typeCon == "1P": 
+        polos = 1
+    else:
+        return "ERROR en AC Config Medidor"
+    
+    # Recorre la DB de medidores de acuerdo a los polos
+    for ind in range(len(dbMeters["polos"])):
+        # Verifica si los polos a medir en el sistema son iguales a los de la referencia
+        if polos == dbMeters["polos"][ind]:
+            # Verifica si la corriente es menor a 120 para medida directa
             if current < 120 and dbMeters["tipo"][ind] == 1:
+                # Almacena la referencia seleccionada del medidor
                 ref = dbMeters["referencia"][ind]
+                # Escribe la bandera de medida directa
                 directa = True
+            # Verifica si la corriente es mayor a 120 A para medida semidirecta
             if current > 120 and dbMeters["tipo"][ind] == 0:
+                # Almacena la referencia del medidor
                 ref = dbMeters["referencia"][ind]
+                # Escribe la bandera de medida directa como False
                 directa = False
 
+    ## Seleccion del Transformador de Corriente
+
+    # Verifica si el medidor no es de medida semidirecta
     if directa == False:
 
+        # Se reinicia la diferencia 
         currentdif = 1e9
-        for val, ind in dbCT["corriente"]:
-            diff = val - current
-            if diff > 0 & diff < currentdif:
-                if val > current * 1.5:
-                    currentdif = diff
-                    index = ind
-        CT = dbCT["referencia"][index]
+        # Se recorre la DB de Transformadores de corriente
+        for ind in range( len( dbCT["corriente"])):
+            # Se calcula la diferencia teniendo en cuenta el sobredimensionamiento de 1.5 del CT
+            diff = dbCT["corriente"][ind] - current * 1.5
+            # Se verifica si la diferencia es mayor a 0 y menor que la diferencia historica
+            if diff > 0 and diff < currentdif:
+                # Se actualiza la diferencia historica
+                currentdif = diff
+                # Se actualiza el indice de la referencia seleccionada
+                index = ind
 
+        # Se almacena la referencia del CT
+        CT = dbCT["referencia"][index]
+        # Se verifica que la referencia del CT haya sido seleccionada, sino ERROR
+        if currentdif == 1e9:
+            CT = "ERROR SIZING CT"
+    
+    # Se indica que le trafo es de medida directa
     else:
         CT = "MEDIDA DIRECTA"
 
+    # Se retorna la informacion de la funcion
     return [ref, CT]
 
 

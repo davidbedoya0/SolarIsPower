@@ -33,8 +33,8 @@ solarInverter = {
     "iInput":[12, 26, 38], 
     "polesperInput":[1, 2, 1], 
     "vInput":[], 
-    "iOutput":[54,30], 
-    "totIoutput":[],
+    "iOutput":[54,90], 
+    "totIoutput": None,
     "vOutput":[200, 75, 40], 
     "pOutput":[], 
     "pInput":[], 
@@ -82,6 +82,8 @@ status = otherElementsSising( dimensionamiento,
     DPS_AC, 
     DPS_DC, 
     WiresISO,
-    WiresDCIso 
+    WiresDCIso, 
+    bdMeters, 
+    dbCT
     )
 
