@@ -16,29 +16,27 @@ pvModules = {
     "refPVMod":[],
     "iPVMod":[],
     "vPVMod":[],
-    "sizePVMod":[],
-    "areaPVMod":[2, 1.05, 0.03],
+    "sizePVMod":[2, 1.05, 0.03],
+    "areaPVMod":[],
     "araTotSyst":[]
 }
 
 solarInverter = {
     #input
-    "powerNeed":[],
-
+    "powerNeed":[],             # Potencia necesaria antes de dimensionamiento (float)
     #output
-    "ref":[],           #referencias de inversores seleccionados
-    "invAmount":[],     #cantidad por referencia
-    "totInvAmount": 2,  # cantidad total de inversores
-    "cost":[], 
-    "iInput":[12, 26, 38], 
-    "polesperInput":[1, 2, 1], 
-    "vInput":[], 
-    "iOutput":[54, 90], 
-    "totIoutput": None,
-    "vOutput":[200, 75, 40], 
-    "pOutput":[], 
-    "pInput":[], 
-    "MPPTusados":[]
+    "ref":[],                   # Referencias de inversores seleccionados (list of strings)
+    "invAmount":[],             # Cantidad por referencia (list of ints)
+    "totInvAmount": 2,          # Cantidad total de inversores
+    "iInput":[12, 26, 38],      # Entrada de corriente del inversor, (list of floats)
+    "polesperInput":[1, 2, 1],  # Cantidad de polos por entrada de corriente (list of ints)
+    "vInput":[],                # Tension de entrada (list of floats)
+    "iOutput":[54, 90],         # salida de corrientes del inversor, (list of floats)
+    "totIoutput": None,         # suma de la corriente de salida (float)
+    "vOutput":[200, 75, 40],    # tensiones de salida (list of floats)
+    "pOutput":[],               # potencias de salida (list of floats)
+    "pInput":[],                # potencias de entrada (list of floats)
+    "MPPTusados":[]             # cantidad de MPPT usados por inversor (list of ints)
 }
 
 otherElements = {
@@ -48,9 +46,9 @@ otherElements = {
     "facilityProtections":[],   # 
     "pvDPS":[],                 # 
     "facilityDPS":[],           # 
-    "meter":[],                 # 
-    "structData":[],            # 
-    "pipeData":[],              # 
+    "meter":[],                 # referencia del medidor y CT si requiere
+    "structData":[],            # referencias y cantidades de la estructura
+    "pipeData":[],              # referencias, tipo y metraje de la tuberia
     "InstalationData":[],       # 
     "wires":[]                  # Estructura del cableado
 }
@@ -62,9 +60,9 @@ siteFeatures ={
     "HSP":[],                   # Horas solares Pico (float)
     "coords":[],                # Coordenadas del proyecto (list)
     "ACConfig":"3P+N",          # "TAG 3F+N, Cantidad de Fases" (string)
-    "TipodeCubierta":1,        # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha) (string)
+    "TipodeCubierta":1,         # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha) (string)
     "cubiertaApta":[],          # Cubierta Apta (la cubierta es apta)(book)
-    "buitron":[]                # Existencia de buitron (bool)
+    "buitron":0                # Existencia de buitron (bool)
 }
 
 dimensionamiento = {
@@ -87,6 +85,7 @@ status = otherElementsSising( dimensionamiento,
     dbCT, 
     metalicStruct, 
     clayTileStruct, 
-    metalicStruct
+    metalicStruct, 
+    EMT
     )
 

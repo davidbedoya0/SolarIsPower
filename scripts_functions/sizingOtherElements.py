@@ -26,7 +26,8 @@ def otherElementsSising(
     dbBRKAC, dbBRKDC, dbDPSAC, dbPSCDC, 
     cableDBAC, cableDBDC, 
     dbMeters, dbCT, 
-    metalicStruct, clayTilStruct, soilStruct
+    metalicStruct, clayTilStruct, soilStruct, 
+    pipeDB
     ):
     
     # Se llama la funcion de calculo de protecciones
@@ -39,6 +40,11 @@ def otherElementsSising(
     if flag == "ERROR":
         return "ERROR"
     
+    # Se llama la funcion de calculo de la tuberia, sirve con cualquier DB de tuberia
+    flag = pipeliComputation( dimensionamiento, cableDBAC, cableDBDC, pipeDB)
+    if flag == "ERROR":
+        return "ERROR"
+
     # Se llama la funcion de seleccion del medidor
     flag = seleccionMedidor( dimensionamiento, dbMeters, dbCT)
     if flag == "ERROR":
@@ -307,7 +313,7 @@ def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
     nArray = dimensionamiento["pvModules"]["nArray"]
 
     A = dimensionamiento["siteFeatures"]["distPv_Tab"] * nArray * 2
-    B = dimensionamiento["pvModules"]["pvModperArray"] * nArray * dimensionamiento["pvModules"]["areaPVMod"][1] *2
+    B = dimensionamiento["pvModules"]["pvModperArray"] * nArray * dimensionamiento["pvModules"]["sizePVMod"][1] *2
     C = 1.1
 
     PVWireTOTDC = (A + B) * C
@@ -332,9 +338,12 @@ def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
 
     nInv = dimensionamiento["solarInverter"]["totInvAmount"]
     distInv2Tab = dimensionamiento["siteFeatures"]["distTab_Cont"]
-    PVWireTOTAC = nInv * amountWiresAC * distInv2Tab * 1.1
+    WireTOTAC = nInv * amountWiresAC * distInv2Tab * 1.1
 
-    return[PVWireTOTAC, referenceACWire, PVWireTOTDC, referencePVWire]
+    dimensionamiento["otherElements"]["pvWires"] = [ referencePVWire, PVWireTOTDC]
+    dimensionamiento["otherElements"]["facilityWires"] = [ referenceACWire, WireTOTAC]
+
+    return[WireTOTAC, referenceACWire, PVWireTOTDC, referencePVWire]
 
 """
 
@@ -571,6 +580,10 @@ def quantityStructComputation(db, amMods):
     return [references, cant]
 
 
+
+
+
+
 """
 
 # Descripcion: Calcula la tuberia necesaria desde el punto 
@@ -586,52 +599,68 @@ dataframe tuberia
 
 """
 
-def pipeliComputation(
-    dimensionamiento, 
-    wiresDBAC, 
-    wiresDBDC,
-    pipeDB
-    ):
+def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
 
     # Calculo del metraje y tipo de tuberia (expuesta, enterrada)
     # Verificamos si existe buitron para uso de IMT
-    overSize = 1.2
     if dimensionamiento["siteFeatures"]["buitron"]==0:
+        # Calcula la cantidad de tuberias enterradas
         tubEnterrada = dimensionamiento["siteFeatures"]["distPv_Tab"]
-        tubExpuesta = dimensionamiento["pvModules"]["pvModperArray"]*dimensionamiento["pvModules"]["sizePVMod"][1]
+        # Calcula la cantidad de tuberias expuestas
+        tubExpuesta = dimensionamiento["pvModules"]["pvModperArray"] * dimensionamiento["pvModules"]["sizePVMod"][1]
     else:
+        # Calcula la cantidad de tuberias enterradas
         tubEnterrada = 0
+        # Calcula la cantidad de tuberias expuestas
         tubExp1 = dimensionamiento["siteFeatures"]["distPv_Tab"]
-        tubExp2 = dimensionamiento["pvModules"]["pvModperArray"]*dimensionamiento["pvModules"]["sizePVMod"][1]
+        tubExp2 = dimensionamiento["pvModules"]["pvModperArray"] * dimensionamiento["pvModules"]["sizePVMod"][1]
         tubExpuesta = tubExp1 + tubExp2
 
     # Calculo cantidad de conductores por la tuberia
     # Lado DC
-    amountWiresDC = dimensionamiento["pvModules"]["nArray"]*2
+    amountWiresDC = dimensionamiento["pvModules"]["nArray"] * 2
     
     # Lado AC
-    # Para el lado AC se tiene en cuenta una cantidad de conductores igual a 
-    # la configuracion del sistema
+    # Para el lado AC se calcula basado en la cantidad de conductores
 
+    # Se extrae la configuracion de la estructura del dimensionamiento 
     config = dimensionamiento["siteFeatures"]["ACConfig"]
+    # Se calcula la cantidad de conductores teniendo en cuenta la configuracion
+    [amountWiresAC, flag] = selConfig( config, 0)
+    # En caso de no encontrar la cantidad se retorna un ERROR
+    if flag != "SUCCES":
+        return flag
 
-    if config == "3P+N":
-        amountWiresAC = 4
-    elif config == "3P": 
-        amountWiresAC = 3
-    elif config == "2P": 
-        amountWiresAC = 2
-    elif config == "1P": 
-        amountWiresAC = 2
-
+    ##########################################################################
     # Calculo de la tuberia
-    # conversion de AWG a mm2
+    ##########################################################################
 
-    ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"])
-    # Se extrae el calibre
-    seccionAWGDC = wiresDBAC["seccion"][ind]
-    seccionAWGAC = wiresDBDC["seccion"][ind]
-    # Calculo seccion optima del tubo
+    
+    ## conversion de AWG a mm2
+
+    # Se extrae la cantidad de referencias de conductores DC
+    dimaux = len(dimensionamiento["otherElements"]["pvWires"])
+
+    if dimaux == 1:
+        # Busca el indice de la referencia del conductor seleccionado para el lado DC
+        ind = wiresDBDC["reference"].index(dimensionamiento["otherElements"]["pvWires"])
+        # Se extrae el calibre para los conductores
+        seccionAWGDC = wiresDBDC["seccion"][ind]
+        # Busca el indice de la referencia del conductor seleccionado para el lado AC
+        ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"])
+        # Se extrae el calibre para los conductores
+        seccionAWGAC = wiresDBAC["seccion"][ind]
+    else:
+        # Se extrae el calibre
+        seccionAWGAC = []
+        seccionAWGDC = []
+        for i in range(dimaux):
+            # Se extrae el calibre
+            ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"][i])
+            # Se extrae el calibre
+            seccionAWGDC.append(wiresDBAC["seccion"][ind])
+            # Calculo seccion optima del tubo
+
     
     if amountWiresDC == 2:
         seccionOptimaDC = seccionAWGDC / 31
@@ -666,3 +695,25 @@ def pipeliComputation(
 
 
 
+def selConfig( config, type):
+    OP_1 = [4, 3, 2, 2]
+    OP_2 = [3, 3, 2, 1]
+    OPS = [OP_1, OP_2, OP_1, OP_2]
+    ERRORchar = ["ERROR finding AC config to pipelines", "ERROR finding AC config to Protections", 
+                "ERROR finding AC config to Wiring", "ERROR finding AC config to Meter"] 
+
+    amountWiresAC = None
+
+    if config == "3P+N":
+        amountWiresAC = OPS[type][0]
+    elif config == "3P": 
+        amountWiresAC = OPS[type][1]
+    elif config == "2P": 
+        amountWiresAC = OPS[type][2]
+    elif config == "1P": 
+        amountWiresAC = OPS[type][3]
+
+    if amountWiresAC == None:
+        return [ERRORchar[type], 0]
+    else:
+        return ["SUCCESS", amountWiresAC]
