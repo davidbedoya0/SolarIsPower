@@ -603,7 +603,7 @@ def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
 
     # Calculo del metraje y tipo de tuberia (expuesta, enterrada)
     # Verificamos si existe buitron para uso de IMT
-    if dimensionamiento["siteFeatures"]["buitron"]==0:
+    if dimensionamiento["siteFeatures"]["buitron"] == 0:
         # Calcula la cantidad de tuberias enterradas
         tubEnterrada = dimensionamiento["siteFeatures"]["distPv_Tab"]
         # Calcula la cantidad de tuberias expuestas
@@ -655,38 +655,50 @@ def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
         seccionAWGAC = []
         seccionAWGDC = []
         for i in range(dimaux):
-            # Se extrae el calibre
+            # Se extrae el calibre del conductor DC i
             ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"][i])
-            # Se extrae el calibre
-            seccionAWGDC.append(wiresDBAC["seccion"][ind])
+            # Se extrae el calibre del conductor DC i 
+            seccionAWGDC.append(wiresDBDC["seccion"][ind])
+            # Se extrae el calibre del conductor AC i 
+            ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"][i])
+            # Se extrae el calibre del conductor AC i 
+            seccionAWGAC.append(wiresDBAC["seccion"][ind])
             # Calculo seccion optima del tubo
 
-    
-    if amountWiresDC == 2:
-        seccionOptimaDC = seccionAWGDC / 31
-    else:
-        seccionOptimaDC = seccionAWGDC / 40
+    # Lleva a 0 la variable auxiliar
+    aux = 0
+    # Suma todos los calibres de los conductores AC
+    CALWires_AC = [ element + aux for element in seccionAWGDC]
+    # Lleva a 0 la variable auxiliar
+    aux = 0
+    # Suma todos los calibres de los conductores DC
+    CALWires_DC = [ element + aux for element in seccionAWGDC]
 
-    if amountWiresAC == 2:
-        seccionOptimaAC = seccionAWGAC / 31
-    else:
-        seccionOptimaAC = seccionAWGAC / 40
+    # Calcula el calibre optimo si hay dos conductores DC
+    if amountWiresDC <= 2: CALWires_DC = seccionAWGDC / 0.31
+    # Calcula el calibre optimo si hay mas de dos conductores DC
+    else: CALWires_DC = seccionAWGDC / 0.40
+    # Calcula el calibre optimo si hay dos conductores AC
+    if amountWiresAC <= 2: CALWires_AC = seccionAWGAC / 0.31
+    # Calcula el calibre optimo si hay mas de dos conductores AC
+    else: CALWires_AC = seccionAWGAC / 0.40
 
+    # Inicia la variable de control
     seccionOpt = 1e9
-    # Buscar seccion 
-    for val, ind in pipeDB["seccion"]:
-        diff = val - seccionOptimaAC
+
+    # Busca la seccion comercial que se acomode a la seccion optima
+    for i in range(len(pipeDB["seccion"])):
+        # Calcula la diferencia entre la seccion comercial y la seccion optima
+        diff = pipeDB["seccion"] - CALWires_DC
         if diff > 0 and diff < seccionOpt:
             seccionOpt = pipeDB["seccion"][ind]
-            indopt = ind
 
     refSeccOptAC = pipeDB["referencia"][ind]
             
     for val, ind in pipeDB["seccion"]:
-        diff = val - seccionOptimaDC
+        diff = val - CALWires_AC
         if diff > 0 and diff < seccionOpt:
             seccionOpt = pipeDB["seccion"][ind]
-            indopt = ind
 
     refSeccOptDC = pipeDB["referencia"][ind]
 
@@ -704,16 +716,34 @@ def selConfig( config, type):
 
     amountWiresAC = None
 
-    if config == "3P+N":
-        amountWiresAC = OPS[type][0]
-    elif config == "3P": 
-        amountWiresAC = OPS[type][1]
-    elif config == "2P": 
-        amountWiresAC = OPS[type][2]
-    elif config == "1P": 
-        amountWiresAC = OPS[type][3]
+    if config == "3P+N": amountWiresAC = OPS[type][0]
+    elif config == "3P": amountWiresAC = OPS[type][1]
+    elif config == "2P": amountWiresAC = OPS[type][2]
+    elif config == "1P": amountWiresAC = OPS[type][3]
+    if amountWiresAC == None: return [ERRORchar[type], 0]
+    else: return ["SUCCESS", amountWiresAC]
 
-    if amountWiresAC == None:
-        return [ERRORchar[type], 0]
-    else:
-        return ["SUCCESS", amountWiresAC]
+
+def busquedaComponente(Xval, DB, param):
+
+    ref = "ERROR"
+    ind = 1e9
+    befDiff = 1e9
+
+    # Busca la seccion comercial que se acomode a la seccion optima
+    for i in range(len(DB["seccion"])):
+        # Calcula la diferencia entre la seccion comercial y la seccion optima
+        diff = DB[param] - Xval
+        if diff > 0 and diff < befDiff:
+            befDiff = diff
+            seccionOpt = DB["seccion"][i]
+            ind = i
+
+    ref = DB["referencia"][i]
+
+    if ind == 1e9:
+        return ["ERROR", None, None]
+
+    return ["SUCCESS", ref, ind]
+
+    
