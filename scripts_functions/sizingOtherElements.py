@@ -251,8 +251,7 @@ Dataframe cableado necesarias
 
 def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
 
-    ## Seleccion de los conductores para el lado DC
-    
+    ###### Seleccion de los conductores para el lado DC    ######
     # Crea el array donde se almacenaran las referencias de los conductores
     referencePVWire = []
     referenceACWire = []
@@ -262,45 +261,25 @@ def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
     curr = [ factOverSizing * element for element in dimensionamiento["pvModules"]["iArray"]]
     
     for j in range(len(curr)):
-        # Se inicializa la variable de medicion y la variable indice
-        befDiffCurr = 1e9
-        ind_ = 1e9
-        # Se recorre la DB de conductores DC
-        for i in range(len(cableDBDC["capCurr"])):
-            # Se calcula la diferencia de corriente el conductor seleccionado y la I de falla
-            diffCurr = cableDBDC["capCurr"][i] - curr[j]
-            # Se verifica si la diferencia calculada es inferior a la mejor diferencia calculada y si 
-            # la diferencia es mayor a 0
-            if diffCurr < befDiffCurr and diffCurr > 0:
-                # Se actualiza el valor de la mejor diferencia con la diferencia actual
-                befDiffCurr = diffCurr
-                # Se almacena el indice de la referencia que genero la mejor diferencia
-                ind_ = i
-        # Se agrega la referencia del conductor al vector de salida
-        referencePVWire.append(cableDBDC["referencia"][ind_])
-    if ind_ == 1e9:
-        return "ERROR SIZING DC WIRES"
+        [flag, ref, indi] = busquedaComponente(curr[j], cableDBDC, "capCurr", "referencia", "ERROR SELECTING WIRE DC")        
+        if flag != "SUCCESS":
+            return flag
+        else:
+            referencePVWire.append(ref)
 
-    ## Seleccion de los conductores para el lado AC
+    ###### Seleccion de los conductores para el lado AC  ######
 
     # Calcula la corriente de falla
     curr = [ element * factOverSizing for element in dimensionamiento["solarInverter"]["iOutput"]]
     
     for j in range ( len(curr)):
-        # Inicializa la variable de medicion
-        befDiffCurr = 1e9
-        ind_ = 1e9
-        # Seleccion de la referencia del conductor para el lado AC
-        for i in range( len( cableDBAC["capCurr"])):
-            diffCurr = cableDBAC["capCurr"][i] - curr[j]
-            if diffCurr < befDiffCurr and diffCurr > 0:
-                befDiffCurr = diffCurr
-                ind_ = i
 
-        referenceACWire.append(cableDBAC["reference"][ind_])
-    
-    if ind_ == 1e9:
-        return "ERROR SIZING AC WIRES"
+        [flag, ref, indi] = busquedaComponente(curr[j], cableDBAC, "capCurr", "reference", "ERROR SELECTING WIRE AC")        
+        if flag != "SUCCESS":
+            return flag
+        else:
+            referenceACWire.append(ref)
+        
 
     # Calculo cantidad de conductor lado DC
 
@@ -313,30 +292,29 @@ def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
     nArray = dimensionamiento["pvModules"]["nArray"]
 
     A = dimensionamiento["siteFeatures"]["distPv_Tab"] * nArray * 2
-    B = dimensionamiento["pvModules"]["pvModperArray"] * nArray * dimensionamiento["pvModules"]["sizePVMod"][1] *2
+    amArr = len(dimensionamiento["pvModules"]["pvModperArray"])
+    B = []
+    for i in range(amArr):
+        B.append(dimensionamiento["pvModules"]["pvModperArray"][i] * nArray * dimensionamiento["pvModules"]["sizePVMod"][1] * 2)
+
     C = 1.1
 
-    PVWireTOTDC = (A + B) * C
+    PVWireTOTDC = []
+    for i in range(len(B)):
+        PVWireTOTDC.append(math.ceil((A + B[i]) * C))
 
-    # Calculo cantidad de conductor lado AC
+    # Calculo metraje de los conductores lado AC
 
     # Para calcularlo seguimos la siguiente formula
     # PVWireTOT = cantidad total de inversores * configuracionAC * distanciaInversores_Medidor * C
     
+    # Se extrae la configuracion
     typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
-
-    if typeCon == "3P+N":
-        amountWiresAC = 4
-    elif typeCon == "3P": 
-        amountWiresAC = 3
-    elif typeCon == "2P": 
-        amountWiresAC = 2
-    elif typeCon == "1P": 
-        amountWiresAC = 2
-    else:
-        return "ERROR en AC Config Wiring"    
-
+    # Se calcula el numero de conductores del lado AC
+    [flag, amountWiresAC] = selConfig( typeCon, 0)
+    # Se extraer la cantidad de inversores
     nInv = dimensionamiento["solarInverter"]["totInvAmount"]
+    # Se extrae la distancia del tablero 
     distInv2Tab = dimensionamiento["siteFeatures"]["distTab_Cont"]
     WireTOTAC = nInv * amountWiresAC * distInv2Tab * 1.1
 
@@ -360,10 +338,7 @@ referenciaMedidor
 
 """
 
-def seleccionMedidor(
-    dimensionamiento,
-    dbMeters, 
-    dbCT):
+def seleccionMedidor( dimensionamiento, dbMeters, dbCT):
 
     # Se verifica que existe la corriente total de salida de los inversores
     if dimensionamiento["solarInverter"]["totIoutput"] == None:
@@ -381,25 +356,13 @@ def seleccionMedidor(
             # Se almacena la corriente total 
             dimensionamiento["solarInverter"]["totIoutput"] = acumul 
 
-
     # Se toma la corriente maxima
     current = dimensionamiento["solarInverter"]["totIoutput"]
     # Se extrae la cantidad de polos del sistema
-
     # Extrae el tipo de configuracion
     typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
-    
     # Calcula la cantidad de polos de acuerdo a la conexion
-    if typeCon == "3P+N":
-        polos = 3
-    elif typeCon == "3P": 
-        polos = 3
-    elif typeCon == "2P": 
-        polos = 2
-    elif typeCon == "1P": 
-        polos = 1
-    else:
-        return "ERROR en AC Config Medidor"
+    [flag, polos] = selConfig(typeCon, 1)
     
     # Recorre la DB de medidores de acuerdo a los polos
     for ind in range(len(dbMeters["polos"])):
@@ -422,27 +385,7 @@ def seleccionMedidor(
 
     # Verifica si el medidor no es de medida semidirecta
     if directa == False:
-
-        # Se reinicia la diferencia 
-        currentdif = 1e9
-        # Se recorre la DB de Transformadores de corriente
-        for ind in range( len( dbCT["corriente"])):
-            # Se calcula la diferencia teniendo en cuenta el sobredimensionamiento de 1.5 del CT
-            diff = dbCT["corriente"][ind] - current * 1.5
-            # Se verifica si la diferencia es mayor a 0 y menor que la diferencia historica
-            if diff > 0 and diff < currentdif:
-                # Se actualiza la diferencia historica
-                currentdif = diff
-                # Se actualiza el indice de la referencia seleccionada
-                index = ind
-
-        # Se almacena la referencia del CT
-        CT = dbCT["referencia"][index]
-        # Se verifica que la referencia del CT haya sido seleccionada, sino ERROR
-        if currentdif == 1e9:
-            CT = "ERROR SIZING CT"
-    
-    # Se indica que le trafo es de medida directa
+        [flag, CT, ind] = busquedaComponente(current, dbCT, "corriente", "referencia", "ERROR SIZING CT")
     else:
         CT = "MEDIDA DIRECTA"
 
@@ -467,11 +410,9 @@ Timepo horas Hombre
 
 """
 
-def tiempoinstalacionTotal(
-    dimensionamiento, 
-    longitudCableado,
-    cantidadModulosPV, 
-    cantidadInversores):
+def tiempoinstalacionTotal(dimensionamiento):
+
+    Horas = [2.5, 4, 1, 4, 3, 3, 3]
 
     # Sigue la siguiente ecuacion para el calculo 
     # instalationTime = A + B + C + D + E + F
@@ -479,16 +420,25 @@ def tiempoinstalacionTotal(
     # B = Cantidadtableros * 4 hrs
     # C = longitudTuberiaExpuesta *  1 hr + longitudTuberiaEnterrada *  4 hr 
     # D = CantidadInversores * 3 hrs
-    # E = CantidadModulos * 4 hrs
+    # E = CantidadModulos * 3 hrs
     # F = CantidadContadores * 3hrs
     
-    if dimensionamiento["siteFeatures"]["cubiertaApta"]==1:
-        areaCubiertaReemplazo = 0;
+    if dimensionamiento["siteFeatures"]["cubiertaApta"] != 0: 
+        if dimensionamiento["siteFeatures"]["TipodeCubierta"] == 0 or dimensionamiento["siteFeatures"]["TipodeCubierta"] == 2: 
+            AreaCubiertaReemplazo = dimensionamiento["pvModules"]["areaTotSyst"]
+        elif dimensionamiento["siteFeatures"]["TipodeCubierta"] == 1: 
+            AreaCubiertaReemplazo = 0
+        else:
+            return "ERROR CON TIPO DE CUBIERTA"
+    else:
+        AreaCubiertaReemplazo = 0
+
+    A = AreaCubiertaReemplazo * Horas[0]
+
+
     if dimensionamiento["siteFeatures"]["buitron"]==0:
         longitudTuberiaEnterrada = dimensionamiento["siteFeatures"]["distPv_Tab"]
     
-
-    return [tiempoInstalacion]
 
 
 """
@@ -580,10 +530,6 @@ def quantityStructComputation(db, amMods):
     return [references, cant]
 
 
-
-
-
-
 """
 
 # Descripcion: Calcula la tuberia necesaria desde el punto 
@@ -607,13 +553,19 @@ def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
         # Calcula la cantidad de tuberias enterradas
         tubEnterrada = dimensionamiento["siteFeatures"]["distPv_Tab"]
         # Calcula la cantidad de tuberias expuestas
-        tubExpuesta = dimensionamiento["pvModules"]["pvModperArray"] * dimensionamiento["pvModules"]["sizePVMod"][1]
+        amArr = len(dimensionamiento["pvModules"]["pvModperArray"])
+        tubExpuesta = 0
+        for i in range(amArr):
+            tubExpuesta += dimensionamiento["pvModules"]["pvModperArray"][i] * dimensionamiento["pvModules"]["sizePVMod"][1]
     else:
         # Calcula la cantidad de tuberias enterradas
         tubEnterrada = 0
+        tubExp2 = 0
         # Calcula la cantidad de tuberias expuestas
         tubExp1 = dimensionamiento["siteFeatures"]["distPv_Tab"]
-        tubExp2 = dimensionamiento["pvModules"]["pvModperArray"] * dimensionamiento["pvModules"]["sizePVMod"][1]
+        amArr = len(dimensionamiento["pvModules"]["pvModperArray"])
+        for i in range(amArr):
+            tubExp2 += dimensionamiento["pvModules"]["pvModperArray"][i] * dimensionamiento["pvModules"]["sizePVMod"][1]
         tubExpuesta = tubExp1 + tubExp2
 
     # Calculo cantidad de conductores por la tuberia
@@ -626,54 +578,37 @@ def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
     # Se extrae la configuracion de la estructura del dimensionamiento 
     config = dimensionamiento["siteFeatures"]["ACConfig"]
     # Se calcula la cantidad de conductores teniendo en cuenta la configuracion
-    [amountWiresAC, flag] = selConfig( config, 0)
+    [flag, amountWiresAC] = selConfig( config, 0)
     # En caso de no encontrar la cantidad se retorna un ERROR
-    if flag != "SUCCES":
+    if flag != "SUCCESS":
         return flag
 
     ##########################################################################
     # Calculo de la tuberia
     ##########################################################################
 
-    
-    ## conversion de AWG a mm2
-
+    ###Calculo seccion transversal conductores DC###
     # Se extrae la cantidad de referencias de conductores DC
-    dimaux = len(dimensionamiento["otherElements"]["pvWires"])
-
-    if dimaux == 1:
-        # Busca el indice de la referencia del conductor seleccionado para el lado DC
-        ind = wiresDBDC["reference"].index(dimensionamiento["otherElements"]["pvWires"])
-        # Se extrae el calibre para los conductores
-        seccionAWGDC = wiresDBDC["seccion"][ind]
-        # Busca el indice de la referencia del conductor seleccionado para el lado AC
-        ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"])
-        # Se extrae el calibre para los conductores
-        seccionAWGAC = wiresDBAC["seccion"][ind]
-    else:
-        # Se extrae el calibre
-        seccionAWGAC = []
-        seccionAWGDC = []
-        for i in range(dimaux):
-            # Se extrae el calibre del conductor DC i
-            ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"][i])
-            # Se extrae el calibre del conductor DC i 
-            seccionAWGDC.append(wiresDBDC["seccion"][ind])
-            # Se extrae el calibre del conductor AC i 
-            ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["pvWires"][i])
-            # Se extrae el calibre del conductor AC i 
-            seccionAWGAC.append(wiresDBAC["seccion"][ind])
-            # Calculo seccion optima del tubo
-
-    # Lleva a 0 la variable auxiliar
-    aux = 0
-    # Suma todos los calibres de los conductores AC
-    CALWires_AC = [ element + aux for element in seccionAWGDC]
-    # Lleva a 0 la variable auxiliar
-    aux = 0
-    # Suma todos los calibres de los conductores DC
-    CALWires_DC = [ element + aux for element in seccionAWGDC]
-
+    dimaux = len(dimensionamiento["otherElements"]["pvWires"][0])
+    # Se inicializa la variable de seccion transversal de conductores DC
+    seccionAWGDC = 0
+    for i in range(dimaux):
+        # Se extrae el calibre del conductor DC i
+        ind = wiresDBDC["referencia"].index(dimensionamiento["otherElements"]["pvWires"][0][i])
+        # Se suman las secciones transversales de los conductores DC
+        seccionAWGDC += wiresDBDC["seccion"][ind]
+    
+    
+    ###Calculo seccion transversal conductores AC###
+    # Se extrae la cantidad de referencias de conductores AC
+    dimaux = len(dimensionamiento["otherElements"]["facilityWires"][0])
+    # Se inicializa la variable de seccion transversal de conductores AC
+    seccionAWGAC = 0
+    for i in range(dimaux):
+        ind = wiresDBAC["reference"].index(dimensionamiento["otherElements"]["facilityWires"][0][i])
+        # Se suman las secciones transversales de los conductores AC 
+        seccionAWGAC += wiresDBAC["seccion"][ind]
+    
     # Calcula el calibre optimo si hay dos conductores DC
     if amountWiresDC <= 2: CALWires_DC = seccionAWGDC / 0.31
     # Calcula el calibre optimo si hay mas de dos conductores DC
@@ -683,27 +618,20 @@ def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
     # Calcula el calibre optimo si hay mas de dos conductores AC
     else: CALWires_AC = seccionAWGAC / 0.40
 
-    # Inicia la variable de control
-    seccionOpt = 1e9
-
     # Busca la seccion comercial que se acomode a la seccion optima
-    for i in range(len(pipeDB["seccion"])):
-        # Calcula la diferencia entre la seccion comercial y la seccion optima
-        diff = pipeDB["seccion"] - CALWires_DC
-        if diff > 0 and diff < seccionOpt:
-            seccionOpt = pipeDB["seccion"][ind]
 
-    refSeccOptAC = pipeDB["referencia"][ind]
-            
-    for val, ind in pipeDB["seccion"]:
-        diff = val - CALWires_AC
-        if diff > 0 and diff < seccionOpt:
-            seccionOpt = pipeDB["seccion"][ind]
-
+    [flag, ref, ind] = busquedaComponente(CALWires_DC, pipeDB, "seccion", "referencia", "ERROR SELECTING PIPELINE DC")
+    [flag, ref, ind] = busquedaComponente(CALWires_AC, pipeDB, "seccion", "referencia", "ERROR SELECTING PIPELINE AC")
+    
     refSeccOptDC = pipeDB["referencia"][ind]
+    refSeccOptAC = pipeDB["referencia"][ind]
 
-    return [refSeccOptAC, dimensionamiento["siteFeatures"]["distTab2Cont"],
+    return [refSeccOptAC, dimensionamiento["siteFeatures"]["distTab_Cont"],
         refSeccOptDC, tubEnterrada, tubExpuesta]
+
+
+def calculoTableros(dimensionamiento):
+
 
 
 
@@ -724,22 +652,22 @@ def selConfig( config, type):
     else: return ["SUCCESS", amountWiresAC]
 
 
-def busquedaComponente(Xval, DB, param):
+def busquedaComponente(Xval, DB, paramDB_1, paramDB_2, ERROR):
 
-    ref = "ERROR"
+    ref = ERROR
+
     ind = 1e9
     befDiff = 1e9
 
     # Busca la seccion comercial que se acomode a la seccion optima
-    for i in range(len(DB["seccion"])):
+    for i in range(len(DB[paramDB_1])):
         # Calcula la diferencia entre la seccion comercial y la seccion optima
-        diff = DB[param] - Xval
+        diff = DB[paramDB_1][i] - Xval
         if diff > 0 and diff < befDiff:
             befDiff = diff
-            seccionOpt = DB["seccion"][i]
             ind = i
 
-    ref = DB["referencia"][i]
+    ref = DB[paramDB_2][ind]
 
     if ind == 1e9:
         return ["ERROR", None, None]
