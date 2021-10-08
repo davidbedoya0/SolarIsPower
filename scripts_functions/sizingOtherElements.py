@@ -1,4 +1,3 @@
-from math import *
 import math
 
 
@@ -628,9 +627,6 @@ def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
 
     return [refSeccOptAC, dimensionamiento["siteFeatures"]["distTab_Cont"],
         refSeccOptDC, tubEnterrada, tubExpuesta]
-
-
-def calculoTableros(dimensionamiento):
 
 
 
