@@ -1,6 +1,7 @@
 #import pandas as pd
-from sizingOtherElements import *
-from ComponentsDB import *
+from scripts_functions.sizingOtherElements import *
+from scripts_functions.ComponentsDB import *
+from PVgisAPI_Consume.pvGIS_API_GET import *
 
 pvModules = {
 
@@ -61,7 +62,14 @@ siteFeatures ={
     "ACConfig":"3P+N",              # "TAG 3F+N, Cantidad de Fases" (string)
     "TipodeCubierta":1,             # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha) (int)
     "cubiertaApta":None,            # Cubierta Apta (la cubierta es apta)(bool) 
-    "buitron":0                     # Existencia de buitron (bool)
+    "buitron":0,                    # Existencia de buitron (bool)
+    "azimuthOP":None,               # Azimuth Optimo extraido de PVGIS
+    "slopeAngleOP":None,            # Angulo de inclinacion Optimo
+    "avgHSP":None,
+    "avgHistHSP":None,
+    "maxHSP":None,
+    "minHSP":None,
+    "dayDat":[]
 }
 
 dimensionamiento = {
@@ -80,4 +88,13 @@ status = otherElementsSising(
     metalicStruct, clayTileStruct, metalicStruct, 
     EMT
     )
+
+lat = 4.615
+lon = -74.06
+
+flag = pvgisGetData(dimensionamiento, lat, lon)
+
+if flag == "SUCCESS":
+    print("OK")
+
 

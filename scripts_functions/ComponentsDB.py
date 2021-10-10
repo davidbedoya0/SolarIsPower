@@ -521,7 +521,7 @@ curvaEficienciaPV = {
 
 tablerosDB = {
     "referencia":[],
-    "referencia":[],
+    "dimensiones":[],
     "referencia":[],
     "referencia":[],
     "referencia":[]
