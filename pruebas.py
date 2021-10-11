@@ -66,6 +66,7 @@ siteFeatures ={
     "azimuthOP":None,               # Azimuth Optimo extraido de PVGIS
     "slopeAngleOP":None,            # Angulo de inclinacion Optimo
     "avgHSP":None,
+    "avgYaerHSP":None,
     "avgHistHSP":None,
     "maxHSP":None,
     "minHSP":None,

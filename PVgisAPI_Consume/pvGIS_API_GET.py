@@ -14,7 +14,7 @@ def pvgisGetData(dimensionamiento, lat, lon):
         return flag
     else:
          [avg, avgHist, maxHist, minHist, flag] = anualAverageHSP(Data)
-         dimensionamiento["siteFeatures"]["avgHSP"] = avg
+         dimensionamiento["siteFeatures"]["avgYearHSP"] = avg
          dimensionamiento["siteFeatures"]["avgHistHSP"] = avgHist
          dimensionamiento["siteFeatures"]["maxHSP"] = maxHist
          dimensionamiento["siteFeatures"]["minHSP"] = minHist
@@ -26,6 +26,12 @@ def pvgisGetData(dimensionamiento, lat, lon):
             return flag
         else:
             dimensionamiento["siteFeatures"]["dayDat"].append(dailyRad(Data))
+    
+    aux = 0
+
+    for i in range(len(avg)):
+        aux += avg[i]
+    dimensionamiento["siteFeatures"]["avgHSP"] = aux / len(avg)
     return "SUCCESS"
     
 
