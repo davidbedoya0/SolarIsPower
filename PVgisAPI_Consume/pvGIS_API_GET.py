@@ -3,7 +3,10 @@ from requests.models import Response
 from scripts_functions.APIProcess import *
 import time
 
-def pvgisGetData(dimensionamiento, lat, lon):
+def pvgisGetData(dimensionamiento):
+    
+    lat = dimensionamiento["siteFeatures"]["latitude"]
+    lon = dimensionamiento["siteFeatures"]["longitude"]
     
     # Request optimum slope angle from 
     [dimensionamiento["siteFeatures"]["slopeAngleOp"], flag] = req_pvgis( lat, lon, 0)

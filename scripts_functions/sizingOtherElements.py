@@ -54,6 +54,8 @@ def otherElementsSising(
     if flag == "ERROR":
         return "ERROR"
 
+    return "SUCCESS"
+
 
 """
 # Descripcion: Calcula la proteccion especifica que se necesita en el sistema 
@@ -91,7 +93,7 @@ def calculoProtecciones(dimensionamiento, DB_BKR_AC, DB_BKR_DC, DB_DPS_AC, DB_DP
         ifail = dimensionamiento["solarInverter"]["iOutput"][i]
         dimensionamiento["otherElements"]["facilityProtections"].append(buscarProteccionCercana( DB_BKR_AC, ifail, 0, 0,dimensionamiento, 0))
         if dimensionamiento["otherElements"]["facilityProtections"][i] == "ERROR":
-            return "ERROR"
+            return "ERROR protecciones AC"
 
     # Busca la proteccion para el lado DC
     for i in range(rngDC):
@@ -100,17 +102,17 @@ def calculoProtecciones(dimensionamiento, DB_BKR_AC, DB_BKR_DC, DB_DPS_AC, DB_DP
         poles = dimensionamiento["solarInverter"]["polesperInput"][i]
         dimensionamiento["otherElements"]["pvProtections"].append(buscarProteccionCercana(DB_BKR_DC, Idc, Vdc, poles, dimensionamiento, 1))
         if dimensionamiento["otherElements"]["pvProtections"][i] == "ERROR":
-            return "ERROR"
+            return "ERROR protecciones DC"
 
     # Dimensionamiento
     dimensionamiento["otherElements"]["facilityDPS"] = seleccionDPS(dimensionamiento, DB_DPS_AC, 0)
     if dimensionamiento["otherElements"]["facilityDPS"] == "ERROR":
-        return "ERROR"
+        return "ERROR DPS AC"
     
     # Dimensionamiento
     dimensionamiento["otherElements"]["pvDPS"] = seleccionDPS(dimensionamiento, DB_DPS_DC, 1)
     if dimensionamiento["otherElements"]["pvDPS"] == "ERROR":
-        return "ERROR"
+        return "ERROR DPS DC"
 
     return "SUCCESS"
 
@@ -186,6 +188,8 @@ def buscarProteccionCercana( df, i_fail, tension, polesperInput, dimensionamient
     # Se retorna el mensaje donde se indica que no se encontro la proteccion adecuada
     if iCurr == 1e6:
         return "ERROR"
+    
+    return "SUCCESS"
 
 """
 # Descripcion: selecciona el DPS, es valido para lado DC y AC
@@ -279,48 +283,52 @@ def calculoCableado( dimensionamiento, cableDBAC, cableDBDC):
         else:
             referenceACWire.append(ref)
         
+    if dimensionamiento["siteFeatures"]["distTab_Cont"] != None or dimensionamiento["siteFeatures"]["distPv_Tab"] != None:
+        # Calculo cantidad de conductor lado DC
 
-    # Calculo cantidad de conductor lado DC
+        # Para calcularlo seguimos la siguiente formula
+        # PVWireTOTDC = (A + B) * C
+        # A -> distancia del tablero a los strings X N Strings X 2
+        # B -> Cantidad de Modulos per String X Cantidad strings X anchoMod X 2
+        # C -> Factor sobredimensionamiento Normalmente 1.1
 
-    # Para calcularlo seguimos la siguiente formula
-    # PVWireTOTDC = (A + B) * C
-    # A -> distancia del tablero a los strings X N Strings X 2
-    # B -> Cantidad de Modulos per String X Cantidad strings X anchoMod X 2
-    # C -> Factor sobredimensionamiento Normalmente 1.1
+        nArray = dimensionamiento["pvModules"]["nArray"]
 
-    nArray = dimensionamiento["pvModules"]["nArray"]
+        A = dimensionamiento["siteFeatures"]["distPv_Tab"] * nArray * 2
+        amArr = len(dimensionamiento["pvModules"]["pvModperArray"])
+        B = []
+        for i in range(amArr):
+            B.append(dimensionamiento["pvModules"]["pvModperArray"][i] * nArray * dimensionamiento["pvModules"]["sizePVMod"][1] * 2)
 
-    A = dimensionamiento["siteFeatures"]["distPv_Tab"] * nArray * 2
-    amArr = len(dimensionamiento["pvModules"]["pvModperArray"])
-    B = []
-    for i in range(amArr):
-        B.append(dimensionamiento["pvModules"]["pvModperArray"][i] * nArray * dimensionamiento["pvModules"]["sizePVMod"][1] * 2)
+        C = 1.1
 
-    C = 1.1
+        PVWireTOTDC = []
+        for i in range(len(B)):
+            PVWireTOTDC.append(math.ceil((A + B[i]) * C))
 
-    PVWireTOTDC = []
-    for i in range(len(B)):
-        PVWireTOTDC.append(math.ceil((A + B[i]) * C))
+        # Calculo metraje de los conductores lado AC
 
-    # Calculo metraje de los conductores lado AC
+        # Para calcularlo seguimos la siguiente formula
+        # PVWireTOT = cantidad total de inversores * configuracionAC * distanciaInversores_Medidor * C
+        
+        # Se extrae la configuracion
+        typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
+        # Se calcula el numero de conductores del lado AC
+        [flag, amountWiresAC] = selConfig( typeCon, 0)
+        # Se extraer la cantidad de inversores
+        nInv = dimensionamiento["solarInverter"]["totInvAmount"]
+        # Se extrae la distancia del tablero 
+        distInv2Tab = dimensionamiento["siteFeatures"]["distTab_Cont"]
+        WireTOTAC = nInv * amountWiresAC * distInv2Tab * 1.1
 
-    # Para calcularlo seguimos la siguiente formula
-    # PVWireTOT = cantidad total de inversores * configuracionAC * distanciaInversores_Medidor * C
-    
-    # Se extrae la configuracion
-    typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
-    # Se calcula el numero de conductores del lado AC
-    [flag, amountWiresAC] = selConfig( typeCon, 0)
-    # Se extraer la cantidad de inversores
-    nInv = dimensionamiento["solarInverter"]["totInvAmount"]
-    # Se extrae la distancia del tablero 
-    distInv2Tab = dimensionamiento["siteFeatures"]["distTab_Cont"]
-    WireTOTAC = nInv * amountWiresAC * distInv2Tab * 1.1
+        dimensionamiento["otherElements"]["pvWires"] = [ referencePVWire, PVWireTOTDC]
+        dimensionamiento["otherElements"]["facilityWires"] = [ referenceACWire, WireTOTAC]
 
-    dimensionamiento["otherElements"]["pvWires"] = [ referencePVWire, PVWireTOTDC]
-    dimensionamiento["otherElements"]["facilityWires"] = [ referenceACWire, WireTOTAC]
+    else: 
+        WireTOTAC = None
+        PVWireTOTDC = None
 
-    return[WireTOTAC, referenceACWire, PVWireTOTDC, referencePVWire]
+    return "SUCCESS"
 
 """
 
@@ -339,6 +347,7 @@ referenciaMedidor
 
 def seleccionMedidor( dimensionamiento, dbMeters, dbCT):
 
+    ref = None
     # Se verifica que existe la corriente total de salida de los inversores
     if dimensionamiento["solarInverter"]["totIoutput"] == None:
 
@@ -362,7 +371,7 @@ def seleccionMedidor( dimensionamiento, dbMeters, dbCT):
     typeCon = dimensionamiento["siteFeatures"]["ACConfig"]
     # Calcula la cantidad de polos de acuerdo a la conexion
     [flag, polos] = selConfig(typeCon, 1)
-    
+    if flag != "SUCCESS": return flag
     # Recorre la DB de medidores de acuerdo a los polos
     for ind in range(len(dbMeters["polos"])):
         # Verifica si los polos a medir en el sistema son iguales a los de la referencia
@@ -380,16 +389,18 @@ def seleccionMedidor( dimensionamiento, dbMeters, dbCT):
                 # Escribe la bandera de medida directa como False
                 directa = False
 
-    ## Seleccion del Transformador de Corriente
+    if ref == None: return "ERROR SELECTING METER"
 
+    ## Seleccion del Transformador de Corriente
     # Verifica si el medidor no es de medida semidirecta
     if directa == False:
         [flag, CT, ind] = busquedaComponente(current, dbCT, "corriente", "referencia", "ERROR SIZING CT")
-    else:
-        CT = "MEDIDA DIRECTA"
+        if flag != "SUCCESS": return "ERROR SELECTING CT"
+    else: CT = "MEDIDA DIRECTA"
 
     # Se retorna la informacion de la funcion
-    return [ref, CT]
+    dimensionamiento["otherElements"]["meter"] = [ref, CT]
+    return "SUCCESS"
 
 
 
@@ -469,13 +480,18 @@ def structureComputation(
     if cubType > 0 and cubType < 4:
         # Cubierta del tipo metalica
         if cubType == 1:
-            return quantityStructComputation(metalStruct, amMods)
+            dimensionamiento["otherElements"]["structData"] = quantityStructComputation(metalStruct, amMods)
         # Cubierta del tipo teja de barro
         elif cubType == 2:
-            return quantityStructComputation(claytyleStruct, amMods)
+            dimensionamiento["otherElements"]["structData"] = quantityStructComputation(claytyleStruct, amMods)
         # Cubierta del tipo suelo
         elif cubType == 3:
-            return quantityStructComputation(soilStruct, amMods)
+            dimensionamiento["otherElements"]["structData"] = quantityStructComputation(soilStruct, amMods)
+        
+        if dimensionamiento["otherElements"]["structData"] == "ERROR":
+                return "ERROR"
+        else:
+            return "SUCCESS"
     else:
         return "ERROR"
 
@@ -504,6 +520,7 @@ def quantityStructComputation(db, amMods):
     i = 0
     references = []
     cant = []
+    cp = 0
 
     while amMods_ > 0:
 
@@ -520,7 +537,10 @@ def quantityStructComputation(db, amMods):
                 cant_ = unidades
                 resto_ = resto
                 ind = i
-                
+        cp += 1
+        if cp > 50:
+            return "ERROR"
+
         references.append(db["reference"][ind])
         cant.append(cant_)
         amMods_ = resto_

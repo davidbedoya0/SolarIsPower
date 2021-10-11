@@ -3,6 +3,7 @@ pvModules = {
     #input
     "performanceRatio":None,        # Eficiencia total del sistema (float)
     "ener_Need":None,               # Energia necesaria a suplir con el sistema (float kWh/dia)
+    "ener_Type":None,               # Energia necesaria a suplir con el sistema (float kWh/dia)
     #output
     "vArraymax":None,               # Tension maxima del arreglo de paneles solares (float V)
     "iArray":[],                    # Corriente de cada uno de los array (list of floats A)
@@ -66,7 +67,7 @@ siteFeatures ={
     "maxHSP":None,                  # Valor máximo de HSP por cada año
     "minHSP":None,                  # valor mínimo de HSP por cada año
     "dayDat":[],                    # Data diaria por cada mes
-    "Voltage":None                  # Tension linea neutro existente en la edificacion
+    "voltage":None                  # Tension linea neutro existente en la edificacion
 }
 
 dimensionamiento = {
