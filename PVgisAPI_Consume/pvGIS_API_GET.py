@@ -1,10 +1,14 @@
 import requests
 from requests.models import Response
 from scripts_functions.APIProcess import *
+import time
 
-def pvgisGetData(dimensionamiento, lat, lon):
+def pvgisGetData(dimensionamiento):
     
-    # Request optimum slope angle from pvgis
+    lat = dimensionamiento["siteFeatures"]["latitude"]
+    lon = dimensionamiento["siteFeatures"]["longitude"]
+    
+    # Request optimum slope angle from 
     [dimensionamiento["siteFeatures"]["slopeAngleOp"], flag] = req_pvgis( lat, lon, 0)
     if flag!= "SUCCESS":
         return flag
@@ -30,7 +34,7 @@ def pvgisGetData(dimensionamiento, lat, lon):
     aux = 0
 
     for i in range(len(avg)):
-        aux += avg[i]
+        aux += avg[i][0]
     dimensionamiento["siteFeatures"]["avgHSP"] = aux / len(avg)
     return "SUCCESS"
     

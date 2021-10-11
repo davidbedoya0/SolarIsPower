@@ -2,6 +2,7 @@
 from scripts_functions.sizingOtherElements import *
 from scripts_functions.ComponentsDB import *
 from PVgisAPI_Consume.pvGIS_API_GET import *
+import time
 
 pvModules = {
 
@@ -65,12 +66,12 @@ siteFeatures ={
     "buitron":0,                    # Existencia de buitron (bool)
     "azimuthOP":None,               # Azimuth Optimo extraido de PVGIS
     "slopeAngleOP":None,            # Angulo de inclinacion Optimo
-    "avgHSP":None,
-    "avgYaerHSP":None,
-    "avgHistHSP":None,
-    "maxHSP":None,
-    "minHSP":None,
-    "dayDat":[]
+    "avgHSP":None,                  # promedio HSP de todos los años
+    "avgYearHSP":None,              # promedio de HSP de cada año
+    "avgHistHSP":None,              # Promedio de HSP 
+    "maxHSP":None,                  # Valor máximo de HSP por cada año
+    "minHSP":None,                  # valor mínimo de HSP por cada año
+    "dayDat":[]                     # Data diaria por cada mes
 }
 
 dimensionamiento = {
@@ -81,6 +82,9 @@ dimensionamiento = {
 }
 
 
+
+start_time = time.time()
+
 status = otherElementsSising( 
     dimensionamiento, 
     proteccionesAC, proteccionesDC, DPS_AC, DPS_DC, 
@@ -90,6 +94,8 @@ status = otherElementsSising(
     EMT
     )
 
+flagtime = time.time()
+
 lat = 4.615
 lon = -74.06
 
@@ -97,5 +103,11 @@ flag = pvgisGetData(dimensionamiento, lat, lon)
 
 if flag == "SUCCESS":
     print("OK")
+
+scn_flagtime = time.time()
+
+print(str(flagtime - start_time))
+print(str(scn_flagtime - flagtime))
+
 
 
