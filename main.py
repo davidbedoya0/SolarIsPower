@@ -3,23 +3,27 @@ from scripts_functions.initSizingProgram import *
 from scripts_functions.sizingOtherElements import *
 from scripts_functions.variables import *
 from scripts_functions.ComponentsDB import *
+from scripts_functions.readPVandInvDB import *
 
-# Inicializacion de variables
+
+# Dimensionamiento
 
 flag = initProgram(dimensionamiento)
-
 if flag == "SUCCESS":
     flag = pvgisGetData(dimensionamiento)
     if flag == "SUCCESS":
-        flag = otherElementsSising(dimensionamiento, 
-            proteccionesAC, proteccionesDC, DPS_AC, DPS_DC, 
-            WiresISO, WiresDCIso,
-            bdMeters, dbCT, 
-            metalicStruct, clayTileStruct, SoilStruct, 
-            IMC)
-            
+        flag = configuracionPanelesInversor(dimensionamiento, dfInversores, dfPaneles)
         if flag == "SUCCESS":
-            i = 9
+            flag = otherElementsSising(dimensionamiento, 
+                proteccionesAC, proteccionesDC, DPS_AC, DPS_DC, 
+                WiresISO, WiresDCIso,
+                bdMeters, dbCT, 
+                metalicStruct, clayTileStruct, SoilStruct, 
+                IMC)
+            if flag != "SUCCESS":
+                print(flag)
+        else:
+            print(flag)
     else: 
         print(flag)
 else:
@@ -27,3 +31,7 @@ else:
 
 
 
+# Analisis Financiero
+
+
+# Analisis tributario
