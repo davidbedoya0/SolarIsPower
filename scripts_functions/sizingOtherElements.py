@@ -15,10 +15,24 @@ base de datos DPS AC
 base de datos DPS DC
 
 # Outputs
-    bandera: SUCCESS o ERROR
+    Cantidad de protecciones
+accesoreios protecciones 
+Cantidad de tableros
+Accesorios Tableros 
+    Seleccion de cable
+    Cantidad de cable
+    Referencia sistema de medicion 
+Accesorios sistemas de medicion
+Sistema de adquisicion
+Accesorios sistema de adquisicion
+    Tiempo Horas hombre
+    Tiempo horas hombre ingenieria
+    elementos Estructura
+    tuberia
 
 
 """
+
 
 def otherElementsSising(
     dimensionamiento, 
