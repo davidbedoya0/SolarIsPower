@@ -70,7 +70,28 @@ solarInverter = {
     "vInput":[],                    # Tension de entrada (list of floats)
     "iOutput":[],                   # salida de corrientes del inversor, (list of floats)
     "totIoutput": None,             # suma de la corriente de salida (float)
-    "vOutput":[],                   # tensiones de salida (list of floats)
+    "vOutput":None,                   # tension de salida nominal (list of floats)
     "pOutput":[],                   # potencias de salida (list of floats)
     "pInput":[]                     # potencias de entrada (list of floats)
 }
+
+
+
+'''
+
+
+
+
+variables = {'numero1':1,'numero2':'r','resultado':None}
+
+def summa (dictionary):
+    dictionary['resultado']= dictionary['numero1'] + dictionary['numero2']
+    return 'SUCCESS'
+
+flag = summa(variables)
+print (variables['resultado'])
+
+
+'''
+
+
