@@ -29,8 +29,6 @@ Accesorios sistema de adquisicion
     Tiempo horas hombre ingenieria
     elementos Estructura
     tuberia
-
-
 """
 
 
