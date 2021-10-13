@@ -113,7 +113,7 @@ def configurarPaneles (nPaneles, nSerieMax, limiteCorriente ,corrientePanel,dism
     
     nSerie, nParalelo = mejorSerie(nPaneles, nSerieMax) 
     corrienteParalelo = nParalelo*corrientePanel
-    while nSerie <nParalelo or corrienteParalelo > limiteCorriente: 
+    while nSerie <=nParalelo or corrienteParalelo > limiteCorriente: 
         if disminuir:
             nPaneles -=1
         else : 
@@ -357,6 +357,9 @@ def elegirPanelAutomatico (configuracionesPosiblesResultado ):
     #configuracionesPosiblesResultado: dataframe que devuelve la función configuracionesPosibles
     menorCosto = min (configuracionesPosiblesResultado['costo'])
     seleccion= configuracionesPosiblesResultado[configuracionesPosiblesResultado['costo']==menorCosto]
+    if len (seleccion)>1:
+        menorArea= min(seleccion['areaRequerida'])
+        seleccion = seleccion[seleccion['areaRequerida']==menorArea]
     seleccion= seleccion.squeeze()
     return seleccion
 
