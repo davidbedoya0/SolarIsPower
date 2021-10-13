@@ -1,30 +1,33 @@
-referencia	tipo	fabricante	precio	proveedor	nominal_power	MaxPvinput	MaxInputVoltage	corrienteMPPT	Max_SC_current_per_MPPT	max_Imp_total_limit	startVoltage	ratedVoltage	#MPPTs	MaxAcOutput	Output voltage 1	Output voltage 2	phases	MaxEff	eficiencia	$/rated output P
-SUN2000-20KTL-M3 Smart String Inverter 20kW	String 	Huaweii	11875000	 Solaire 	20	30	750	26	40	104	200	360	4	22	220	240	3	0,976	0,972	$ 594
-SUN2000-2KTL-L1 Smart Energy Center 2kW	String 	Huaweii	2875000	 Solaire 	2	3	600	12,5	18	25	100	360	2	2,2	220	240	1	0,982	0,967	$ 1.438
-SUN2000-3KTL-L1 Smart Energy Center 3kW	String 	Huaweii	3250000	 Solaire 	3	4,5	600	12,5	18	25	100	360	2	3,3	220	240	1	0,983	0,973	$ 1.083
-SUN2000-4KTL-L1 Smart Energy Center 4kW	String 	Huaweii	4000000	 Solaire 	4	6	600	12,5	18	25	100	360	2	4,4	220	240	1	0,984	0,975	$ 1.000
-SUN2000-5KTL-L1 Smart Energy Center 5kW	String 	Huaweii	4125000	 Solaire 	5	7,5	600	12,5	18	25	100	360	2	5,5	220	240	1	0,984	0,978	$ 825
-SUN2000-6KTL-L1 Smart Energy Center 6kW	String 	Huaweii	4625000	 Solaire 	6	9	600	12,5	18	25	100	360	2	6	220	240	1	0,984	0,978	$ 771
-SUN2000-100KTL-M1 Smart String Inverter 100kW	String 	Huaweii	24375000	 Solaire 	100		1100	26	40	260	200	720	10	110	480	400	3	0,986	0,984	$ 244
-SUN2000-36KTL-M3 Smart String Inverter 36kW	String 	Huaweii	12750000	 Solaire 	36		620	22	30	88	250	620	4	40	400		3	0,986	0,984	$ 354
-SUN2000-60KTL-M0 Smart String Inverter 60kW	String 	Huaweii	17125000	 Solaire 	60		1100	22	30	132	200	600	6	66	380	480	3	0,987	0,985	$ 285
-Fronius Symo 10.0-3 208-240V advanced	String 	Fronius	11000000	 Solaire 	10	15	600	20,75	31,1	41,5	200	350	2	10	208	240	3	0,97	0,965	$ 1.100
-Fronius Primo 3,8-1 208 /240	String 	Fronius	5287500	 Solaire 	3,8	6	600	18	22,5	36	80	410	2	3,8	208	240	1	0,967	0,95	$ 1.391
-Fronius Primo 5.0-1 208 /240	String 	Fronius	5425000	 Solaire 	5	7,8	600	18	22,5	36	80	420	2	5	208	240	1	0,969	0,955	$ 1.085
-Fronius Primo 6.0-1 208 /240	String 	Fronius	6000000	 Solaire 	6	9,3	600	18	22,5	36	80	420	2	6	208	240	1	0,969	0,96	$ 1.000
-Fronius Primo 7.6-1 208 /240	String 	Fronius	7312500	 Solaire 	7,6	11,7	600	18	22,5	36	80	420	2	7,6	208	240	1	0,969	0,96	$ 962
-Fronius Primo 8.2-1 208 /240	String 	Fronius	7750000	 Solaire 	8,2	23,2	600	18	22,5	36	80	420	2	8,2	208	240	1	0,97	0,965	$ 945
-Fronius Primo 10.0-1 208 /240	String 	Fronius	9675000	 Solaire 	10	15,5	1000	25,5		51	80	655	2	10	208	240	1	0,979	0,96	$ 968
-Fronius Primo 15.0-1 208 /240	String 	Fronius	12925000	 Solaire 	15	23,2	1000	25,5		51	80	680	2	15	208	240	1	0,979	0,965	$ 862
-Fronius Symo 12.0-3  208-240V advanced 	String 	Fronius	12312500	 Solaire 	12	18	600	18,5		41,5	200	350	2	12	208	240	3	0,97	0,965	$ 1.026
-Symo Advance 15-3 208	String 	Fronius 	11562500	 Solaire 	15	22,5	1000	50		50	325	325	1	15	208		3	0,973	0,965	$ 771
-Symo Advance 24-3 480	String 	Fronius	12000000	 Solaire 	24	36	1000	29		51	200	720	2	24	480		3	0,98	0,975	$ 500
-CPS SCA 3.6 KTL-S /EU/ 3.6 kW  A 220V	String 	CPS	2875000	 Solaire 	3,6	4	600	11		11	90	360	1	3,6	220	240	1	0,976	0,973	$ 799
-CPS SCA 5KTL-SM /EU/ 5 kW  A 220V	String 	CPS	3250000	 Solaire 	5	5,5	600	11		22	90	360	2	5	220	240	1	0,978	0,973	$ 650
-CPS SCA 6KTL-SM /EU/ 6 kW  A 220V	String 	CPS	3500000	 Solaire 	6	6,05	600	11		22	90	360	2	6	220	240	1	0,98	0,974	$ 583
-CPS SCA 18KTL -T/SA/ 18 kW A 208V	String 	CPS	10000000	 Solaire 	18	21,6	800	23		69	250	680	3	20	208	240	3	0,936	0,983	$ 556
-CPS SCAKTL-T /SA/ 30 kW A 208 V	String 	CPS	13125000	 Solaire 	30	36	800	27,5		110	250	680	4	33	208	240	3	0,988	0,984	$ 438
-CPS SCAKTL-T /SA/  36 kW A 208 V	String 	CPS	13625000	 Solaire 	36	42	800	33		132	250	680	4	40	208	240	3	0,988	0,984	$ 378
-CPS SCA36KTL-DO/US/ 36 kW a 440 V	String 	CPS	15875000	 Solaire 	36	54	1000	62,5		125	320	720	2	36	480		3	0,985	0,98	$ 441
-CPS SCA50KTL-DO/US-480/ 50 kW  A 480 V	String 	CPS	16750000	 Solaire 	50	75	1000	36		108	330	700	3	50	480		3	0,988	0,985	$ 223
-CPS SCA60KTL-DO/US-480/ 60 kW  A 480 V	String 	CPS	17250000	 Solaire 	60	90	1000	38		114	330	700	3	60	480		3	0,988	0,985	$ 192
+﻿referencia;tipo;fabricante;precio;proveedor;nominal_power;MaxPvinput;MaxInputVoltage;corrienteMPPT;Max_SC_current_per_MPPT;max_Imp_total_limit;startVoltage;ratedVoltage;#MPPTs;MaxAcOutput;Output voltage 1;Output voltage 2;phases;MaxEff;eficiencia;$/rated output P
+SUN2000-20KTL-M3 Smart String Inverter 20kW;String ;Huaweii;11875000; Solaire ;20,00;30,00;750;26;40;104;200;360;4;22,00;;220;3;0,976;0,972; $ 594 
+SUN2000-2KTL-L1 Smart Energy Center 2kW;String ;Huaweii;2875000; Solaire ;2,00;3,00;600;12,5;18;25;100;360;2;2,20;220;240;1;0,982;0,967; $ 1.438 
+SUN2000-3KTL-L1 Smart Energy Center 3kW;String ;Huaweii;3250000; Solaire ;3,00;4,50;600;12,5;18;25;100;360;2;3,30;220;240;1;0,983;0,973; $ 1.083 
+SUN2000-4KTL-L1 Smart Energy Center 4kW;String ;Huaweii;4000000; Solaire ;4,00;6,00;600;12,5;18;25;100;360;2;4,40;220;240;1;0,984;0,975; $ 1.000 
+SUN2000-5KTL-L1 Smart Energy Center 5kW;String ;Huaweii;4125000; Solaire ;5,00;7,50;600;12,5;18;25;100;360;2;5,50;220;240;1;0,984;0,978; $ 825 
+SUN2000-6KTL-L1 Smart Energy Center 6kW;String ;Huaweii;4625000; Solaire ;6,00;9,00;600;12,5;18;25;100;360;2;6,00;220;240;1;0,984;0,978; $ 771 
+SUN2000-100KTL-M1 Smart String Inverter 100kW;String ;Huaweii;24375000; Solaire ;100,00;;1100;26;40;260;200;720;10;110,00;480;400;3;0,986;0,984; $ 244 
+SUN2000-36KTL-M3 Smart String Inverter 36kW;String ;Huaweii;12750000; Solaire ;36,00;;620;22;30;88;250;620;4;40,00;400;;3;0,986;0,984; $ 354 
+SUN2000-60KTL-M0 Smart String Inverter 60kW;String ;Huaweii;17125000; Solaire ;60,00;;1100;22;30;132;200;600;6;66,00;380;480;3;0,987;0,985; $ 285 
+Fronius Symo 10.0-3 208-240V advanced;String ;Fronius;11000000; Solaire ;10,00;15,00;600;20,75;31,1;41,5;200;350;2;10,00;208;240;3;0,970;0,965; $ 1.100 
+Fronius Primo 3,8-1 208 /240;String ;Fronius;5287500; Solaire ;3,80;6,00;600;18;22,5;36;80;410;2;3,80;208;240;1;0,967;0,950; $ 1.391 
+Fronius Primo 5.0-1 208 /240;String ;Fronius;5425000; Solaire ;5,00;7,80;600;18;22,5;36;80;420;2;5,00;208;240;1;0,969;0,955; $ 1.085 
+Fronius Primo 6.0-1 208 /240;String ;Fronius;6000000; Solaire ;6,00;9,30;600;18;22,5;36;80;420;2;6,00;208;240;1;0,969;0,960; $ 1.000 
+Fronius Primo 7.6-1 208 /240;String ;Fronius;7312500; Solaire ;7,60;11,70;600;18;22,5;36;80;420;2;7,60;208;240;1;0,969;0,960; $ 962 
+Fronius Primo 8.2-1 208 /240;String ;Fronius;7750000; Solaire ;8,20;23,20;600;18;22,5;36;80;420;2;8,20;208;240;1;0,970;0,965; $ 945 
+Fronius Primo 10.0-1 208 /240;String ;Fronius;9675000; Solaire ;10,00;15,50;1000;25,5;;51;80;655;2;10,00;208;240;1;0,979;0,960; $ 968 
+Fronius Primo 15.0-1 208 /240;String ;Fronius;12925000; Solaire ;15,00;23,20;1000;25,5;;51;80;680;2;15,00;208;240;1;0,979;0,965; $ 862 
+Fronius Symo 12.0-3  208-240V advanced ;String ;Fronius;12312500; Solaire ;12,00;18,00;600;18,5;;41,5;200;350;2;12,00;208;240;3;0,970;0,965; $ 1.026 
+Symo Advance 15-3 208;String ;Fronius ;11562500; Solaire ;15,00;22,50;1000;50;;50;325;325;1;15,00;208;;3;0,973;0,965; $ 771 
+Symo Advance 24-3 480;String ;Fronius;12000000; Solaire ;24,00;36,00;1000;29;;51;200;720;2;24,00;480;;3;0,980;0,975; $ 500 
+CPS SCA 3.6 KTL-S /EU/ 3.6 kW  A 220V;String ;CPS;2875000; Solaire ;3,60;4,00;600;11;;11;90;360;1;3,60;220;240;1;0,976;0,973; $ 799 
+CPS SCA 5KTL-SM /EU/ 5 kW  A 220V;String ;CPS;3250000; Solaire ;5,00;5,50;600;11;;22;90;360;2;5,00;220;240;1;0,978;0,973; $ 650 
+CPS SCA 6KTL-SM /EU/ 6 kW  A 220V;String ;CPS;3500000; Solaire ;6,00;6,05;600;11;;22;90;360;2;6,00;220;240;1;0,980;0,974; $ 583 
+CPS SCA 18KTL -T/SA/ 18 kW A 208V;String ;CPS;10000000; Solaire ;18,00;21,60;800;23;;69;250;680;3;20,00;208;240;3;0,936;0,983; $ 556 
+CPS SCAKTL-T /SA/ 30 kW A 208 V;String ;CPS;13125000; Solaire ;30,00;36,00;800;27,5;;110;250;680;4;33,00;208;240;3;0,988;0,984; $ 438 
+CPS SCAKTL-T /SA/  36 kW A 208 V;String ;CPS;13625000; Solaire ;36,00;42,00;800;33;;132;250;680;4;40,00;208;240;3;0,988;0,984; $ 378 
+CPS SCA36KTL-DO/US/ 36 kW a 440 V;String ;CPS;15875000; Solaire ;36,00;54,00;1000;62,5;;125;320;720;2;36,00;480;;3;0,985;0,980; $ 441 
+CPS SCA50KTL-DO/US-480/ 50 kW  A 480 V;String ;CPS;16750000; Solaire ;50,00;75,00;1000;36;;108;330;700;3;50,00;480;;3;0,988;0,985; $ 223 
+CPS SCA60KTL-DO/US-480/ 60 kW  A 480 V;String ;CPS;17250000; Solaire ;60,00;90,00;1000;38;;114;330;700;3;60,00;480;;3;0,988;0,985; $ 192 
+;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;
