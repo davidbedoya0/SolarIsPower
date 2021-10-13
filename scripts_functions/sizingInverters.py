@@ -229,4 +229,9 @@ def seleccionarInversores (potenciaNecesaria, numeroFasesSistema, dataframeInver
     return seleccion
 
 
+"""
 
+CAMBIO PEQUEÑO
+
+
+"""
