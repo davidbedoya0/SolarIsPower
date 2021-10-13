@@ -15,7 +15,6 @@ base de datos DPS AC
 base de datos DPS DC
 
 # Outputs
-<<<<<<< HEAD
     Cantidad de protecciones
 accesoreios protecciones 
 Cantidad de tableros
@@ -30,12 +29,8 @@ Accesorios sistema de adquisicion
     Tiempo horas hombre ingenieria
     elementos Estructura
     tuberia
-=======
-    bandera: SUCCESS o ERROR
->>>>>>> 43c25a2197ea3a8b56d8f426452d6a0a0dc215f1
-
-
 """
+
 
 def otherElementsSising(
     dimensionamiento, 
