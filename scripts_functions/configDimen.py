@@ -6,7 +6,7 @@ from sizingInverters import *
 
 ###DATOS PARA PEUEBAS 
 irradiacionEntrada= 4.6
-energiaEntrada= 35 #116.9 #kWh-dia
+energiaEntrada= 500 #116.9 #kWh-dia
 fasesSistema= 3
 PF= 0.8316
 
