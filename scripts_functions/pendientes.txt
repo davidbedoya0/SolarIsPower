@@ -1,0 +1,6 @@
+Terminar funcion de tuberia
+Terminar funcion de calculo de Tiempo
+Terminar funcion principal 
+Optimizar codigo en funciones 
+Dejar funciones como opcionales
+Dejar funciones con errores de salida 
