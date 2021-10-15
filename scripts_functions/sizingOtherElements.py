@@ -1,6 +1,5 @@
 import math
 
-
 """
 
 # Descripcion. Calcula la configuracion de las protecciones, el tablero, cableado, 
@@ -72,22 +71,18 @@ def otherElementsSising(
 
 
 """
-# Descripcion: Calcula la proteccion especifica que se necesita en el sistema 
-para el lado DC o AC. 
+# +++ Descripcion: Calcula la proteccion especifica que se necesita en el sistema 
+# +++ para el lado DC o AC. 
 
-# Inputs: 
-Dataframe de configuracion
-Base de datos breakers AC
-Base de datos breakers DC
-Base de datos DPS AC
-Base de datos DPS DC
+# ! Inputs: 
+?Dataframe de configuracion
+?Base de datos breakers AC
+?Base de datos breakers DC
+?Base de datos DPS AC
+?Base de datos DPS DC
 
-# Outputs: 
-Dataframe de configuracion actualizado
-    Se actualiza el array proteccion AC
-    Se actualiza el array proteccion DC
-    Se actualiza el string DPS AC
-    Se actualiza el string DPS DC
+# ! Outputs: 
+? bandera success
 """
 
 def calculoProtecciones(dimensionamiento, DB_BKR_AC, DB_BKR_DC, DB_DPS_AC, DB_DPS_DC):
