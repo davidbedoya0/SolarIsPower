@@ -26,7 +26,7 @@ seleccionInversores = seleccionarInversores(potenciaNecesaria,fasesSistema,dfInv
 configuracionesPaneles = configuracionesPosibles(potenciaNecesaria,dfPaneles, dfInversores,seleccionInversores)
 
 panelElegido = elegirPanelAutomatico (configuracionesPaneles)
-panelEligidoDict = panelElegido.to_dict()
+#panelEligidoDict = panelElegido.to_dict()
 
 
 
@@ -50,7 +50,8 @@ pvModules = {
     "sizePVMod":dfPaneles[dfPaneles['referencia']==panelElegido['referencia']].squeeze()['dimensiones'],   # dimensionaes del panel seleccionado (list of floats mm)
     "areaPVMod":calAreaPaneles(dfPaneles[dfPaneles['referencia']==panelElegido['referencia']].squeeze()['dimensiones'],1),  # area del panel seleccionado (float m2)
     "areaTotSyst":panelElegido['areaRequerida'],                # area total de todos los paneles (float m2)
-    'otrasReferencias':configuracionesPaneles             #
+    'otrasReferencias':configuracionesPaneles,             #
+    'pTotalPaneles':sum (list (panelElegido['configuracion'][0]['potenciaInstalada']))
     
 }
 
@@ -62,24 +63,23 @@ solarInverter = {
     #input
     "powerNeed":potenciaNecesaria,                 # Potencia necesaria antes de dimensionamiento (float kW)
     #output
-    "ref":[],                       # Referencias de inversores seleccionados (list of strings)
-    "invAmount":[],                 # Cantidad por referencia (list of ints)
-    "totInvAmount": None,           # Cantidad total de inversores (int)
-    "iInput":[],                    # Entrada de corriente del inversor, (list of floats)
-    "polesperInput":[],             # Cantidad de polos por entrada de corriente (list of ints)
-    "vInput":[],                    # Tension de entrada (list of floats)
-    "iOutput":[],                   # salida de corrientes del inversor, (list of floats)
+    "referencias":list (seleccionInversores['configuracion'].keys()),                       # Referencias de inversores seleccionados (list of strings)
+    "invAmount":seleccionInversores['configuracion'],                 # Cantidad por referencia (list of ints)
+    "totInvAmount": len(panelElegido['configuracion'][0]),           # Cantidad total de inversores (int)
+    "iInput":panelElegido['configuracion'][1].loc[:,['inversor','mppt','corrienteArreglo']],                    # Entrada de corriente del inversor, (list of floats)
+    "polesperInput":panelElegido['configuracion'][1].loc[:,['inversor','mppt','SeriesEnParalelo']],             # Cantidad de polos por entrada de corriente (list of ints)
+    "vInput":panelElegido['configuracion'][0].loc[:,['inversor','voltajeIn']],                    # Tension de entrada (list of floats)
+    "iOutput":[ ],                   # salida de corrientes del inversor, (list of floats)
     "totIoutput": None,             # suma de la corriente de salida (float)
     "vOutput":None,                   # tension de salida nominal (list of floats)
-    "pOutput":[],                   # potencias de salida (list of floats)
-    "pInput":[]                     # potencias de entrada (list of floats)
+    "pOutput":[ ],                   # potencias de salida (list of floats)
+    "pInput":panelElegido['configuracion'][0].loc[:,['inversor','potenciaInstalada']],                     # potencias de entrada (list of floats)
+    "pTotalInversores":  sum ([dfInversores[dfInversores['referencia']==i].loc[:,'nominal_power'].squeeze() for i in list(seleccionInversores['configuracion'].keys())])
 }
 
 
 
 '''
-
-
 
 
 variables = {'numero1':1,'numero2':'r','resultado':None}

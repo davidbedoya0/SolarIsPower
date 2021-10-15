@@ -213,7 +213,7 @@ def seleccionarInversores (potenciaNecesaria, numeroFasesSistema, dataframeInver
     for i in DataFrameInversores.index:
         referenciaInv=DataFrameInversores['referencia'][i]
         [costoConfiguracion , configuracion ]= configuracionInversor(referenciaInv,potenciaNecesaria,DataFrameInversores)
-        
+#        configuracion={'referencias':configuracion[0],'cantidades':configuracion[1]}
         referencias.append(referenciaInv)
         costosConfiguraciones.append (costoConfiguracion)
         configuraciones.append (configuracion)
@@ -225,21 +225,17 @@ def seleccionarInversores (potenciaNecesaria, numeroFasesSistema, dataframeInver
     referencias_I = configuracionMenor[0]
     cantidades =configuracionMenor[1]
     configuracionElegida = dict(zip(referencias_I, cantidades))
+    
     seleccion = {'referencia_principal':referencias[menor], 'costo': costosConfiguraciones [menor], 'configuracion': configuracionElegida}
+#    configuracionesInversores=DataFrameInversores.loc[:,['referencia','costoConfiguracion','configuracion']]
     return seleccion
-
-
 """
+dfInversores= importarInversores()
+potenciaNecesaria= 130 #[kWp]
+numeroFasesSistema=3
 
-CAMBIO PEQUEÑO
-
-
+prueba= seleccionarInversores(potenciaNecesaria, numeroFasesSistema, dfInversores)
 """
-
-
-
-
-
 
 
 
