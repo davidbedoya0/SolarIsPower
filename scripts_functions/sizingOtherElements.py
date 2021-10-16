@@ -1,5 +1,21 @@
 import math
 
+class inventary:
+    pvWires:None                   # Conductores del lado DC (list [referencias string metraje float m2])
+    facilityWires:None             # Conductores del lado AC (list [referencias string metraje float m2])
+    pvProtections:None             # breakers lado DC (list[referencia string cantidad int N])
+    facilityProtections:None       # breakers lado AC (list[referencia string cantidad int N])
+    pvDPS:None                     # DPS lado DC (string)
+    facilityDPS:None               # DPS lado AC (string)
+    meter:None                     # referencia del medidor y CT si requiere (list (referencia Medidor referencia CT))
+    structData:None                # referencias y cantidades de la estructura (list (referencia metraje m2))
+    pipeData:None                  # referencias tipo y metraje de la tuberia (list (referencia metraje m2))
+    wires:None                     # Estructura del cableado (list (referencias metraje float m2 referencias metraje float m2))
+    pvModulesData:None             # informacion de los modulos solares
+
+    protectionscomputation()
+
+
 """
 
 # Descripcion. Calcula la configuracion de las protecciones, el tablero, cableado, 
@@ -656,7 +672,7 @@ def pipeliComputation( dimensionamiento, wiresDBAC, wiresDBDC, pipeDB):
         refSeccOptDC, tubEnterrada, tubExpuesta]
 
 
-
+#--- Funciones auxiliares
 
 def selConfig( config, type):
     OP_1 = [4, 3, 2, 2]

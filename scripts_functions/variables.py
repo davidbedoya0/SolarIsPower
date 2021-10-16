@@ -3,6 +3,28 @@
 # ? input (opcional)
 # ! Outputs
 
+class pvSizing:
+
+    performanceRatio:None        # +++ Eficiencia total del sistema (float)
+    ener_Need:None               # +++ Energia necesaria a suplir con el sistema (float kWh/dia)
+    ener_Type:None               # +++ Energia necesaria a suplir con el sistema (float kWh/dia)
+    areaTotSyst:None             # ? area total de todos los paneles (float m2)
+    vArraymax:None               # ! Tension maxima del arreglo de paneles solares (float V)
+    iArray:None                  # ! Corriente de cada uno de los array (list of floats A)
+    nArray:None                  # ! Cantidad de arrays (int N)
+    pvModperArray:None           # ! Cantidad de modulos por cada array (list of ints N)
+    amountPVMod:None             # ! Cantidad total de modulos (int N)
+    configuracionGeneral:None    # ! Cantidad total de modulos (int N)
+    configuracionArrays:None     # ! Cantidad total de modulos (int N)        
+    refPVMod:None                # ! Referencia del panel (string )
+    iPVMod:None                  # ! Corriente de salida del panel seleccionado (float A)
+    vPVMod:None                  # ! Tension de salida del panel seleccionado (float V)
+    sizePVMod:None               # ! dimensionaes del panel seleccionado (list of floats mm)
+    areaPVMod:None               # ! area del panel seleccionado (float m2)
+    pTotalPaneles:None           # ! dimensionaes del panel seleccionado (list of floats mm)
+
+
+
 pvModules = {
 
     
@@ -15,19 +37,22 @@ pvModules = {
     "nArray":None,                  # ! Cantidad de arrays (int N)
     "pvModperArray":[],             # ! Cantidad de modulos por cada array (list of ints N)
     "amountPVMod":None,             # ! Cantidad total de modulos (int N)
+    "configuracionGeneral":None,    # ! Cantidad total de modulos (int N)
+    "configuracionArrays":None,     # ! Cantidad total de modulos (int N)        
     "refPVMod":None,                # ! Referencia del panel (string )
     "iPVMod":[],                    # ! Corriente de salida del panel seleccionado (float A)
     "vPVMod":[],                    # ! Tension de salida del panel seleccionado (float V)
     "sizePVMod":[],                 # ! dimensionaes del panel seleccionado (list of floats mm)
-    "areaPVMod":[]                  # ! area del panel seleccionado (float m2)
-    
+    "areaPVMod":[],                 # ! area del panel seleccionado (float m2)
+    "pTotalPaneles":[]              # ! dimensionaes del panel seleccionado (list of floats mm)
+
 }
 
 solarInverter = {
     #input
     "powerNeed":[],                 # Potencia necesaria antes de dimensionamiento (float kW)
     #output
-    "ref":[],                       # Referencias de inversores seleccionados (list of strings)
+    "referencias":[],               # Referencias de inversores seleccionados (list of strings)
     "invAmount":[],                 # Cantidad por referencia (list of ints)
     "totInvAmount": None,           # Cantidad total de inversores (int)
     "iInput":[],                    # Entrada de corriente del inversor, (list of floats)
@@ -37,7 +62,8 @@ solarInverter = {
     "totIoutput": None,             # suma de la corriente de salida (float)
     "vOutput":[],                   # tensiones de salida (list of floats)
     "pOutput":[],                   # potencias de salida (list of floats)
-    "pInput":[]                     # potencias de entrada (list of floats)
+    "pInput":[],                    # potencias de entrada (list of floats)
+    "pTotalInversores":[]           # potencias de entrada (list of floats)
 }
 
 otherElements = {
