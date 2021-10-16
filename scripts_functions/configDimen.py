@@ -2,7 +2,7 @@
 
 from sizingPVModules import *
 from sizingInverters import *
-
+from variables import *
 
 ###DATOS PARA PEUEBAS 
 irradiacionEntrada= 4.6
@@ -11,7 +11,7 @@ fasesSistema= 3
 PF= 0.8316
 
 
-
+#def dimensionarSistema (configuracion):
 dfInversores=importarInversores()
 dfPaneles= importarPaneles()
 
@@ -51,7 +51,7 @@ pvModules = {
     "areaPVMod":calAreaPaneles(dfPaneles[dfPaneles['referencia']==panelElegido['referencia']].squeeze()['dimensiones'],1),  # area del panel seleccionado (float m2)
     "areaTotSyst":panelElegido['areaRequerida'],                # area total de todos los paneles (float m2)
     'otrasReferencias':configuracionesPaneles,             #
-    'pTotalPaneles':sum (list (panelElegido['configuracion'][0]['potenciaInstalada']))
+    'pTotalPaneles':sum (list (panelElegido['configuracion'][0]['potenciaInstalada']))#potencia instalada en paneles
     
 }
 
@@ -74,10 +74,10 @@ solarInverter = {
     "vOutput":None,                   # tension de salida nominal (list of floats)
     "pOutput":[ ],                   # potencias de salida (list of floats)
     "pInput":panelElegido['configuracion'][0].loc[:,['inversor','potenciaInstalada']],                     # potencias de entrada (list of floats)
-    "pTotalInversores":  sum ([dfInversores[dfInversores['referencia']==i].loc[:,'nominal_power'].squeeze() for i in list(seleccionInversores['configuracion'].keys())])
+    "pTotalInversores":  sum ([dfInversores[dfInversores['referencia']==i].loc[:,'nominal_power'].squeeze() for i in list(seleccionInversores['configuracion'].keys())]) #capacidad de potencia total de los inversores juntos 
 }
 
-
+#    return "SUCCESS"
 
 '''
 
