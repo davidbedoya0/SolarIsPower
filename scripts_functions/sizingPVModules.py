@@ -77,17 +77,18 @@ def calPotNec (irradiacion , consumo , PF , EnergiaDiaria: bool = True ,EnergiaM
 
 
 def calNumPaneles (potenciaNecesaria, potenciaReferenciaPanel):
-    numPaneles=math.ceil(potenciaNecesaria/(potenciaReferenciaPanel/1000))
+    nPn=math.ceil(potenciaNecesaria/(potenciaReferenciaPanel/1000))
     
-    return numPaneles
+    return nPn
 
-def calAreaPaneles (dimensionesPanel, nPaneles):
+def calAreaPaneles (dimensionesPanel, nPn):
+    
     dim = re.split('[xX\*]',dimensionesPanel)
     largo= int (dim [0])/1000 #metros
     ancho= int (dim[1])/1000 #metros
-    #grueso=[2]
+    #grueso=int (dim[2])
     areaUnitaria=largo*ancho
-    areaTotal= areaUnitaria* nPaneles
+    areaTotal= areaUnitaria* nPn
     areaTotal = round (areaTotal,2)
     return areaTotal
 
@@ -95,32 +96,32 @@ def calAreaPaneles (dimensionesPanel, nPaneles):
 
 
 
-def mejorSerie (nPaneles,nSerieMax):
-    #Entradas: nPaneles = Numero de paneles necesarios 
-    #          nSerieMax= Numero de paneles en serie maximos soportados por el inversor 
-    #Salidas: nPanelesSerie
-    vector = np.arange(nSerieMax, 0, -1)
+def mejorSerie (nPu,nSmax):
+    #Entradas: nPu = Numero de paneles utilizados 
+    #          nSmax= Numero de paneles en serie maximos soportados por el inversor 
+    #Salidas: nS, nP
+    vector = np.arange(nSmax, 0, -1)
     for i in vector :
-        mod = nPaneles % i
+        mod = nPu % i
         if mod ==0:
-            serie = i
-            paralelo = nPaneles/i
-            #print (serie, "paneles en serie , y ", paralelo, " arreglos en paralelo", ", y un total de ", serie*paralelo)
-            return serie , paralelo
+            nS= i
+            nP= nPu/i
+            #print (nS, "paneles en serie , y ", nP, " arreglos en paralelo", ", y un total de ", nS*nP)
+            return nS, nP
 
 
-def configurarPaneles (nPaneles, nSerieMax, limiteCorriente ,corrientePanel,disminuir: bool = False ):
+def CantidadPanelesConfig (nPu, nSmax, iMaxI ,Imp,disminuir: bool = False ):
     
-    nSerie, nParalelo = mejorSerie(nPaneles, nSerieMax) 
-    corrienteParalelo = nParalelo*corrientePanel
-    while nSerie <=nParalelo or corrienteParalelo > limiteCorriente: 
+    nS, nP = mejorSerie(nPu, nSmax) 
+    Ip = nP*Imp
+    while nS <=nP or Ip > iMaxI: 
         if disminuir:
-            nPaneles -=1
+            nPu -=1
         else : 
-            nPaneles += 1
-        nSerie, nParalelo = mejorSerie(nPaneles, nSerieMax)
-        corrienteParalelo = nParalelo*corrientePanel
-    return nSerie, nParalelo
+            nPu += 1
+        nS, nP = mejorSerie(nPu, nSmax) 
+        Ip = nP*Imp
+    return nS, nP
 
 
 
@@ -145,36 +146,36 @@ def calPanelesSoportados (inversor, panel):
     maxDcInput= (1-ef)*maxAcOutput+maxAcOutput
     #print ("potencia DC maxima convertible por el inversor: ", maxDcInput,'\n')
     #Cálculo de maximo numero de paneles para maxDcInput
-    maxPan=math.floor(maxDcInput*1000/Wp)
-    #print ('maximo numero de paneles soportados por el inversor: ', maxPan, '\n')
+    nPmax=math.floor(maxDcInput*1000/Wp)
+    #print ('maximo numero de paneles soportados por el inversor: ', nPmax, '\n')
     #Cálculo de maximo numero de paneles en serie 
-    maxPanSerie=math.floor(maxInputVoltage/Voc)
+    nSmax=math.floor(maxInputVoltage/Voc)
     
-    #print ("Este inversor soporta máximo ", maxPan ," paneles, con una potencia total de ",maxPan*Wp , "Wp, y ",maxPanSerie," paneles en serie como máximo" )
-    return maxPan, maxPanSerie
+    #print ("Este inversor soporta máximo ", nPmax ," paneles, con una potencia total de ",nPmax*Wp , "Wp, y ",nSmax," paneles en serie como máximo" )
+    return nPmax, nSmax
 
 
 
 
 
 
-def configuracionPanelesEnInversor (inversor, panel, nPn): #Funcion Final
-    
+def configuracionPanelesEnInversor (inversor, panel, nPn): 
+        
     
     
     Imp= panel['Imp'] #Corriente de punto de maxima potencia del panel
-    corrienteMppt=inversor['corrienteMPPT']
+    iMppt=inversor['corrienteMPPT']
     nMppt= inversor ['#MPPTs']
-    limiteCorrienteInversor= corrienteMppt*nMppt
-    nPsi, nPMaxS  = calPanelesSoportados(inversor, panel)
-    condicion = nPsi<nPn
+    iMaxI= iMppt*nMppt
+    nPmax, nSmax  = calPanelesSoportados(inversor, panel)
+    condicion = nPmax<nPn
     if condicion :
-        nPu=nPsi
-        nS,nP = configurarPaneles(nPu, nPMaxS,limiteCorrienteInversor,Imp,True)
+        nPu=nPmax
+        nS,nP = CantidadPanelesConfig(nPu, nSmax,iMaxI,Imp,True)
         nPu = nS * nP
     else: 
         nPu=nPn
-        nS,nP = configurarPaneles(nPu,nPMaxS ,limiteCorrienteInversor,Imp)
+        nS,nP = CantidadPanelesConfig(nPu,nSmax ,iMaxI,Imp)
     nPn_new=nPn-nPu
     return nS, nP, nPn_new
 
@@ -191,18 +192,17 @@ PanelesSerie, PanelesParalelo, Restantes = configuracionPanelesEnInversor(invers
 
 """
 
-def configurarArregloInversores (potenciaNecesariaEntrada,dataframeInversores, dataframePaneles, seleccionInversores,panelElegido):
+def ConfigurarSeleccionInversores (potenciaNecesariaEntrada,dataframeInversores, dataframePaneles, seleccionInversores,panel):
     
-    potenciaPanel= panelElegido['Wp']
+    potenciaPanel= panel['Wp']
+    Vmp= panel['Vmp']
     
     panelesNecesariosEntrada= calNumPaneles (potenciaNecesariaEntrada, potenciaPanel)
-    
-
 
     #print ("\n potenciaNecesaria:", potenciaNecesariaEntrada, " , Paneles necesarios: ", panelesNecesariosEntrada)
 
-    inversores = list();nPns= list ();nSs=list ();nPs= list ();potenciaInstalada=list (); voltajeArreglos=list ()
-    arreglo=list();corrientesArreglos=list ();listaTodosInversores=list ();mppts=list();nSeries=list();nPT_lst = list()
+    inversores = list();nPns= list ();nSs=list ();nPs= list ();potenciaInstalada=list ();voltajeInversores=list()
+    voltajeArreglos=list ();arreglo=list();corrientesArreglos=list ();listaTodosInversores=list ();mppts=list();nSeries=list();nPT_lst = list()
     
     for i in seleccionInversores ['configuracion'].keys() :
         cantidad = seleccionInversores['configuracion'][i]
@@ -211,17 +211,17 @@ def configurarArregloInversores (potenciaNecesariaEntrada,dataframeInversores, d
         inversor = dataframeInversores [dataframeInversores['referencia']==i].squeeze()
         while contador > 0 :
             
-            nS, nP, nPn_nuevo = configuracionPanelesEnInversor(inversor,panelElegido,panelesNecesariosEntrada)
+            nS, nP, nPn_nuevo = configuracionPanelesEnInversor(inversor,panel,panelesNecesariosEntrada)
             #print ( nS, nP, nPn_nuevo)
         
             panelesInversor= nS*nP
             #print ('\n paneles utilizados en este inversor: ', panelesInversor)
             potenciaT = panelesInversor*potenciaPanel
             
-            nPanelesArreglo, voltajeArreglo, corrienteArreglo,mppt,listaInversores, nPanelesSerie, nPT= definirArreglo(nS, nP, panelElegido, inversor)
+            nPanelesArreglo, voltajeArreglo, corrienteArreglo,mppt,listaInversores, nPanelesSerie, nPT= definirArreglo(nS, nP, panel, inversor)
             
             inversores.append(i) ; nPns.append (panelesInversor); nSs.append(nS);nPs.append(nP)
-            potenciaInstalada.append(potenciaT)
+            potenciaInstalada.append(potenciaT);voltajeInversores.append(nS*Vmp)
             
             #arreglo.append(nPanelesArreglo); voltajeArreglos.append(voltajeArreglo)
             #corrientesArreglos.append(corrienteArreglo);listaTodosInversores.append(listaInversores);mppts.append(mppt)
@@ -236,14 +236,14 @@ def configurarArregloInversores (potenciaNecesariaEntrada,dataframeInversores, d
         
     
     
-    costoPanel= panelElegido['precio']
+    costoPanel= panel['precio']
     costoTotalPaneles= costoPanel * sum (nPns)
     #print ("\n El costo total de los paneles es de: ", costoTotalPaneles, '\n')
     
-    configuracionGeneral = pd.DataFrame({'inversor': inversores,'numeroPaneles': nPns,'Serie':nSs,'Paralelo':nPs, 'potenciaInstalada':potenciaInstalada})
-    configuracionArreglos= pd.DataFrame({'inversor':listaTodosInversores, 'mppt':mppts,'panelesUsados':nPT_lst,'PanelesSerie':nSeries,'SeriesEnParalelo':arreglo,'voltajeArreglo': voltajeArreglos,'corrienteArreglo': corrientesArreglos})
+    configuracionGeneral = pd.DataFrame({'inversor': inversores,'numeroPaneles': nPns,'Serie':nSs,'Paralelo':nPs, 'potenciaInstalada':potenciaInstalada,'voltajeIn':voltajeInversores})
+    configuracionArrays= pd.DataFrame({'inversor':listaTodosInversores, 'mppt':mppts,'panelesUsados':nPT_lst,'PanelesSerie':nSeries,'SeriesEnParalelo':arreglo,'voltajeArreglo': voltajeArreglos,'corrienteArreglo': corrientesArreglos})
     
-    return configuracionGeneral, configuracionArreglos ,costoTotalPaneles
+    return configuracionGeneral, configuracionArrays ,costoTotalPaneles
 
 def definirArreglo(nS,nP, panel, inversor):##Define cuantos MPPTs son necesarios utlizar en el inversor. 
     
@@ -259,35 +259,35 @@ def definirArreglo(nS,nP, panel, inversor):##Define cuantos MPPTs son necesarios
     nArreglos=nArreglosFull+1 
     
     
-    nParaleloArreglo=list (); nSerieArreglo = list ();voltajeArreglo = list (); corrienteArreglo= list (); inversores= list ();mppts=list()
-    panelesTotales=list()
+    nPA=list (); nSA = list ();vA = list (); iA= list (); inversores= list ();mppts=list()
+    nPTA=list()
     
-    
+    #nPA= numero de series de paneles en paralelo en el arreglo; iA= corriente del arreglo ; vA = voltaje arreglo
     contador=nArreglosFull
     mppt=1
     while contador>0:
-        nParaleloArreglo.append(panelesParaleloMaximosMppt)
-        nSerieArreglo.append(nS)
-        voltajeArreglo.append(voltaje)
-        corrienteArreglo.append(panelesParaleloMaximosMppt*corrienteMaximaPotencia)
+        nPA.append(panelesParaleloMaximosMppt)
+        nSA.append(nS)
+        vA.append(voltaje)
+        iA.append(panelesParaleloMaximosMppt*corrienteMaximaPotencia)
         inversores.append(inversor['referencia'])
         mppts.append('MPPT '+ str (mppt))
-        panelesTotales.append(nS*panelesParaleloMaximosMppt)
+        nPTA.append(nS*panelesParaleloMaximosMppt)
         
         
         mppt+=1
         contador-=1
     if restantes != 0:
-        nParaleloArreglo.append(restantes)
-        nSerieArreglo.append(nS)
-        voltajeArreglo.append(voltaje)
-        corrienteArreglo.append(restantes*corrienteMaximaPotencia)
+        nPA.append(restantes)
+        nSA.append(nS)
+        vA.append(voltaje)
+        iA.append(restantes*corrienteMaximaPotencia)
         inversores.append(inversor['referencia'])
         mppts.append('MPPT '+ str (mppt))
-        panelesTotales.append(nS*restantes)
+        nPTA.append(nS*restantes)
     
 
-    return nParaleloArreglo, voltajeArreglo, corrienteArreglo, mppts,inversores,nSerieArreglo, panelesTotales
+    return nPA, vA, iA, mppts,inversores,nSA, nPTA
 
 
 
@@ -321,7 +321,7 @@ panel = dfPaneles [dfPaneles['referencia']== referenciaPanelElegido].squeeze()
 potenciaNecesariaa= calPotNec(irradiacionEntrada,energiaEntrada,PF)
 
 seleccion = seleccionarInversores(potenciaNecesariaa,fasesSistema,dfInversores)
-configuracionGeneral, configuracionArreglos , costoss= configurarArregloInversores (potenciaNecesariaa, dfInversores, dfPaneles, seleccion, panel)
+configuracionGeneral, configuracionArreglos , costoss= ConfigurarSeleccionInversores (potenciaNecesariaa, dfInversores, dfPaneles, seleccion, panel)
 '''
 
 
@@ -338,7 +338,7 @@ def configuracionesPosibles (potenciaNecesaria, dfPaneles, dfInversores, selecci
        referencia= dfPaneles['referencia'][i]
        panel = dfPaneles [dfPaneles['referencia']== referencia].squeeze()
        #print (referencia)
-       configuracionGeneral, configuracionArreglos, costo = configurarArregloInversores (potenciaNecesaria, dfInversores, dfPaneles, seleccionInversores, panel)
+       configuracionGeneral, configuracionArreglos, costo = ConfigurarSeleccionInversores (potenciaNecesaria, dfInversores, dfPaneles, seleccionInversores, panel)
        configuracion = [configuracionGeneral,configuracionArreglos]
        numeroTotalPaneles=sum (configuracion[0]['numeroPaneles'])
        dimensiones= dfPaneles['dimensiones'][i]
@@ -347,20 +347,31 @@ def configuracionesPosibles (potenciaNecesaria, dfPaneles, dfInversores, selecci
        potenciaInstalada= potenciaPanel*numeroTotalPaneles/1000 #kWp
        referencias.append(referencia);configuraciones.append(configuracion);costos.append(costo);areas.append(area);numeroPaneles.append(numeroTotalPaneles); potenciaInstaladaTotal.append(potenciaInstalada)
     
-    resultado = pd.DataFrame({'referencia': referencias,'configuracion': configuraciones,'costo':costos,'areaRequerida':areas,'numeroPaneles':numeroPaneles,'potenciaInstalada': potenciaInstaladaTotal})
+    configuracionesPaneles = pd.DataFrame({'referencia': referencias,'configuracion': configuraciones,'costo':costos,'areaRequerida':areas,'numeroPaneles':numeroPaneles,'potenciaInstalada': potenciaInstaladaTotal})
     
-    return resultado
+    return configuracionesPaneles
 
 
 
 def elegirPanelAutomatico (configuracionesPosiblesResultado ):
     #configuracionesPosiblesResultado: dataframe que devuelve la función configuracionesPosibles
+    
+    
+    #Hacer una prueba que si existen dos elementos iguales en el data frame, sigue seleccionando solo 1 
+    
     menorCosto = min (configuracionesPosiblesResultado['costo'])
     seleccion= configuracionesPosiblesResultado[configuracionesPosiblesResultado['costo']==menorCosto]
+    
     if len (seleccion)>1:
         menorArea= min(seleccion['areaRequerida'])
         seleccion = seleccion[seleccion['areaRequerida']==menorArea]
+        if len(seleccion)>1:
+            for i in seleccion.index:
+                seleccion=seleccion.loc[i]
+                return seleccion
+
     seleccion= seleccion.squeeze()
+
     return seleccion
 
 
