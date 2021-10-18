@@ -84,43 +84,6 @@ class humanResources:
 
 
 
-
-class siteFeatures:
-
-    distTab_Cont:None              # Distancia del tablero de inversores al contador (float)
-    distPv_Tab:None                # Distancia del tablero de inversores a los array (float)
-    availableArea:None             # Area disponible (float)
-    HSP:None                       # Horas solares Pico (float)
-    coords:None                    # Coordenadas del proyecto (list)
-    ACConfig:None                  # TAG 3F+N Cantidad de Fases (string)
-    TipodeCubierta:None            # Cubierta Metalica Teja de Barro Tipo Suelo(Plancha) (int)
-    cubiertaApta:None              # Cubierta Apta (la cubierta es apta)(bool) 
-    buitron:None                   # Existencia de buitron (bool)
-    azimuthOP:None                 # Azimuth Optimo extraido de PVGIS
-    slopeAngleOP:None              # Angulo de inclinacion Optimo
-    avgHSP:None                    # promedio HSP de todos los años
-    avgYearHSP:None                # promedio de HSP de cada año
-    avgHistHSP:None                # Promedio de HSP 
-    maxHSP:None                    # Valor máximo de HSP por cada año
-    minHSP:None                    # valor mínimo de HSP por cada año
-    dayDat:None                    # Data diaria por cada mes
-    voltage:None                   # Tension linea neutro existente en la edificacion
-
-    def __init__(self, pr, enne, entyp, aconf, volt, coords,
-    area = 0, dt2c=0, dpv2tab=0, tc =0, btrn = 0):
-        self.performanceRatio = pr
-        self.ener_Need = enne
-        self.ener_Type = entyp
-        self.ACConfig = aconf
-        self.voltage = volt
-        self.coords = coords
-        self.availableArea = area
-        self.distTab_Cont = dt2c
-        self.distPv_Tab = dpv2tab
-        self.TipodeCubierta = tc
-        self.buitron = btrn
-
-    
     
 class pvSizing(pvArea, pvProject, inverters, inventary, siteFeatures):
     

@@ -24,6 +24,22 @@ class pvSizing:
     pTotalPaneles:None           # ! dimensionaes del panel seleccionado (list of floats mm)
 
 
+#input
+    "powerNeed":[],                 # Potencia necesaria antes de dimensionamiento (float kW)
+    #output
+    "referencias":[],               # Referencias de inversores seleccionados (list of strings)
+    "invAmount":[],                 # Cantidad por referencia (list of ints)
+    "totInvAmount": None,           # Cantidad total de inversores (int)
+    "iInput":[],                    # Entrada de corriente del inversor, (list of floats)
+    "polesperInput":[],             # Cantidad de polos por entrada de corriente (list of ints)
+    "vInput":[],                    # Tension de entrada (list of floats)
+    "iOutput":[],                   # salida de corrientes del inversor, (list of floats)
+    "totIoutput": None,             # suma de la corriente de salida (float)
+    "vOutput":[],                   # tensiones de salida (list of floats)
+    "pOutput":[],                   # potencias de salida (list of floats)
+    "pInput":[],                    # potencias de entrada (list of floats)
+    "pTotalInversores":[]           # potencias de entrada (list of floats)
+
 
 pvModules = {
 

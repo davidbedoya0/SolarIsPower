@@ -1,7 +1,6 @@
 import requests
 from requests.models import Response
 from scripts_functions.APIProcess import *
-import time
 
 def pvgisGetData(dimensionamiento):
     
