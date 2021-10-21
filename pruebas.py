@@ -6,6 +6,7 @@
 from numpy import empty
 
 
+
 class pvProject:
     performanceRatio:None        # +++ Eficiencia total del sistema (float)
     ener_Need:None               # +++ Energia necesaria a suplir con el sistema (float kWh/dia)
