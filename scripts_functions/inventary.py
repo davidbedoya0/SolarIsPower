@@ -45,7 +45,7 @@ class inventary:
     pipelSizeAC:None
     pvModulesData:None             # informacion de los modulos solares
     auxiliarData:None
-
+        
     """
     ! ==========================================================
     --- TEST SUCCESS
@@ -122,7 +122,7 @@ class inventary:
         # convierte la columna de corriente en una lista
         ibreakers = db_bkr["corriente"]
         # crea un array con el valor de la corriente del panel
-        iPanelArr = [i_fail] * len(ibreakers)    
+        iPanelArr = [i_fail] * len(ibreakers)   
         # calcula la diferencia entre la corriente de falla y 
         diffI = [e1 - e2 for e1, e2 in zip(ibreakers, iPanelArr)]
 

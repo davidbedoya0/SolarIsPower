@@ -1,0 +1,2 @@
+SELECT * FROM proteccionesac
+DROP TABLE bdmeters, claytilestruct, dbct, dps_ac, dps_dc, emt, imc, metalicstruct, proteccionesac, pvc, soilstruct, wiresdciso, wiresiso
