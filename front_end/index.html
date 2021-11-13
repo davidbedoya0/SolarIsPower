@@ -25,7 +25,7 @@
             <p class = "textoInputs-Selects">
                Nombre del proyecto 
             </p>
-            <input type = "text" class = "formularionuevoproyecto__tipodeproyecto--input" placeholder = "  Nombre del proyecto">
+            <input type = "text" class = "formularionuevoproyecto__tipodeproyecto--input" placeholder = "  Nombre del proyecto" required="required">
             <p class = "textoInputs-Selects">
                Tipo de Sistema
             </p>
@@ -37,11 +37,13 @@
         </div>
 
         <div class = "tipoProyecto__info">
-            <img src="hybrid.png" class="tipoProyecto__img">
+            <div class="tipoProyecto__container">
+                <img src="hybrid.png" class="tipoProyecto__img">
+            </div>
+            
             <p class = "tipoProyecto__info--p">
-                Has seleccionado un sistema __ -_____, este es un sistema que se compone de A, B, C
-                D, E, y F. Este sistema te permitira inyectar energia a la red y generar un ahorro en 
-                tu cobro de energia electrica. 
+                *Sistema OnGrid, sistema compuesto por paneles, 
+                tableros de proteccion, inversor, tablero de protecciones DC y contador bidireccional
             </p>
         </div>
     </div>
@@ -93,36 +95,41 @@
             <p class="p_left">
                Entrada de energia
             </p>
-            <input type = "text" class="inputForm" placeholder="Inserte el valor de Energia"> 
+            <input type = "text" class="inputForm" placeholder="Inserte el valor de Energia" > 
             <button class="button_left"> Usar datos de consumo</button>
         </div>
         <div class = "entradaEnergia__cargas">
-            
             <h2 class = "formularionuevoproyecto__titulosubsubseccion--highlight">
                 Cargas Especificas - Agregar cargas
             </h2>
-            <p class="p_left">
-               Nombre 
-            </p>
-            <input type = "text" class="inputForm" placeholder="Insertar nombre de carga">
-            <p class="p_left">
-               Potencia Nominal 
-            </p>
-            <input type = "text" class="inputForm" placeholder="Insertar potencia de carga [kw]">
-            <p class="p_left">
-               Horas de uso 
-            </p>
-            <input type = "text" class="inputForm" placeholder="Insertar horas de uso [h]">
-            <button class="button_left">Nueva Carga</button>
-            <p class="p_left">
-               Energia demandada (*opcional) 
-            </p>
-            <input type = "text" class="inputForm" placeholder="Insertar potencia de carga [kw]">
-            <p class="p_left" style="display: inline-block">
-               Tarifa Estimada (*opcional)
-            </p>
-            <input type = "text" class="inputForm">
-            <button class="button_left"> Usar datos de Cargas</button>
+            <p class="p_left">Costo Unitario</p>
+                <input type = "text" class="inputForm" placeholder="Precio kWh [COP]" id="kwhprice">
+            <div class="container__loadInputs">
+                <div class = "container__formLoads">
+                    <p class="p_left">Nombre</p>
+                    <input type = "text" class="inputForm" placeholder="#Tag carga" id="loadName">
+                    <p class="p_left">Potencia Nominal</p>
+                    <input type = "text" class="inputForm" placeholder="Potencia de carga [kw]" id ="loadPower">
+                    <p class="p_left">Horas de uso</p>
+                    <input type = "text" class="inputForm" placeholder="Horas de uso [h]"  id="loadHours">
+                </div>
+                <div class="container_rightButton">
+                    <button class="button_right newLoad">Nueva Carga</button>
+                </div>
+            </div>
+            <div class="loadTables" id="#loadTables"></div>
+            <div class = "loadConsumptionOutput">
+                <p class = "p_left">
+                    Energia demandada [kWh]
+                </p>
+                <div class = "result" id = "energydemand"></div>
+                <p class ="p_left">
+                    Tarifa Estimada [COP $]
+                </p>
+                <div class="result" id="tarifaEstimada"></div>
+            </div>
+                
+            <button  class = "button_left"> Usar datos de Cargas</button>
         </div>
 
     </div>

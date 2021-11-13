@@ -55,7 +55,7 @@
     padding: 10px 0px 10px 90px;
     display: flex;
     flex-direction: column;
-    
+
 }
 
 .formularionuevoproyecto__tipodeproyecto--input{
@@ -79,6 +79,8 @@
     outline: none;
 }
 
+
+
 .tipoProyecto__info{
     width: 50%;
     display: flex;
@@ -95,15 +97,35 @@
 
 .tipoProyecto__info--p{
     font-family: verdana, Helvetica;
-    font-size: 15px;
+    font-size: 10px;
     font-weight: 100;
     width: 80%;
     margin-top: 10px;
     text-align: justify;
 }
 
+.tipoProyecto__container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 185px;
+}
+
 .tipoProyecto__img{
     width: 80%;
+    height: 100%;
+    transition: height 1.5s ease-out, opacity 1s ease-in-out;
+}
+
+.transimg{
+    opacity: 0.1;
+    height: 10%;
+}
+
+.endtransinmg{
+    opacity: 1;
+    height: 100%;
 }
 
 .formularionuevoproyecto__titulosubsubseccion--highlight{
@@ -216,6 +238,7 @@ button:hover{
     margin-left: 90px;
     font-family: verdana, Helvetica;
     font-size: 20px;
+    display: inline-block;
 }
 .entradaEnergia__cargas{
     width: 50%;
@@ -223,7 +246,7 @@ button:hover{
 
 .inputForm{
     padding: 8px 0 8px 16px;
-    margin: 10px 90px 0 90px;
+    margin: 10px 0 0 90px;
     border: none;
     border-radius: 10px;
     background-color: #214488;
@@ -242,10 +265,26 @@ button:hover{
     outline: none;
 }
 
+.button_right{
+    padding:10px;
+    width: 100%;
+    height: 80%;
+    margin: 40px 0 0 0;
+}
+
 .button_left{
-    width: 60%;
+    width: 65%;
     margin: 15px;
     align-self: center;
+}
+
+.container_rightButton{
+    width: 35%;
+    height: 100%;
+}
+
+.container__formLoads{
+    width: 60%;
 }
 
 .entradaEnergia__cargas{
@@ -255,9 +294,122 @@ button:hover{
     align-items: stretch;
 }
 
+.container__loadInputs{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
 .entradaEnergia__cargas>*:first-child{
     align-items: stretch;
 }
+
+.loadTables{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 25px 0 90px;
+    margin: 15px 0 0 0;
+}
+
+.headloadTables{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    background-color: #3363c2;
+    border-radius: 7px;
+}
+
+.headloadTables_headers_title{
+    align-self: stretch;
+    width: 100%;
+    font-weight: 400;
+    text-align: center;
+    border-bottom: #242734 3px solid;
+    padding: 10px 0;
+    font-size: 20px;
+}
+
+.headloadTables_headers_name{
+    align-self: stretch;
+    width: 55%;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 7px;
+    padding: 10px 0;
+}
+
+.headloadTables_headers_others{
+    align-self: stretch;
+    width: 15%;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 7px;
+    padding: 10px 0;
+}
+
+
+.headloadTables>*:first-child{
+    align-self: stretch;
+    width: 100%;
+}
+
+.loadName_stl{
+    align-self: stretch;
+    width: 55%;
+    font-weight: 100;
+    text-align: left;
+    padding-left: 10px;
+    margin: 5px 0;
+}
+
+.loadcell_stl{
+    align-self: stretch;
+    width: 15%;
+    font-weight: 100;
+    text-align: center;
+    margin: 5px 0;
+    border-left: #242734 3px solid;
+}
+
+.carga_row{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    background-color: #AAAAAA;
+    border-radius: 5px;
+    margin: 5px 0 0 0;
+    color: #FFF;
+}
+
+.loadConsumptionOutput{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    visibility:hidden;
+    margin-top: 10px;
+    padding: 0 25px 0 90px;
+}
+
+.result{
+    background-color: #AAAAAA;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 100%;
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+/*
+? Datos instalacion
+*/
 
 .formularionuevoproyecto__datosInstalacion{
     display: flex;
