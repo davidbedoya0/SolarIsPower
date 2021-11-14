@@ -23,15 +23,34 @@
         aditionalInfoEnable: Habilita los campos de informacion adicional
         y modifica el front-end.
 
+        ? Tasks 
+        cmplt Agregar cambio de nombre de proyecto
+        todo agregar logica consulta PVGIS json
+        todo Agregar Aside en pagina Web
+        todo arreglar posicion costo unitario
+        todo arreglar espaciamiento cargas especificas botones
+        todo arreglar apariencia radius input informacion adicional
+        todo agregar campos adicionales
+        todo almacenar todos los valores y configurar json final
+        todo arreglar header y footer
+        todo arreglar imagenes tipo de sistema
+        todo agregar iconos de ayuda y ayudas de cada input
+        cmplt
 */
 
-// Query selectors
+// Query selectors Inicio del proyecto
 const typeSist = document.querySelector(".formularionuevoproyecto__tipodeproyecto--select")
+const titleInput = document.querySelector(".formularionuevoproyecto__tipodeproyecto--input")
+const siteTitle = document.querySelector(".formularionuevoproyecto__tituloseccion--Large")
+
+// Query selectors Ubicacion
+
 const newLoadButton = document.querySelector(".newLoad")
 const energydemand = document.querySelector("#energydemand")
 const tarifaestimada = document.querySelector("#tarifaEstimada")
 const loadoutput = document.querySelector(".loadConsumptionOutput")
-
+const uninkwhprice = document.querySelector("#kwhprice")
+const deletButton = document.querySelector("#deleteButton")
 const specificLoads = document.querySelector(".loadTables")
 const loadName = document.getElementById("loadName")
 const loadPower = document.getElementById("loadPower")
@@ -72,6 +91,12 @@ function showTypeSystemInfographic(){
 
 
 function crearTabla(){
+
+    if(loadName.value == ""|loadPower.value == ""|loadHours.value == ""){
+        alert("Debe completar todos los datos")
+        return 0
+    }
+
     // Verifica si la tabla ya ha sido creada
     if (document.querySelector(".headloadTables") == null){
         var headerCargas = document.createElement("div")
@@ -118,7 +143,7 @@ function crearTabla(){
     loName.innerHTML = loadName.value
     loPow.innerHTML = ld_pwr
     lousHor.innerHTML = ld_hrs
-    loEnr.innerHTML = ld_enrg
+    loEnr.innerHTML = Math.round(ld_enrg)
     carga.setAttribute("class","carga_row")
     loEnr.setAttribute("class","loadcell_stl")
     lousHor.setAttribute("class","loadcell_stl")
@@ -135,18 +160,38 @@ function crearTabla(){
     // actualizar resultado general
     if(energydemand.innerText== ""){
         loadoutput.style.visibility = "visible"
-        energydemand.innerHTML = ld_enrg
-        tarifaestimada.innerHTML = ld_enrg
+        energydemand.innerHTML = Math.round(ld_enrg)
+        tarifaestimada.innerHTML = Math.round(ld_enrg * Number(uninkwhprice.value) * 30)
     }
     else{
-        energydemand.innerText = Number(energydemand.innerText) + ld_enrg
+        energydemand.innerText = Math.round(Number(energydemand.innerText) + ld_enrg)
+        tarifaestimada.innerHTML = Math.round(Number(energydemand.innerText) * Number(uninkwhprice.value) * 30)
     }
+}
+
+function changeTitle(){
+    siteTitle.innerText = "Nuevo Proyecto" + ": " + titleInput.value
+}
+
+/*
+function getIrradiationData(){
+
     
-
-
-
+    var lati = 70;
+    var long = 10;
+    var params = "lat=" + lati + "&lon=" + long + "&horirrad=" + 1 + "&outputformat=" + "json";
+    var urlTarget ="https://re.jrc.ec.europa.eu/api/MRcalc" + "?" + params;
+    console.log(urlTarget)
+    request = fetch(urlTarget)
     
 }
+
+
+
+getIrradiationData()
+*/
+
+
 
 // ! Event listeners
 
@@ -157,3 +202,13 @@ typeSist.addEventListener("change", (event)=>{
 newLoadButton.addEventListener("click", (event)=>{
     crearTabla();
 })
+
+deletButton.addEventListener("click", (event)=>{
+    specificLoads.innerHTML=""
+    loadoutput.style.visibility = "hidden"
+})
+
+titleInput.addEventListener("change",(event)=>{
+    changeTitle()
+})
+

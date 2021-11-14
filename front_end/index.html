@@ -7,179 +7,206 @@
         <link rel="stylesheet" type="text/css" href="normalize.css">        
     </head>
 <body>
-<div class="formularionuevoproyecto">
     <div class = "formularionuevoproyecto__tituloPagina">
-        <h1 class = "formularionuevoproyecto__tituloseccion--Large">
-            Creación de nuevo proyecto
-        </h1>
-    </div>
-
-    <div class="formularionuevoproyecto__tipoProyecto">
-        <div class = "formularionuevoproyecto__tituloseccion">
-            <h1 class = "formularionuevoproyecto__titulosubseccion--highlight">
-                Inicio del proyecto
+            <h1 class = "formularionuevoproyecto__tituloseccion--Large">
+                Nuevo proyecto
             </h1>
-        </div>
-
-        <div class = "tipoProyecto__formulario">
-            <p class = "textoInputs-Selects">
-               Nombre del proyecto 
-            </p>
-            <input type = "text" class = "formularionuevoproyecto__tipodeproyecto--input" placeholder = "  Nombre del proyecto" required="required">
-            <p class = "textoInputs-Selects">
-               Tipo de Sistema
-            </p>
-            <select class = "formularionuevoproyecto__tipodeproyecto--select" id="selTypSyst">
-                <option value = "0">Sistema On-grid</option>
-                <option value = "1">Sistema Off-grid</option>
-                <option value = "2">Sistema Hibrido</option>
-            </select>
-        </div>
-
-        <div class = "tipoProyecto__info">
-            <div class="tipoProyecto__container">
-                <img src="hybrid.png" class="tipoProyecto__img">
+    </div>
+    <div class="formularionuevoproyecto">
+        <div class="formularionuevoproyecto__tipoProyecto">
+            <div class = "formularionuevoproyecto__tituloseccion">
+                <h1 class = "formularionuevoproyecto__titulosubseccion--highlight">
+                    Inicio del proyecto
+                </h1>
             </div>
-            
-            <p class = "tipoProyecto__info--p">
-                *Sistema OnGrid, sistema compuesto por paneles, 
-                tableros de proteccion, inversor, tablero de protecciones DC y contador bidireccional
-            </p>
+
+            <div class = "tipoProyecto__formulario">
+                <p class = "textoInputs-Selects">
+                Nombre del proyecto 
+                </p>
+                <input type = "text" class = "formularionuevoproyecto__tipodeproyecto--input" placeholder = "  Nombre del proyecto">
+                <p class = "textoInputs-Selects">
+                Tipo de Sistema
+                </p>
+                <select class = "formularionuevoproyecto__tipodeproyecto--select" id="selTypSyst">
+                    <option value = "0">Sistema On-grid</option>
+                    <option value = "1">Sistema Off-grid</option>
+                    <option value = "2">Sistema Hibrido</option>
+                </select>
+            </div>
+
+            <div class = "tipoProyecto__info">
+                <div class="tipoProyecto__container">
+                    <img src="hybrid.png" class="tipoProyecto__img">
+                </div>
+                
+                <p class = "tipoProyecto__info--p">
+                    *Sistema OnGrid, sistema compuesto por paneles, 
+                    tableros de proteccion, inversor, tablero de protecciones DC y contador bidireccional
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="formularionuevoproyecto__seleccionUbicacion">
-        <div class = "formularionuevoproyecto__tituloseccion">
+        <div class="formularionuevoproyecto__seleccionUbicacion">
+            <div class = "formularionuevoproyecto__tituloseccion">
+                <h1 class = "formularionuevoproyecto__titulosubseccion--highlight">
+                    Ubicacion
+                </h1>
+            </div>
+            <div class = "seleccionUbicacion__formulario">
+                <p class = "textoInputs-Selects">
+                Direccion 
+                </p>
+                <input type = "text" placeholder = "  Inserte la direccion">
+                <p class = "textoInputs-Selects">
+                Latitud 
+                </p>
+                <input type = "text" placeholder = "  Inserte la latitud">
+                <p class = "textoInputs-Selects">
+                Longitud 
+                </p>
+                <input type = "text" placeholder = "  Inserte la longitud">
+            </div>
+            <div class = "seleccionUbicacion__ubicacion">
+            </div>
+            <div class = "seleccionUbicacion__botonBusqueda">
+                <button>Buscar Seleccion</button>
+            </div>
+        </div>
+        <div class="formularionuevoproyecto__entradaEnergia">
+            <div class = "formularionuevoproyecto__tituloseccion">
+                <h1 class = "formularionuevoproyecto__titulosubseccion--highlight">
+                        Demanda de energia
+                </h1>
+                <p class="p_left">Costo Unitario</p>
+                    <input type = "text" class="inputForm_right" placeholder="Precio kWh [COP]" id="kwhprice">
+            </div>
+            <div class = "entradaEnergia__consumo">
+                <h2 class = "formularionuevoproyecto__titulosubsubseccion--highlight">
+                    Consumo
+                </h2>
+                <p class="p_left">
+                Seleccion de Magnitud
+                </p>
+                
+                <select class="Selects_left">
+                    <option value = "0">kWh/dia</option>
+                    <option value = "1">kWh/mes</option>
+                    <option value = "2">kWh/anio</option>
+                </select>
+                <p class="p_left">
+                Entrada de energia
+                </p>
+                <input type = "text" class="inputForm" placeholder="Inserte el valor de Energia" > 
+                <button class="button_left"> Usar datos de consumo</button>
+            </div>
+            <div class = "entradaEnergia__cargas">
+                <h2 class = "formularionuevoproyecto__titulosubsubseccion--highlight">
+                    Cargas Especificas - Agregar cargas
+                </h2>
+                
+                <div class="container__loadInputs">
+                    <div class = "container__formLoads">
+                        <p class="p_left">Nombre</p>
+                        <input type = "text" class="inputForm" placeholder="#Tag carga" id="loadName">
+                        <p class="p_left">Potencia Nominal</p>
+                        <input type = "text" class="inputForm" placeholder="Potencia de carga [kw]" id ="loadPower">
+                        <p class="p_left">Horas de uso</p>
+                        <input type = "text" class="inputForm" placeholder="Horas de uso [h]"  id="loadHours">
+                    </div>
+                    <div class="container_rightButton">
+                        <button class="button_right newLoad">Nueva Carga</button>
+                    </div>
+                </div>
+                <div class="loadTables" id="#loadTables"></div>
+                <div class = "loadConsumptionOutput">
+                    <div class="container__loadInputs">
+                        <p class = "p_left">
+                            Energia demandada [kWh]
+                        </p>
+                        <div class = "result" id = "energydemand"></div>
+                    </div>
+                    <div class="container__loadInputs">
+                        <p class ="p_left">
+                            Tarifa Estimada [COP $]
+                        </p>
+                        <div class="result" id="tarifaEstimada"></div>
+                    </div>
+                </div>
+                <div class = "buttonContainers">
+                    <button  class = "buttonload" id = "deleteButton"> Borrar Cargas</button>
+                    <button  class = "buttonload"> Usar datos de Cargas</button>
+                </div>
+                
+            </div>
+
+        </div>
+        <div class="formularionuevoproyecto__datosInstalacion">
             <h1 class = "formularionuevoproyecto__titulosubseccion--highlight">
-                Ubicacion
+                    Otros datos de la instalacion
             </h1>
-        </div>
-        <div class = "seleccionUbicacion__formulario">
-            <p class = "textoInputs-Selects">
-               Direccion 
-            </p>
-            <input type = "text" placeholder = "  Inserte la direccion">
-            <p class = "textoInputs-Selects">
-               Latitud 
-            </p>
-            <input type = "text" placeholder = "  Inserte la latitud">
-            <p class = "textoInputs-Selects">
-               Longitud 
-            </p>
-            <input type = "text" placeholder = "  Inserte la longitud">
-        </div>
-        <div class = "seleccionUbicacion__ubicacion">
+            <div class = "datosInstalacion__configuracionAC">
+                <p class="p_left">
+                Configuracion AC 
+                </p>
+                <select class="Selects_left">
+                    <option value = "0">MONOFASICO 1F+N</option>
+                    <option value = "1">BIFASICO 2F</option>
+                    <option value = "2">TRIFASICO 3F</option>
+                    <option value = "3">TRIFASICO 4 HILOS 3F+N</option>
+                </select>
+                <p class="p_left">
+                Nivel de tension Linea-Neutro
+                </p>
+                <select class="Selects_left">
+                    <option value = "0">110 V</option>
+                    <option value = "1">120 V</option>
+                    <option value = "2">127 V</option>
+                    <option value = "3">230 V</option>
+                </select>
+                <p class="p_left">
+                Area Disponible (*opcional) 
+                </p>
+                <input type = "text" class="inputForm">
+            </div>
+            <div class = "datosInstalacion__areadisponible">
+                <p class="p_left">
+                    Informacion Adicional en la instalacion
+                </p>
+                <input type="radio" value="0">
+                <label>Habilitar informacion Adicional</label><br>
+                <input type="radio" value="0">
+                <label>Deshabilitar informacion Adicional</label><br>
+            </div>
         </div>
         <div class = "seleccionUbicacion__botonBusqueda">
-            <button>Buscar Seleccion</button>
+            <button>Crear Proyecto</button>
         </div>
+        
     </div>
-    <div class="formularionuevoproyecto__entradaEnergia">
-        <div class = "formularionuevoproyecto__tituloseccion">
-            <h1 class = "formularionuevoproyecto__titulosubseccion--highlight">
-                    Demanda de energia
-            </h1>
-        </div>
-        <div class = "entradaEnergia__consumo">
-            <h2 class = "formularionuevoproyecto__titulosubsubseccion--highlight">
-                Consumo
-            </h2>
-            <p class="p_left">
-               Seleccion de Magnitud
-            </p>
-            
-            <select class="Selects_left">
-                <option value = "0">kWh/dia</option>
-                <option value = "1">kWh/mes</option>
-                <option value = "2">kWh/anio</option>
-            </select>
-            <p class="p_left">
-               Entrada de energia
-            </p>
-            <input type = "text" class="inputForm" placeholder="Inserte el valor de Energia" > 
-            <button class="button_left"> Usar datos de consumo</button>
-        </div>
-        <div class = "entradaEnergia__cargas">
-            <h2 class = "formularionuevoproyecto__titulosubsubseccion--highlight">
-                Cargas Especificas - Agregar cargas
-            </h2>
-            <p class="p_left">Costo Unitario</p>
-                <input type = "text" class="inputForm" placeholder="Precio kWh [COP]" id="kwhprice">
-            <div class="container__loadInputs">
-                <div class = "container__formLoads">
-                    <p class="p_left">Nombre</p>
-                    <input type = "text" class="inputForm" placeholder="#Tag carga" id="loadName">
-                    <p class="p_left">Potencia Nominal</p>
-                    <input type = "text" class="inputForm" placeholder="Potencia de carga [kw]" id ="loadPower">
-                    <p class="p_left">Horas de uso</p>
-                    <input type = "text" class="inputForm" placeholder="Horas de uso [h]"  id="loadHours">
-                </div>
-                <div class="container_rightButton">
-                    <button class="button_right newLoad">Nueva Carga</button>
-                </div>
+    <div class="aside">
+        <div class = "aside__container">
+            <div class = "aside__header">
+                <p>Resumen de proyecto</p>
             </div>
-            <div class="loadTables" id="#loadTables"></div>
-            <div class = "loadConsumptionOutput">
-                <p class = "p_left">
-                    Energia demandada [kWh]
-                </p>
-                <div class = "result" id = "energydemand"></div>
-                <p class ="p_left">
-                    Tarifa Estimada [COP $]
-                </p>
-                <div class="result" id="tarifaEstimada"></div>
+            <div class = "aside__body">
+                <div class = "aside__status">
+                    <div class = "perc">25</div>
+                    <div class = "perc">50</div>
+                    <div class = "perc">75</div>
+                    <div class = "perc">100</div>
+                </div>
+                <div class = "aside__proyectTitle"></div>
+                <div class = "aside__placeinfo"></div>
+                <div class = "aside__consumption"></div>
+                <div class = "aside__electricFeats"></div>
             </div>
-                
-            <button  class = "button_left"> Usar datos de Cargas</button>
         </div>
-
-    </div>
-    <div class="formularionuevoproyecto__datosInstalacion">
-        <h1 class = "formularionuevoproyecto__titulosubseccion--highlight">
-                Otros datos de la instalacion
-        </h1>
-        <div class = "datosInstalacion__configuracionAC">
-            <p class="p_left">
-               Configuracion AC 
-            </p>
-            <select class="Selects_left">
-                <option value = "0">MONOFASICO 1F+N</option>
-                <option value = "1">BIFASICO 2F</option>
-                <option value = "2">TRIFASICO 3F</option>
-                <option value = "3">TRIFASICO 4 HILOS 3F+N</option>
-            </select>
-            <p class="p_left">
-               Nivel de tension Linea-Neutro
-            </p>
-            <select class="Selects_left">
-                <option value = "0">110 V</option>
-                <option value = "1">120 V</option>
-                <option value = "2">127 V</option>
-                <option value = "3">230 V</option>
-            </select>
-            <p class="p_left">
-               Area Disponible (*opcional) 
-            </p>
-            <input type = "text" class="inputForm">
-        </div>
-        <div class = "datosInstalacion__areadisponible">
-            <p class="p_left">
-                Informacion Adicional en la instalacion
-            </p>
-            <input type="radio" value="0">
-            <label>Habilitar informacion Adicional</label><br>
-            <input type="radio" value="0">
-            <label>Deshabilitar informacion Adicional</label><br>
-        </div>
-    </div>
-    <div class = "seleccionUbicacion__botonBusqueda">
-        <button>Crear Proyecto</button>
     </div>
     <div class="Foot formularionuevoproyecto__tituloPagina">
-        <p class="p_left">EXIA</p>
-        <p class="p_left">Tutoriales</p>
-        <p class="p_left">Data</p>
+            <p class="p_left">EXIA</p>
+            <p class="p_left">Tutoriales</p>
+            <p class="p_left">Data</p>
     </div>
-</div>
 <script src="fe_functions.js"></script>
 
 </body>

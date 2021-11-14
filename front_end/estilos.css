@@ -2,10 +2,11 @@
 .formularionuevoproyecto{
     background-color: #14274E;
     color: #fff;
+    width: 80%;
 }
 
 .formularionuevoproyecto__tituloPagina{
-    width: 100vw;
+    width: 100%;
     display: block;
     background-color: #214488;
     border-radius: 10px;
@@ -233,6 +234,8 @@ button:hover{
     flex-direction: column;
 }
 
+
+
 .p_left{
     margin-top: 7px;
     margin-left: 90px;
@@ -240,6 +243,17 @@ button:hover{
     font-size: 20px;
     display: inline-block;
 }
+
+.inputForm_right{
+    padding: 8px 0 8px 16px;
+    margin: 10px 25px 0 90px;
+    border: none;
+    border-radius: 10px;
+    background-color: #214488;
+    color: #AAAAAA;
+    outline: none;
+}
+
 .entradaEnergia__cargas{
     width: 50%;
 }
@@ -276,6 +290,20 @@ button:hover{
     width: 65%;
     margin: 15px;
     align-self: center;
+}
+
+.buttonContainers{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding:0 0 0 90px
+}
+
+.buttonload{
+    width: 45%;
+    padding: 15px;
+    margin: 10px 3% 0 1%;
 }
 
 .container_rightButton{
@@ -432,6 +460,64 @@ button:hover{
 
 .datosInstalacion__areadisponible{
     width: 50%;
+}
+
+/*
+    ?Aside
+*/
+
+body{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.aside{
+    width: 20%;
+    background-color: #14274E;
+}
+
+.aside__container{
+    width: 90%;
+    position: fixed;
+    white-space: nowrap;
+}
+
+.aside__header{
+    width: 100%;
+    position: relative;
+    top: 10px;
+    background-color: #305fbe;
+    text-align: left;
+    font-size: 20px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-family: Helvetica, verdana;
+}
+
+.aside__header p{
+    margin-left: 20px;
+    padding: 10px 0;
+    color: #FFF;
+}
+
+.aside__body{
+    width: 100%;
+    top: 10px;
+}
+
+.aside__status{
+    
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.perc{
+    display: inline-block;
+    width: 20%;
+    background-color: #F39422;
 }
 
 /* 
