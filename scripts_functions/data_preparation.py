@@ -1,5 +1,3 @@
-import requests
-from requests.models import Response
 from support_dataprep import *
 
 """
