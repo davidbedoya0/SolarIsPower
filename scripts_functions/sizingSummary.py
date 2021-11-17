@@ -13,29 +13,15 @@ Estructura general de costos
 
 """
 
+
+
+
 def calNumPaneles(energiaNecesaria, potenciaReferenciaPanel, areaPanel):
 
-
+    
 
 
 
 
     return [numeroPaneles, potenciaSistema, areaSistema]
 
-
-
-"""
-
-# Descripcion: verifica la compatibilidad de los equipos y elementos seleccionados
-
-# Inputs
-
-# Outputs: success flag or error
-"""
-
-def configuracionPaneles(configuracionInversores):
-
-
-    
-
-    return [configuracion]

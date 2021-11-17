@@ -1,113 +1,95 @@
-#import pandas as pd
-from scripts_functions.sizingOtherElements import *
-from scripts_functions.ComponentsDB import *
-from PVgisAPI_Consume.pvGIS_API_GET import *
-import time
 
-pvModules = {
+# +++ inputs
+# ? input (opcional)
+# ! Outputs
 
-    #input
-    "performanceRatio":None,        # Eficiencia total del sistema (float)
-    "ener_Need":None,               # Energia necesaria a suplir con el sistema (float kWh/dia)
-    #output
-    "vArraymax":125,                # Tension maxima del arreglo de paneles solares (float V)
-    "iArray":[12, 26, 38],          # Corriente de cada uno de los array (list of floats A)
-    "nArray":2,                     # Cantidad de arrays (int N)
-    "pvModperArray":[20, 35, 50],   # Cantidad de modulos por cada array (list of ints N)
-    "amountPVMod":63,               # Cantidad total de modulos (int N)
-    "refPVMod":None,                # Referencia del panel (string )
-    "iPVMod":[],                    # Corriente de salida del panel seleccionado (float A)
-    "vPVMod":[],                    # Tension de salida del panel seleccionado (float V)
-    "sizePVMod":[2, 1.05, 0.03],    # dimensionaes del panel seleccionado (list of floats mm)
-    "areaPVMod":[],                 # area del panel seleccionado (float m2)
-    "areaTotSyst":[]                # area total de todos los paneles (float m2)
-}
-
-solarInverter = {
-    #input
-    "powerNeed":[],                 # Potencia necesaria antes de dimensionamiento (float kW)
-    #output
-    "ref":[],                       # Referencias de inversores seleccionados (list of strings)
-    "invAmount":[],                 # Cantidad por referencia (list of ints)
-    "totInvAmount": 2,              # Cantidad total de inversores (int)
-    "iInput":[12, 26, 38],          # Entrada de corriente del inversor, (list of floats)
-    "polesperInput":[1, 2, 1],      # Cantidad de polos por entrada de corriente (list of ints)
-    "vInput":[],                    # Tension de entrada (list of floats)
-    "iOutput":[54, 90],             # salida de corrientes del inversor, (list of floats)
-    "totIoutput": None,             # suma de la corriente de salida (float)
-    "vOutput":[200, 75, 40],        # tensiones de salida (list of floats)
-    "pOutput":[],                   # potencias de salida (list of floats)
-    "pInput":[]                     # potencias de entrada (list of floats)
-}
-
-otherElements = {
-    "pvWires":[],                   # Conductores del lado DC (list [referencias string, metraje float m2])
-    "facilityWires":[],             # Conductores del lado AC (list [referencias string, metraje float m2])
-    "pvProtections":[],             # breakers lado DC (list[referencia string, cantidad int N])
-    "facilityProtections":[],       # breakers lado AC (list[referencia string, cantidad int N])
-    "pvDPS":[],                     # DPS lado DC (string)
-    "facilityDPS":[],               # DPS lado AC (string)
-    "meter":[],                     # referencia del medidor y CT si requiere (list (referencia Medidor, referencia CT))
-    "structData":[],                # referencias y cantidades de la estructura (list (referencia, metraje m2))
-    "pipeData":[],                  # referencias, tipo y metraje de la tuberia (list (referencia, metraje m2))
-    "InstalationData":[],           # Tiempo de instalacion estimado (float)
-    "wires":[]                      # Estructura del cableado (list (referencias metraje float m2, referencias metraje float m2))
-}
-
-siteFeatures ={
-    "distTab_Cont":3,               # Distancia del tablero de inversores al contador (float)
-    "distPv_Tab":15,                # Distancia del tablero de inversores a los array (float)
-    "availableArea":None,           # Area disponible (float)
-    "HSP":None,                     # Horas solares Pico (float)
-    "coords":[],                    # Coordenadas del proyecto (list)
-    "ACConfig":"3P+N",              # "TAG 3F+N, Cantidad de Fases" (string)
-    "TipodeCubierta":1,             # Cubierta Metalica, Teja de Barro, Tipo Suelo(Plancha) (int)
-    "cubiertaApta":None,            # Cubierta Apta (la cubierta es apta)(bool) 
-    "buitron":0,                    # Existencia de buitron (bool)
-    "azimuthOP":None,               # Azimuth Optimo extraido de PVGIS
-    "slopeAngleOP":None,            # Angulo de inclinacion Optimo
-    "avgHSP":None,                  # promedio HSP de todos los años
-    "avgYearHSP":None,              # promedio de HSP de cada año
-    "avgHistHSP":None,              # Promedio de HSP 
-    "maxHSP":None,                  # Valor máximo de HSP por cada año
-    "minHSP":None,                  # valor mínimo de HSP por cada año
-    "dayDat":[]                     # Data diaria por cada mes
-}
-
-dimensionamiento = {
-    "pvModules":pvModules,             # Estructura de modulos solares
-    "solarInverter":solarInverter,     # Estructura de la seleccion del inversor
-    "siteFeatures":siteFeatures,       # Estructura de las caracteristicas del sitio
-    "otherElements":otherElements      # Estructura que almacena la informacion de otros elementos
-}
+from numpy import empty
 
 
 
-start_time = time.time()
+class pvProject:
+    performanceRatio:None        # +++ Eficiencia total del sistema (float)
+    ener_Need:None               # +++ Energia necesaria a suplir con el sistema (float kWh/dia)
+    ener_Type:None               # +++ Energia necesaria a suplir con el sistema (float kWh/dia)
+    areaTotSyst:None             # ? area total de todos los paneles (float m2)
+    powerNeed:None                 # Potencia necesaria antes de dimensionamiento (float kW)
 
-status = otherElementsSising( 
-    dimensionamiento, 
-    proteccionesAC, proteccionesDC, DPS_AC, DPS_DC, 
-    WiresISO, WiresDCIso, 
-    bdMeters, dbCT, 
-    metalicStruct, clayTileStruct, metalicStruct, 
-    EMT
-    )
+    
+class pvArea:
 
-flagtime = time.time()
+    
+    vArraymax:None               # ! Tension maxima del arreglo de paneles solares (float V)
+    iArray:None                  # ! Corriente de cada uno de los array (list of floats A)
+    nArray:None                  # ! Cantidad de arrays (int N)
+    pvModperArray:None           # ! Cantidad de modulos por cada array (list of ints N)
+    amountPVMod:None             # ! Cantidad total de modulos (int N)
+    configuracionGeneral:None    # ! Cantidad total de modulos (int N)
+    configuracionArrays:None     # ! Cantidad total de modulos (int N)        
+    refPVMod:None                # ! Referencia del panel (string )
+    iPVMod:None                  # ! Corriente de salida del panel seleccionado (float A)
+    vPVMod:None                  # ! Tension de salida del panel seleccionado (float V)
+    sizePVMod:None               # ! dimensionaes del panel seleccionado (list of floats mm)
+    areaPVMod:None               # ! area del panel seleccionado (float m2)
+    pTotalPaneles:None           # ! dimensionaes del panel seleccionado (list of floats mm)
 
-lat = 4.615
-lon = -74.06
+    
+    
 
-flag = pvgisGetData(dimensionamiento, lat, lon)
 
-if flag == "SUCCESS":
-    print("OK")
+class inverters:
 
-scn_flagtime = time.time()
+    referencias:None               # Referencias de inversores seleccionados (list of strings)
+    invAmount:None                 # Cantidad por referencia (list of ints)
+    totInvAmount: None             # Cantidad total de inversores (int)
+    iInput:None                    # Entrada de corriente del inversor (list of floats)
+    polesperInput:None             # Cantidad de polos por entrada de corriente (list of ints)
+    vInput:None                    # Tension de entrada (list of floats)
+    iOutput:None                   # salida de corrientes del inversor (list of floats)
+    totIoutput: None               # suma de la corriente de salida (float)
+    vOutput:None                   # tensiones de salida (list of floats)
+    pOutput:None                   # potencias de salida (list of floats)
+    pInput:None                    # potencias de entrada (list of floats)
+    pTotalInversores:None          # potencias de entrada (list of floats)
+    powerNeed:None                 # Potencia necesaria antes de dimensionamiento (float kW)
+    referencias:None               # Referencias de inversores seleccionados (list of strings)
+    invAmount:None                 # Cantidad por referencia (list of ints)
+    totInvAmount: None             # Cantidad total de inversores (int)
+    iInput:None                    # Entrada de corriente del inversor (list of floats)
+    polesperInput:None             # Cantidad de polos por entrada de corriente (list of ints)
+    vInput:None                    # Tension de entrada (list of floats)
+    iOutput:None                   # salida de corrientes del inversor (list of floats)
+    totIoutput: None               # suma de la corriente de salida (float)
+    vOutput:None                   # tensiones de salida (list of floats)
+    pOutput:None                   # potencias de salida (list of floats)
+    pInput:None                    # potencias de entrada (list of floats)
+    pTotalInversores:None          # potencias de entrada (list of floats)
 
-print(str(flagtime - start_time))
-print(str(scn_flagtime - flagtime))
+class inventary:
+    pvWires:None                   # Conductores del lado DC (list [referencias string metraje float m2])
+    facilityWires:None             # Conductores del lado AC (list [referencias string metraje float m2])
+    pvProtections:None             # breakers lado DC (list[referencia string cantidad int N])
+    facilityProtections:None       # breakers lado AC (list[referencia string cantidad int N])
+    pvDPS:None                     # DPS lado DC (string)
+    facilityDPS:None               # DPS lado AC (string)
+    meter:None                     # referencia del medidor y CT si requiere (list (referencia Medidor referencia CT))
+    structData:None                # referencias y cantidades de la estructura (list (referencia metraje m2))
+    pipeData:None                  # referencias tipo y metraje de la tuberia (list (referencia metraje m2))
+    wires:None                     # Estructura del cableado (list (referencias metraje float m2 referencias metraje float m2))
+    pvModulesData:None             # informacion de los modulos solares
 
+
+
+class humanResources:
+    InstalationData:None           # Tiempo de instalacion estimado (float)
+    EngineerTime:None              # Tiempo de dedicacion ingenieria
+
+
+
+    
+class pvSizing(pvArea, pvProject, inverters, inventary, siteFeatures):
+    
+    super().__init__(self, pr, enne, entyp, aconf, volt, coords,
+            area = 0, dt2c=0, dpv2tab=0, tc =0, btrn = 0)
+        
 
 

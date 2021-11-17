@@ -1,0 +1,429 @@
+/*
+Estilos para los contenedores generales y para todo el body
+*/
+
+*{
+    font-family: 'Encode Sans Semi Condensed', Latto, sans-serif;
+}
+
+.content{
+    display: grid;
+    grid-template-rows: 150px repeat(5, max-content) 400px;
+}
+
+.Header{
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    background-color: #FFF;
+}
+.Seccion1{
+    display: grid;
+    grid-template-rows: 200px 70px 150px;
+    background-image: url(img/IM9.jpg);
+    background-position: center;
+    filter: saturate(130%) contrast(140%) hue-rotate(5deg) ;
+}
+.Seccion2{
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+    grid-template-rows: 100px 100px minmax(500px, 1fr);
+    background-color: #14274E;
+}
+
+.Seccion3{
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+    grid-template-rows: 200px repeat(2, minmax(500px,1fr));
+    background-color: #A2AEBB;
+}
+
+.Seccion4{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(600px,1fr));
+    grid-gap:10px;
+    grid-auto-rows: 150px;
+    background-color: #000;
+    padding: 10px;
+}
+.Seccion5{
+    display: grid;
+    grid-template-columns: 30% 70%;
+    background-color: #A2AEBB;
+}
+
+.Footer{
+    display: grid;
+    grid-template-columns: 80% 20%;
+    background-color: #14274E;
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* --------------Estilos Header -----------------------*/
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+
+
+.Header__Logo{
+    display: flex;
+    align-items: center;
+}
+
+.Header__Nav{
+    display: flex;
+    align-items: center;
+}
+
+.Header__SocialNetWork{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Header__Logo-Style{
+    width: 200px;
+    margin: 50px 0 50px 50px;
+}
+
+.nav_li{
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.nav_li a{
+    text-decoration: none;
+    font-family: Lato, sans-serif;
+    font-weight: 400;
+    color: #14274E;
+    font-size: 25px;
+}
+
+.nav__ul-sm{
+    padding: 0 40px 0 0;
+}
+
+.nav_li_ico{
+    color: #14274E;
+    font-size: 30px;
+    padding: 10px 5px;
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* --------------------Seccion 1-----------------------*/
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+
+.Seccion1__Titulo1{
+    padding: 55px 40px 0 0;
+}
+
+.Seccion1__Titulo2{
+    padding: 0 40px 0 0;
+}
+
+.Seccion1__button-container{
+    padding: 0 40px 0 0;
+    text-align: right;
+}
+
+.Seccion1__Titulo1 p{
+    color: #FFF;
+    font-size: 75px;
+    font-weight: 400;
+    text-align: right;
+}
+
+.Seccion1__Titulo2 p{
+    color: #FFF;
+    font-size: 28px;
+    font-weight: 800;
+    text-align: right;
+}
+
+.Seccion1__Button{
+    background-color: #A2AEBB;
+    font-size: 27px;
+    text-align: center;
+    padding: 25px;
+    border: none;
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* --------------Estilos Seccion 2 --------------------*/
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+
+
+.Seccion2__Titulos-Titulo1{
+    grid-row: 1 / 1;
+    grid-column: 1 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Seccion2__Titulos-Titulo2{
+    grid-row: 2 / 2;
+    grid-column: 1 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Seccion2__SolarEnergy img{
+    position:relative;
+    left: 10%;
+    width: 400px;
+}
+
+.Seccion2__Movility img{
+    position:relative;
+    left: 10%;
+    width: 400px;
+}
+
+.Seccion2__TextContainer{
+    position: relative;
+    background-color: #FFF;
+    width: 40%;
+    left: 45%;
+    top: -150px;
+    padding-bottom: 20px;
+}
+
+.Seccion2__TextContainer h1{
+    text-align: center;
+    color: #14274E;
+    font-size: 40px;
+    padding: 10px 40px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.Seccion2__TextContainer p{
+    color: #14274E;
+    font-size: 18px;
+    padding: 10px 40px;
+    text-align: justify;
+    line-height: 27px;
+    font-weight: 300;
+}
+
+.Seccion2__TextContainer button{
+    background-color: black;
+    color: #FFF;
+    font-size: 20px;
+    border: none;
+    margin-top: 20px;
+    margin-left: 40px;
+    padding: 10px 20px;
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* ---------------Estilos Seccion 3 -------------------*/
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+
+.Seccion3__Titulo{
+    grid-column: 1 / 3;
+    grid-row: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 75px;
+}
+
+.Seccion3__Blog1-img{
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+.Seccion3__Blog1-Text-container{
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;    
+    width: 55%;
+}
+
+.Seccion3__Blogs-img img{
+    width: 450px;
+    margin: 25px 0 0 50%;
+}
+
+.Seccion3__Blog2-img{
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+}
+
+.Seccion3__Blog2-Text-container{
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+    width: 55%;
+}
+
+.Seccion3__Blog-Text h1{
+    color: #14274E;
+    font-size: 50px;
+    padding: 10px 40px;
+    margin: 0;
+}
+
+.Seccion3__Blog-Text p{
+    color: #14274E;
+    font-size: 20px;
+    padding: 10px 40px;
+    margin: 0;
+    line-height: 35px;
+}
+
+.Seccion2__Blogs-Button-container{
+    margin: 60px 0 0 40px;
+    margin-top: 60px;
+}
+.Seccion3__Blogs-button{
+    color: #A2AEBB;
+    background-color: #000;
+    font-size: 20px;
+    padding: 10px 40px;
+    border: none;
+}
+
+.marginblog{
+    margin: 100px 0;
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* ---------------Estilos Seccion 4------------------- */
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+
+.Seccion4 img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.seccion4 img:nth-child(1){
+    grid-row: 1 / 2;
+    grid-column: 1 / 3;
+}
+
+.seccion4 img:nth-child(2){
+    grid-row: 1 / 3;
+    grid-column: 3 / 4;
+}
+
+.seccion4 img:nth-child(3){
+    grid-row: 2 / 4;
+    grid-column: 1 / 2;
+}
+
+.Seccion4 img:nth-child(8){
+    grid-row: 3 / 5;
+    grid-column: 2 / 3;
+}
+
+.Seccion4 img :hover{
+    grid-row: 1 / 5;
+    grid-column: 1 / 4;
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* ---------------Estilos Seccion 5 ------------------ */
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+
+
+.seccion5_imagen{
+    width: 100%;
+    padding-top: 100px;
+}
+
+.seccion5__lista{
+    width: 70%;
+    padding-left: 45px;
+    padding-top: 60px;
+    font-size: 30px;
+    line-height: 80px;
+    padding-top: 100px;
+
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* ----------------- Footer ---------------------------*/
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+
+
+.Footer__container-text1{
+    color: #FFF;
+    width: 70%;
+}
+
+.Footer__container-text1 {
+    padding: 40px 0 40px 30%;
+}
+
+.Footer__container-text1 p{
+    color: #FFF;
+    line-height: 50px;
+    font-size: 30px;
+}
+
+.Footer__SocialNetworkIcon-container{
+    padding: 50px 100px 50px 0;
+}
+
+.Footer__li-SocialNetworkIcon{
+    display: inline-block;
+}
+
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+/* ---------------------Generales----------------------*/
+/* ----------------------------------------------------*/
+/* ----------------------------------------------------*/
+.Titulo1 p{
+    color: #FFF;
+    font-size: 55px;
+    font-weight: 800;
+    letter-spacing: 4px;
+}
+
+.Titulo2 p{
+    color: #FFF;
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: 4px;
+}
+
+.Boton1{
+    border: none;
+    background-color: #000;
+    color: #A2AEBB;
+    font-size: 20px;
+    padding: 27px;
+    font-weight: 200;
+}
+
+.texto2{
+    font-size: 20px;
+    color: #333;
+    line-height: 30px;
+}
+
+.icono_BackGround-Dark{
+    color: #FFF;
+    font-size: 40px;
+    padding: 20px;
+}
+
+.DarkTitle{
+    font-size: 50px;
+    font-weight: 600;
+}
