@@ -47,3 +47,4 @@ if __name__ == '__main__':
     
     CI_test= ConfiguracionesInversores(pN_test,f_test)
     CP_test=ConfiguracionesPaneles(CI_test,pN_test,f_test)
+    listaTest= CI_test.listaInversores
