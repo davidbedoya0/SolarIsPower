@@ -4,10 +4,11 @@ from sizingPVModules import *
 from sizingInverters import *
 from variables import *
 
+
 ###DATOS PARA PEUEBAS 
-irradiacionEntrada= 4.6
-energiaEntrada= 500 #116.9 #kWh-dia
-fasesSistema= 3
+irradiacionEntrada=4.8
+energiaEntrada= 4.8 #116.9 #kWh-dia
+fasesSistema= 1
 PF= 0.8316
 
 

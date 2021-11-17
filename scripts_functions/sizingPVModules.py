@@ -236,7 +236,7 @@ def ConfigurarSeleccionInversores (potenciaNecesariaEntrada,dataframeInversores,
         
     
     
-    costoPanel= panel['precio']
+    costoPanel= panel['costo']
     costoTotalPaneles= costoPanel * sum (nPns)
     #print ("\n El costo total de los paneles es de: ", costoTotalPaneles, '\n')
     
@@ -286,7 +286,6 @@ def definirArreglo(nS,nP, panel, inversor):##Define cuantos MPPTs son necesarios
         mppts.append('MPPT '+ str (mppt))
         nPTA.append(nS*restantes)
     
-
     return nPA, vA, iA, mppts,inversores,nSA, nPTA
 
 
