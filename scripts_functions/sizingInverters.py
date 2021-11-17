@@ -119,7 +119,7 @@ def configuracionInversor(referenciaInversor,potenciaRequerida, dataframe,config
     
     #Se guarda el Costo parcial de entrada en una constante para luego usarlo dentro del for y reiniciar el CP con CP_p
     CP_p=CP
-    configL_c = [x[:] for x in configL]
+    configL_c =[x[:] for x in configL]
     
     epsilon=0
     
