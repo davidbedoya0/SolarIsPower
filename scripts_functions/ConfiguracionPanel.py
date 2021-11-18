@@ -15,35 +15,81 @@ from Inversor import Inversor
 
 class ConfiguracionPanel:
     
+    all=[]
     
-    def __init__(self, panel:Panel,configuracionesInversores : ConfiguracionesInversores, potenciaNecesaria):
-        
-#        if direccion is None :
-#            direccion= 'paneles.csv'
-#        self.listaPaneles = ListaPaneles(direccion)
-        self.configuracionesInversores =  configuracionesInversores
-        self.panel= panel
-        self.potenciaNecesaria= potenciaNecesaria
-        self.nPanelesNecesarios = self.NumeroPanelesNecesarios()
-        self.configuracionGeneral=None
-        self.configuracionArrays=None
-        self.panelesUsados=None
-        self.potenciaInstalada=None 
-        self.ConfigurarSeleccionInversores()
-        self.areaNecesaria = self.panelesUsados * self.panel.area
-        self.costoPaneles= self.panelesUsados * self.panel.costo
-
+    def __init__(self, panel:Panel,configuracionesInversores : ConfiguracionesInversores, potenciaNecesaria:float):
         
         
         
+        #Inicializar atributos
+        self.__configuracionesInversores =  configuracionesInversores
+        self.__panel= panel
+        self.__potenciaNecesaria= potenciaNecesaria
         
-    def NumeroPanelesNecesarios(self):
-        panel=self.panel
-        nPn=math.ceil(self.potenciaNecesaria/(panel.Wp/1000))
-        return nPn
+        #Ejecutar Acciones
+        ConfiguracionPanel.all.append(self)
+        self.__NumeroPanelesNecesarios()
+        self.__ConfigurarSeleccionInversores()
+        
+        
+    #Funciones de representación de la instancia
+    def __repr__(self): 
+        cadena= "<Configuracion utilizando el panel " + self.__panel.referencia+">"
+        return cadena
     
-    def panelesSoportados(self, inversor: Inversor):
-        panel=self.panel
+    
+    #=============Restriccion de atributos a ReadOnly , GETTERS
+    @property
+    def configuracionesInversores(self):
+        return self.__configuracionesInversores
+    
+    @property
+    def panel(self):
+        return self.__panel
+    
+    @property
+    def potenciaNecesaria(self):
+        return self.__potenciaNecesaria
+    
+    @property
+    def nPanelesNecesarios(self):
+        return self.__nPanelesNecesarios
+    
+    @property
+    def configuracionGeneral(self):
+        return self.__configuracionGeneral
+    
+    @property
+    def configuracionArrays(self):
+        return self.__configuracionArrays
+    
+    @property
+    def nPanelesUsados(self):
+        return self.__nPanelesUsados
+    
+    @property
+    def potenciaInstalada(self):
+        return self.__potenciaInstalada
+    
+    @property
+    def areaNecesaria(self):
+        return self.__areaNecesaria
+    
+    @property
+    def costoPaneles(self):
+        return self.__costoPaneles
+    
+    
+    #==================METODOS PRIVADOS
+    
+    def __NumeroPanelesNecesarios(self):
+        panel=self.__panel
+        nPn=math.ceil(self.__potenciaNecesaria/(panel.Wp/1000))
+        self.__nPanelesNecesarios= nPn
+#        return nPn
+    
+    def __PanelesSoportados(self, inversor: Inversor):
+        panel=self.__panel
         #ef= 1 #panel.eficiencia
 #        maxDcInput= (1-ef)*inversor.maxPout+inversor.maxPout
         nPmax= math.floor(inversor.maxPout*1000/panel.Wp) #Nmero de paneles soportados
@@ -52,8 +98,8 @@ class ConfiguracionPanel:
         return nPmax, nSmax
     
     
-    def ConfiguracionGeneralPaneles(self, nPu, nSmax, inversor:Inversor, disminuir:bool=False): #Funciona 
-        panel= self.panel
+    def __ConfiguracionGeneralPaneles(self, nPu, nSmax, inversor:Inversor, disminuir:bool=False): #Funciona 
+        panel= self.__panel
         vector=np.arange (nSmax, 0,-1)
         for i in vector: 
             mod=nPu%i
@@ -66,30 +112,30 @@ class ConfiguracionPanel:
                         nPu-=1
                     else:
                         nPu+=1
-                    nS, nP= self.ConfiguracionGeneralPaneles(nPu,nSmax, inversor, disminuir)
+                    nS, nP= self.__ConfiguracionGeneralPaneles(nPu,nSmax, inversor, disminuir)
                 else: 
                     return nS, nP
         return nS, nP
     
     
-    def ConfiguracionPanelesEnInversor (self,inversor, nPn): #Esta funcion y ConfiguracionGeneralPaneles() se podrían unificar 
+    def __ConfiguracionPanelesEnInversor (self,inversor, nPn): #Esta funcion y __ConfiguracionGeneralPaneles() se podrían unificar 
     
-        nPmax ,nSmax = self.panelesSoportados(inversor)
+        nPmax ,nSmax = self.__PanelesSoportados(inversor)
         condicion = nPmax <nPn
         if condicion: 
             nPu=nPmax
-            nS, nP = self.ConfiguracionGeneralPaneles(nPu,nSmax,inversor ,True)
+            nS, nP = self.__ConfiguracionGeneralPaneles(nPu,nSmax,inversor ,True)
             nPu=  nS*nP
         else:
             nPu=nPn
-            nS,nP=self.ConfiguracionGeneralPaneles(nPu,nSmax, inversor, False)
+            nS,nP=self.__ConfiguracionGeneralPaneles(nPu,nSmax, inversor, False)
         nPn_new= nPn-nPu
         return nS, nP, nPn_new
     
     
 
-    def definirArreglo (self,nS, nP, inversor:Inversor): ##Define cuantos MPPTs son necesarios utilizar en el inversor
-        panel=self.panel
+    def __DefinirArreglo (self,nS, nP, inversor:Inversor): ##Define cuantos MPPTs son necesarios utilizar en el inversor
+        panel=self.__panel
         voltaje= panel.Vmp * nS
         nPanelesMaxPerMppt= math.floor (inversor.iMppt*1.1/panel.Imp)#numero de paneles maximos por mppt
         nPr=nP%nPanelesMaxPerMppt #numero de paralelo restantes. 
@@ -126,23 +172,23 @@ class ConfiguracionPanel:
         return  nPA, nSA, vA, iA,mppts, inversores, nPTA
     
     
-    def ConfigurarSeleccionInversores (self):
+    def __ConfigurarSeleccionInversores (self):
         
-        panel=self.panel
-        nPn= self.nPanelesNecesarios #Cantidad de paneles necesarios
+        panel=self.__panel
+        nPn= self.__nPanelesNecesarios #Cantidad de paneles necesarios
         
         inversores=[]; nPns=[];nSs=[];nPs=[]; potenciaInstalada=[]; voltajeInversores=[]
         voltajeArreglos=[];nParalelo=[]; corrienteArreglos=[];listaTodosInversores=[];mppts=[];nSeries=[];nPT_list= []
-        dfConfiguracionInversores=self.configuracionesInversores.seleccion.config
+        dfConfiguracionInversores=self.__configuracionesInversores.seleccion.config
         for i in dfConfiguracionInversores.index: #np.arange (len(self.arregloInversores.configuracion)):
             cantidad=dfConfiguracionInversores['Cantidad'][i]
             inversor= dfConfiguracionInversores['Inversor'][i]
             contador=cantidad
             while contador >0:
-                nS, nP, nPn_nuevo = self.ConfiguracionPanelesEnInversor(inversor,nPn)
+                nS, nP, nPn_nuevo = self.__ConfiguracionPanelesEnInversor(inversor,nPn)
                 panelesInversor=nS*nP#paneles utilizados en este inversor
                 potenciaTotal= panelesInversor*panel.Wp
-                nPA,nSA,vA, iA, mppt, listaInversores, nPTA =self.definirArreglo(nS,nP , inversor)
+                nPA,nSA,vA, iA, mppt, listaInversores, nPTA =self.__DefinirArreglo(nS,nP , inversor)
                 
                 #CONFIGURACION GENERAL
                 inversores.append(inversor.codigo);nPns.append(panelesInversor);nSs.append(nS); nPs.append(nP)
@@ -154,15 +200,24 @@ class ConfiguracionPanel:
                 
                 nPn= nPn_nuevo #Cantidad de paneles necesarios restantes 
                 contador-=1
-        self.panelesUsados= sum(nPns)
-        self.potenciaInstalada= self.panelesUsados * self.panel.Wp
-        self.configuracionGeneral= pd.DataFrame({'Inversor': inversores, 'Numero de Paneles': nPns, 'Paneles en serie': nSs, 'Series en Paralelo': nPs,
+        self.__nPanelesUsados= sum(nPns)
+        self.__potenciaInstalada= self.__nPanelesUsados * self.__panel.Wp
+        self.__areaNecesaria = self.__nPanelesUsados * self.__panel.area
+        self.__costoPaneles= self.__nPanelesUsados * self.__panel.costo
+        self.__configuracionGeneral= pd.DataFrame({'Inversor': inversores, 'Numero de Paneles': nPns, 'Paneles en serie': nSs, 'Series en Paralelo': nPs,
                                             'Potencia Instalada': potenciaInstalada, 'Vin': voltajeInversores})
-        self.configuracionArrays= pd.DataFrame ({'Inversor': listaTodosInversores, 'MPPT': mppts, 'Paneles Usados':nPT_list, 'Paneles en Serie': nSeries, 
+        self.__configuracionArrays= pd.DataFrame ({'Inversor': listaTodosInversores, 'MPPT': mppts, 'Paneles Usados':nPT_list, 'Paneles en Serie': nSeries, 
                                             'Series en Paralelo':nParalelo, 'Voltaje Arreglo': voltajeArreglos, 'Corriente Arreglo': corrienteArreglos})
-#        return configuracionGeneral, configuracionArrays, costoTotalPaneles
+
+    
+    #============METODOS PÚBLICOS ---- Setters
     
     
+    
+    
+    
+    
+    #========== METODO TEST======
     def TestConfiguracion (self):
         print ("HAZ LA FUNCIÓNNNN!!!")
         #El voltaje de cada MPPT cumple con los requerimientos del inversor?

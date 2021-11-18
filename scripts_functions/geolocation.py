@@ -11,22 +11,52 @@ import urllib.request, urllib.parse, urllib.error
 import json 
 import ssl
 
-class geolocalizacion:
+class Geolocalizacion:
     
     def __init__ (self, ubicacion):
-        self.ubicacion= ubicacion
-        self.data=None
-        self.resultadoConsulta=None
-        self.direccion= None
-        self.ciudad=None
-        self.pais= None
-        self.latitud=None
-        self.longitud=None
-        self.geolocalizacion=None
         
-        self.obtenerGeolocalizacion()
+        #Inicializar parametros
+        self.__ubicacion= ubicacion
         
-    def obtenerGeolocalizacion (self):
+        #Ejecutar Acciones
+        self.ObtenerGeolocalizacion()
+        
+        
+    #=============Restriccion de atributos a ReadOnly , GETTERS
+    @property
+    def ubicacion(self):
+        return self.__ubicacion
+    
+    @property
+    def data(self):
+        return self.__data
+    
+    @property
+    def resultado(self):
+        return self.__resultado
+    
+    @property
+    def direccion(self):
+        return self.__direccion
+    
+    @property
+    def ciudad(self):
+        return self.__ciudad
+    
+    @property
+    def pais(self):
+        return self.__pais
+    
+    @property
+    def latitud(self):
+        return self.__latitud
+    
+    @property
+    def longitud(self):
+        return self.__longitud
+        
+    #=====Metodos Privados
+    def __ObtenerGeolocalizacion (self):
         api_key= 42
         serviceurl= 'http://py4e-data.dr-chuck.net/json?'
         
@@ -35,12 +65,12 @@ class geolocalizacion:
         ctx.check_hostname=False
         ctx.verify_mode= ssl.CERT_NONE
         
-        address= self.ubicacion
+        address= self.__ubicacion
         
         parms= dict()
         parms['address']= address
         parms['key']=api_key
-        url=serviceurl + urllib.parse.urlencode(parms) #Retriving this url 
+        url=serviceurl + urllib.parse.urlencode(parms) #
         
         data= urllib.request.urlopen(url,context=ctx).read().decode()
         
@@ -49,24 +79,24 @@ class geolocalizacion:
         if not js or 'status' not in js or js['status']!='OK':
             falla='Falla al solicitar datos de geolocalización'
             print(falla)
-            self.data=data
-            self.resultadoConsulta=falla
+            self.__data=data
+            self.__resultado=falla
             
         
         else:
-            self.data=data
-            self.resultadoConsulta= js
+            self.__data=data
+            self.__resultado= js
             
-            self.latitud= js['results'][0]['geometry']['location']['lat']
-            self.longitud=js['results'][0]['geometry']['location']['lng']
-            self.geolocalizacion =str (self.latitud)+","+str(self.longitud)
-            self.ciudad= js['results'][0]['formatted_address'].split(',')[1].strip()
-            self.pais=js['results'][0]['formatted_address'].split(',')[2].strip()
-            self.direccion=js['results'][0]['formatted_address'].split(',')[0].strip()
+            self.__latitud= js['results'][0]['geometry']['location']['lat']
+            self.__longitud=js['results'][0]['geometry']['location']['lng']
+            self.__geolocalizacion =str (self.latitud)+","+str(self.longitud)
+            self.__ciudad= js['results'][0]['formatted_address'].split(',')[1].strip()
+            self.__pais=js['results'][0]['formatted_address'].split(',')[2].strip()
+            self.__direccion=js['results'][0]['formatted_address'].split(',')[0].strip()
             
     
 
 if __name__ == '__main__':
     dirTest= input('ingrese ubicacion: ')
-    ubicacion = geolocalizacion(dirTest)
+    ubicacion = Geolocalizacion(dirTest)
     print(ubicacion.direccion,' se encuentra en las coordenadas ', ubicacion.geolocalizacion)

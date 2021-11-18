@@ -11,7 +11,12 @@ from ConfiguracionesInversores import ConfiguracionesInversores
 
 class ConfiguracionesPaneles: 
     
-    def __init__ (self, configuracionesInversores: ConfiguracionesInversores, potenciaNecesaria, fases ):
+    def __init__ (self, configuracionesInversores: ConfiguracionesInversores, potenciaNecesaria: float, fases: int  ):
+        
+        #Validacion de argumentos
+        assert potenciaNecesaria > 0, "La potencia necesaria ingresada debe ser mayor que 0"
+        assert fases in [1,2,3], "Ingrese un numero de fases entre 1 y 3"
+        
         self.configuracionesInversores = configuracionesInversores
         self.potenciaNecesaria = potenciaNecesaria
         self.fases = fases
@@ -22,6 +27,7 @@ class ConfiguracionesPaneles:
         
         
     def CrearConfiguraciones (self):
+        
         
         configuraciones= []
         dfConfiguraciones= pd.DataFrame(columns=['Panel', 'Costo', 'Area Requerida','Potencia Instalada', 'Configuracion'])
@@ -42,9 +48,12 @@ class ConfiguracionesPaneles:
 
 if __name__ == '__main__':
     
+    
     pN_test=120
     f_test=3
     
     CI_test= ConfiguracionesInversores(pN_test,f_test)
     CP_test=ConfiguracionesPaneles(CI_test,pN_test,f_test)
     listaTest= CI_test.listaInversores
+    
+    print (CP_test.configuraciones[0].areaNecesaria)
