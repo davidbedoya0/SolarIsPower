@@ -12,6 +12,10 @@ class ConfiguracionesInversores:
     
     def __init__(self, potenciaNecesaria, fases ):
         
+        #Validacion de argumentos
+        assert potenciaNecesaria > 0, "La potencia necesaria ingresada debe ser mayor que 0"
+        assert fases in [1,2,3], "Ingrese un numero de fases entre 1 y 3"
+        
         self.potenciaNecesaria= potenciaNecesaria
         self.fases=fases
         self.listaInversores= ListaInversores(direccion= "inversores.csv").FiltrarOrganizar(potenciaNecesaria, fases=fases)
