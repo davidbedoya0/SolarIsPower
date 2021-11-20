@@ -156,6 +156,10 @@ def validation(data, lenvar, datcomp_Sup, datcomp_Inf, error, typeData):
     success or error flag
 ! ==========================================================
 """
+#%% 
+
+import requests
+from geolocation import Geolocalizacion
 
 def req_pvgis(lat, lon, case, month = 15):
 
@@ -196,3 +200,12 @@ def req_pvgis(lat, lon, case, month = 15):
             return [Data["outputs"]["daily_profile"], "SUCCESS"]
     else: 
         return ["ERROR: Data is correct but " + tools[case] +" API don't work", 0]
+    
+   
+    
+if __name__ == '__main__':
+    ubicacion= Geolocalizacion ("Salitre plaza")
+    lat=ubicacion.latitud
+    lng=ubicacion.longitud
+    
+    data= req_pvgis(lat,lng,1)

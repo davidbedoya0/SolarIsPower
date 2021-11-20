@@ -56,7 +56,7 @@ const loadName = document.getElementById("loadName")
 const loadPower = document.getElementById("loadPower")
 const loadHours = document.getElementById("loadHours")
 
-const srcs = ["OnGrid.png","offGrid.png","hybrid.png"]
+const srcs = ["img/SistemaOnGrid.png","img/SistemaOffgrid.png","img/SistemaHibrido.png"]
 const syst_inf = ['*Sistema OnGrid, sistema compuesto por paneles, tableros de proteccion, inversor, tablero de protecciones DC y contador bidireccional', 
     `*Sistema Off-Grid, sistema compuesto por paneles, tablero de protecciones DC, inversor de onda pura, baterias y tablero de protecciones AC`,
     `*Sistema Off-Grid, sistema compuesto por paneles, tablero de protecciones DC, inversor hibrido, baterias, tablero de protecciones AC y contador bidireccional`
