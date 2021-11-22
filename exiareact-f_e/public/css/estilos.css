@@ -197,6 +197,7 @@
     padding: 10px 0;
     font-family: Lato, sans-serif;
 }
+
 button{
     background-color: #F1F6F9;
     font-weight: 700;
@@ -210,15 +211,6 @@ button{
     align-items: center;
 }
 
-button:hover{
-    background-color: #CCC;
-    font-weight: 700;
-    color: #14274E;
-    border: #666 solid 1.5px;
-    border-radius: 15px;
-    padding: 10px;
-    
-}
 
 /* ? Demanda de energia */
 
@@ -570,7 +562,7 @@ button:hover{
 
 .leftAside__Header{
     width: 100%;
-    background-color: #305fbe;
+    background-color: #0D47A1;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     
@@ -603,14 +595,15 @@ button:hover{
     background-color: #14274E;
 }
 
-.Header h1{
+.Header p{
     font-family: Squada One, sans-sefif;
     color: #FFF;
     margin: 0;
-    padding: 10px 20px
+    padding: 10px;
+    font-weight: 100;
+    font-size: 30px;
 
 }
-
 
 
 /*
@@ -635,6 +628,7 @@ button:hover{
 .centerview{
     width: 66%;
 }
+
 
 /*
 --- Components: Subtitles
@@ -684,6 +678,11 @@ button:hover{
     width: 100%;
 }
 
+.ProyectBasicData>*:last-child{
+    width: 100%;
+    
+}
+
 .ProyectBasicData__form{
     width: 50%;
     padding: 0 0 10px 30px;
@@ -706,6 +705,54 @@ button:hover{
 
 .ProyectBasicData__info p{
 
+}
+
+/*
+--- LocationDataProyect
+*/
+
+.locationData{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.locationData>*:first-child{
+    width: 100%;
+}
+
+.locationData__form{
+    width: 50%;
+    padding: 0 0 10px 30px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.locationData__map{
+    width:50%
+}
+
+/*
+--- Buttons
+*/
+
+.centralButton{
+    background-color: #F1F6F9;
+    font-weight: 700;
+    color: #14274E;
+    border: #666 solid 2px;
+    border-radius: 15px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.centralButton img{
+    width: 15px;
+    margin-right: 10px;
 }
 
 

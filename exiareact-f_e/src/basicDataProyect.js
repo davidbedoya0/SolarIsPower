@@ -17,15 +17,19 @@ export default function BasicDataProyect(props){
                   <option value="2">Sistema Hibrido</option>
                 </select>
               </div>
-              <div className="tipoProyecto__info">
-                <div className="tipoProyecto__container">
+              <div className="ProyectBasicData__info">
+                <div className="ProyectBasicData__container--img">
                   <img src="img/SistemaOnGrid.png" className="tipoProyecto__img" />
                 </div>
-                <p className="tipoProyecto__info--p">
+                <p>
                   *Sistema OnGrid, sistema compuesto por paneles,
                   tableros de proteccion, inversor, tablero de protecciones DC y contador bidireccional
                 </p>
               </div>
+              <div className="">
+                <button className="centralButton">Guardar Entrada</button>
+              </div>
+              
         </div>
         
     );

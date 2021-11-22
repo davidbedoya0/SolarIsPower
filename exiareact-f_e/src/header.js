@@ -2,9 +2,9 @@ export default function HeaderWebPage(props){
 
     return(
         <div className="Header">
-          <h1>
+          <p>
             {props.Title}
-          </h1>
+          </p>
         </div>
     );
 }

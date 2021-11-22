@@ -3,6 +3,7 @@ import BasicDataProyect from './basicDataProyect';
 import HeaderWebPage from './header';
 import Inputvariable from './inputvariable';
 import Leftaside from './leftAside';
+import LocationDataProyect from "./ubicacion";
 import Selectvariable from './selectVariable';
 
 function App() {
@@ -14,28 +15,8 @@ function App() {
           <Leftaside/>
           <div className="centerview">
             <BasicDataProyect/>
+            <LocationDataProyect/>
             
-            <div className="formularionuevoproyecto__seleccionUbicacion">
-              <div className="formularionuevoproyecto__tituloseccion">
-                <h1 className="formularionuevoproyecto__titulosubseccion--highlight">
-                  <p>
-                    Ubicacion
-                  </p>
-                </h1>
-              </div>
-              <div className="seleccionUbicacion__formulario">
-
-                <Inputvariable inptitle = "Dirección" imgsrc = "img/ask.png" plcholder = "  Inserte dirección"/>
-                <Inputvariable inptitle = "Latitud" imgsrc = "img/ask.png" plcholder = "  Inserte latitud"/>
-                <Inputvariable inptitle = "Longitud" imgsrc = "img/ask.png" plcholder = "  Inserte longitud"/>
-                
-              </div>
-              <div className="seleccionUbicacion__ubicacion">
-              </div>
-              <div className="seleccionUbicacion__botonBusqueda">
-                <button><img src="img/magnifying-glass.png" className="icon" />Buscar Seleccion</button>
-              </div>
-            </div>
             <div className="formularionuevoproyecto__entradaEnergia">
               <div className="formularionuevoproyecto__tituloseccion">
                 <h1 className="formularionuevoproyecto__titulosubseccion--highlight">
