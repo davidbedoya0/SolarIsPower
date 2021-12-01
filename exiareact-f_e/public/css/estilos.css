@@ -461,7 +461,7 @@ button{
 }
 
 /*
-    ?Aside
+--- Aside
 */
 
 
@@ -478,12 +478,12 @@ button{
 .aside__header{
     width: 100%;
     position: relative;
-    background-color: #305fbe;
+    background-color: #214488;
     text-align: left;
     font-size: 20px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    font-family: Helvetica, verdana;
+    font-family: Squada One, verdana;
 }
 
 .aside__header p{
@@ -496,29 +496,103 @@ button{
     width: 100%;
     position: relative;
     align-items: center;
-    background-color: #d3d8e2;
+    background-color: #dbe4e9;
     text-align: center;
+    padding: 0 0 20px 0;
+    border-bottom-left-radius: 15px;
 }
 
-.aside__status{
+.asideSectionTitle{
+    text-align: left;
+    font-size: 19px;
+    font-family: Advent Pro;
+    width: 80%;
+    margin: 7px 10%;
+}
+
+/*
+? statusBarGradient
+*/
+.statusBarContainer{
     width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    font-family: Advent Pro, Arial, Helvetica;    
+}
+
+.statusBarContainer p{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.statusBarGradientContainer{
+    width: 80%;
+    background-color: #666;
+    margin: 5px 10%;
+    border-radius: 8px;
+    
+}
+
+.statusColor{
+    width: 40%;
+    background-color: #14274E;
+    border-radius: 8px;
+    padding: 5px;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 100%);
+}
+
+.statusBar_info{
+    color: #FFF;
+    font-weight: 400;
+}
+
+/* 
+? rightAsideItem
+*/
+
+.righAsideItemContainer{
+    background-color: #c7c7f7;
+    width: 80%;
+    margin: 5px 10%;
+    border-radius: 3px;
+    padding: 5px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    font-family: Helvetica, verdana;
+    justify-content:space-between;
 }
 
-.aside__status>*:first-child{
+.rightAsideItemTitle{
+    display: inline-block;
+    font-weight: 600;
+    text-align: left;
+    font-size: 13px;
+}
+
+.rightAsideItemValue{
+    display: inline-block;
+    text-align: right;
+    font-size: 13px;
+    
+}
+
+/* 
+? Aside Buttons
+*/
+
+.asideButtonContainer{
     width: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
 }
 
-.perc{
-    width: 20%;
-    background-color: #F39422;
-    padding: 3px;
-    margin: 10px 2.5%;
-    flex-grow: 1;
+.asideButton{
+    width: 70%;
+    justify-content: center;
+    border-radius: 6px;
 }
 
 /*
@@ -652,7 +726,12 @@ button{
 --- Components Select Box
 */
 
-
+.selectContainer{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
 
 .selectBox{
     font-family: Advent Pro, sans-serif;
@@ -678,10 +757,6 @@ button{
     width: 100%;
 }
 
-.ProyectBasicData>*:last-child{
-    width: 100%;
-    
-}
 
 .ProyectBasicData__form{
     width: 50%;
@@ -748,6 +823,7 @@ button{
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
+    margin-top: 15px;
 }
 
 .centralButton img{
@@ -755,6 +831,27 @@ button{
     margin-right: 10px;
 }
 
+.container_centralButton{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+/*
+--- InfoPop
+*/
+.ableInfoPop{
+    background-color: #242734;
+    color: #EEEEEE;
+    position: absolute;
+    right: 50%;
+    border-radius: 5px;
+    padding:10px;
+    font-size: 13px;
+    width: 20%;
+    text-align: justify;
+}
 
 
 
